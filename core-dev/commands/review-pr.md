@@ -1,4 +1,5 @@
 ---
+name: review-pr
 description: Conduct a comprehensive code review of a GitHub pull request based on the Pragmatic Quality framework.
 ---
 

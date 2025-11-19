@@ -1,4 +1,5 @@
 ---
+name: create-pr
 description: Create a new branch, push to remote, and create a pull request on GitHub
 ---
 

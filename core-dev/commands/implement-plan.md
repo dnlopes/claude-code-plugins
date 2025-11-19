@@ -1,3 +1,8 @@
+---
+name: implement-plan
+description: Implement approved technical plans phase by phase with automated and manual verification at each step
+---
+
 # Implement Plan
 
 You are tasked with implementing an approved technical plan. These plans contain phases with specific changes and success criteria.
