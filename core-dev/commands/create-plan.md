@@ -222,17 +222,9 @@ After structure approval:
 **File**: `path/to/file.ext`
 **Changes**: [Summary of changes]
 
-```[language]
-// Specific code to add/modify
-```
-
 #### 2. [Another component/File group]
 **File**: `path/to/file.ext`
 **Changes**: [Summary of another change]
-
-```[language]
-// Specific code to add/modify
-```
 
 ### Success Criteria:
 
@@ -248,8 +240,6 @@ After structure approval:
 - [ ] Performance is acceptable under load
 - [ ] Edge case handling verified manually
 - [ ] No regressions in related features
-
-**Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 
 ---
 
