@@ -1,0 +1,14 @@
+{
+  "name": "dnl-marketplace",
+  "owner": {
+    "name": "David Lopes"
+  },
+  "plugins": [
+    {
+      "name": "core-dev",
+      "version": "1.0.0",
+      "source": "./core-dev",
+      "description": "Provides core development commands, skills, subagents, hooks, and MCPs for daily activities and workflows"
+    }
+  ]
+}

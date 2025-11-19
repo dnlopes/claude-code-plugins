@@ -1,0 +1,8 @@
+{
+    "name": "core-dev",
+    "description": "Provides core development commands, skills, subagents, hooks, and MCPs for daily activities and workflows",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}
