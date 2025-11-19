@@ -12,6 +12,10 @@
       "type": "http",
       "url": "https://www.shadcn.io/api/mcp"
     },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    },
     "serena": {
       "command": "uvx",
       "args": [
