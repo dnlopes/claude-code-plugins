@@ -1,8 +1,0 @@
-{
-    "name": "terminal-notifications",
-    "description": "Desktop notification hooks for Claude Code events using terminal-notifier",
-    "version": "1.0.0",
-    "author": {
-        "name": "David Lopes"
-    }
-}
