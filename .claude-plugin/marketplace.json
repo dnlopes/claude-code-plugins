@@ -5,10 +5,46 @@
   },
   "plugins": [
     {
-      "name": "core-dev",
+      "name": "dev-toolkit",
       "version": "1.0.0",
-      "source": "./core-dev",
-      "description": "Provides core development commands, skills, subagents, hooks, and MCPs for daily activities and workflows"
+      "source": "./dev-toolkit",
+      "description": "Complete development workflow toolkit with planning, research, implementation, and code review capabilities"
+    },
+    {
+      "name": "git-workflow",
+      "version": "1.0.0",
+      "source": "./git-workflow",
+      "description": "Git and GitHub workflow commands for commits and pull requests"
+    },
+    {
+      "name": "terminal-notifications",
+      "version": "1.0.0",
+      "source": "./terminal-notifications",
+      "description": "Desktop notification hooks for Claude Code events using terminal-notifier"
+    },
+    {
+      "name": "mcp-serena",
+      "version": "1.0.0",
+      "source": "./mcp-serena",
+      "description": "Serena MCP server for semantic code analysis and understanding"
+    },
+    {
+      "name": "mcp-context7",
+      "version": "1.0.0",
+      "source": "./mcp-context7",
+      "description": "Context7 MCP server for up-to-date library documentation and examples"
+    },
+    {
+      "name": "mcp-atlassian",
+      "version": "1.0.0",
+      "source": "./mcp-atlassian",
+      "description": "Atlassian MCP server for Jira and Confluence integration"
+    },
+    {
+      "name": "mcp-shadcn",
+      "version": "1.0.0",
+      "source": "./mcp-shadcn",
+      "description": "shadcn/ui MCP server for component documentation"
     }
   ]
 }
