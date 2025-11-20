@@ -1,0 +1,8 @@
+{
+    "name": "macos-notifications",
+    "description": "Native macOS notification hooks using osascript - zero dependencies",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}
