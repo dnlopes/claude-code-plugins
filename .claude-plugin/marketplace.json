@@ -23,6 +23,12 @@
       "description": "Desktop notification hooks for Claude Code events using terminal-notifier"
     },
     {
+      "name": "macos-notifications",
+      "version": "1.0.0",
+      "source": "./macos-notifications",
+      "description": "Native macOS notification hooks using osascript - zero dependencies"
+    },
+    {
       "name": "mcp-serena",
       "version": "1.0.0",
       "source": "./mcp-serena",
