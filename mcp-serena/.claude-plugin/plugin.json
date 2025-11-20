@@ -1,0 +1,8 @@
+{
+    "name": "mcp-serena",
+    "description": "Serena MCP server for semantic code analysis and understanding",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "name": "dev-toolkit",
+    "description": "Complete development workflow toolkit with planning, research, implementation, and code review capabilities",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}

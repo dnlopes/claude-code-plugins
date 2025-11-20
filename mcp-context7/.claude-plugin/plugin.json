@@ -1,0 +1,8 @@
+{
+    "name": "mcp-context7",
+    "description": "Context7 MCP server for up-to-date library documentation and examples",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}

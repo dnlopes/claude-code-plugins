@@ -1,0 +1,8 @@
+{
+    "name": "mcp-shadcn",
+    "description": "shadcn/ui MCP server for component documentation",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}
