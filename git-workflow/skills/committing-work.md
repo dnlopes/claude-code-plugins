@@ -1,65 +1,34 @@
 ---
 name: committing-work
-description: Use when committing changes on the repository.
+description: Use this skill when committing changes on the repository.
 ---
 
 # Committing Work
 
 ## Overview
 
-Commit pending changes
-
-**Core principle:** Analyze changes → Plan commits → Execute.
-
 **Announce at start:** "🟢 I'm using the committing-work skill to complete this work."
-
-## The Process
-
-### Step 1: Think about what changed
-
-1. Review the conversation history and understand what was accomplished
-2. Run `git status` to see current changes
-3. Run `git diff` to understand the modifications
-4. Consider whether changes should be one commit or multiple logical commits
-
-### Step 2: Plan your commit(s)
-
-1. Identify which files belong together
-2. Draft clear, descriptive commit messages
-3. Use imperative mood in commit messages
-4. Focus on why the changes were made, not just what
-
-### Step 3: Present your plan to the user
-> **For Claude:** if this skill is being executed by a subagent, skip this step.
-
-1. List the files you plan to add for each commit
-2. Show the commit message(s) you'll use
-3. Ask: "I plan to create [N] commit(s) with these changes. Shall I proceed?"
-
-### Step 4: Execute planned commits
-1. Use `git add` with specific files (never use `-A` or `.`)
-- Create commits with your planned messages
-- Show the result with `git log --oneline -n [number]`
-
 
 ## Key Principles
 
 - **Commit message**: commit messages must be constructed based on the changes detected
 - **Atomic commits**: Each commit should contain related changes that serve a single purpose
 - **Split large changes**: If changes touch multiple concerns, split them into separate commits
-- **Conventional commit format**: Use the format `<type>: <description>` where type is one of:
-  - `feat`: A new feature
-  - `fix`: A bug fix
-  - `docs`: Documentation changes
-  - `style`: Code style changes (formatting, etc)
-  - `refactor`: Code changes that neither fix bugs nor add features
-  - `perf`: Performance improvements
-  - `test`: Adding or fixing tests
-  - `chore`: Changes to the build process, tools, etc.
+- **Conventional commit format**: Use the format `<type>(<ticket>): <description>`:
+  - `<ticket>` section is optional
+  - `<type>` section is one of:
+    - `feat`: A new feature
+    - `fix`: A bug fix
+    - `docs`: Documentation changes
+    - `style`: Code style changes (formatting, etc)
+    - `refactor`: Code changes that neither fix bugs nor add features
+    - `perf`: Performance improvements
+    - `test`: Adding or fixing tests
+    - `chore`: Changes to the build process, tools, etc.
 - **Present tense, imperative mood**: Write commit messages as commands (e.g., "add feature" not "added feature")
 - **Ignore not relevant changes**: Changed files unrelated to the work done should be ignored (e.g., temporary files). If unsure, ask the user for guidance.
 - **Concise first line**: Keep the first line under 72 characters
-- **Emoji**: Each commit type is paired with an appropriate emoji:
+- **Use emojis**: Each commit type **MUST** be paired with an appropriate emoji:
   - ✨ `feat`: New feature
   - 🐛 `fix`: Bug fix
   - 📝 `docs`: Documentation
