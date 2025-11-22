@@ -1,0 +1,20 @@
+name: PR
+on:
+  pull_request:
+    types: [opened, reopened, edited, labeled, unlabeled, synchronize]
+
+concurrency:
+  group: pr-pre-commit-check-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  statuses: write
+  contents: read
+  checks: write
+  pull-requests: read
+
+jobs:
+  pre_commmit:
+    name: Pre-commit
+    uses: dnlopes/Reusable.Workflows/.github/workflows/pre-commit-hooks.yaml@v1
+    secrets: inherit
