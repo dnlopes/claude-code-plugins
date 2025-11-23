@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":configMigration",
+    "group:allNonMajor",
+    ":semanticCommitType(chore)",
+    ":semanticCommitScope(deps)",
+    ":automergePr",
+    ":automergeAll",
+    ":automergeRequireAllStatusChecks",
+    ":enableVulnerabilityAlerts",
+    ":labels(renovate, dependencies)",
+    ":rebaseStalePrs",
+    ":timezone(UTC)",
+    "security:openssf-scorecard"
+  ],
+  "schedule": ["* 0-5 * * 4,5"],
+  "reviewersFromCodeOwners": true,
+  "automergeStrategy": "squash",
+  "packageRules": [
+    {
+      "matchDepTypes": [
+        "action"
+      ],
+      "pinDigests": false
+    }
+  ]
+}

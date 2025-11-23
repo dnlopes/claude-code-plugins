@@ -1,0 +1,34 @@
+version: 1
+labels:
+  - label: "major"
+    title: "^!(fix|feat|chore)(\\(\\w+\\))?:\\s.+$"
+  - label: "breaking-change"
+    title: "^!(fix|feat|chore)(\\(\\w+\\))?:\\s.+$"
+  - label: "minor"
+    title: "^feat(\\(\\w+\\))?:\\s.+$"
+  - label: "feature"
+    title: "^feat(\\(\\w+\\))?:\\s.+$"
+  - label: "patch"
+    title: "^fix(\\(\\w+\\))?:\\s.+$"
+  - label: "fix"
+    title: "^fix(\\(\\w+\\))?:\\s.+$"
+  - label: "patch"
+    title: "^chore(\\(\\w+\\))?:\\s.+$"
+  - label: "ready-to-merge"
+    mergeable: true
+  - label: "draft"
+    draft: true
+  - label: "size-S"
+    size:
+      below: 10
+  - label: "size-M"
+    size:
+      above: 9
+      below: 100
+  - label: "size-L"
+    size:
+      above: 100
+  - label: "work-in-progress"
+    title: "^WIP.*"
+  - label: "do-not-merge"
+    title: "^WIP.*"

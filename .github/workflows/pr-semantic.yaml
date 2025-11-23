@@ -1,0 +1,29 @@
+name: PR
+on:
+  pull_request:
+    types: [opened, reopened, edited, labeled, unlabeled, synchronize]
+
+concurrency:
+  group: pr-semantic-check-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  pull-requests: write
+  statuses: write
+  contents: read
+
+jobs:
+  pr_labels:
+    name: Add labels
+    runs-on: ubuntu-latest
+    steps:
+      - uses: srvaroa/labeler@b4493338d7929ddc4ffc95fadf6f28c73bae2e90
+        with:
+          config_path: .github/labeler-config.yaml
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+  semantic_pr:
+    needs: pr_labels
+    name: Semantic
+    uses: dnlopes/Reusable.Workflows/.github/workflows/semantic-pr.yaml@v1
