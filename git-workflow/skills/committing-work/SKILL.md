@@ -1,6 +1,6 @@
 ---
 name: committing-work
-description: Use this skill when committing changes on the repository.
+description: Use this skill before committing changes on the repository.
 ---
 
 # Committing Work
