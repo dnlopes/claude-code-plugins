@@ -45,6 +45,12 @@
       "version": "1.0.0",
       "source": "./mcp-shadcn",
       "description": "shadcn/ui MCP server for component documentation"
+    },
+    {
+      "name": "project-documenter",
+      "version": "1.0.0",
+      "source": "./project-documenter",
+      "description": "Repository documentation toolkit for creating and maintaining CLAUDE.md and docs/claude/ structure"
     }
   ]
 }

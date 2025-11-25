@@ -1,0 +1,8 @@
+{
+    "name": "project-documenter",
+    "description": "Repository documentation toolkit for creating and maintaining CLAUDE.md and docs/claude/ structure",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}
