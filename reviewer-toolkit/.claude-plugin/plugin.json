@@ -1,0 +1,8 @@
+{
+    "name": "reviewer-toolkit",
+    "description": "Introduce codebase and PR review commands and skills using multiple specialized agents.",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}
