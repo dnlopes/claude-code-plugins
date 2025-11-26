@@ -13,7 +13,7 @@ Provides system-level desktop notifications for Claude Code lifecycle events, ke
 - **Stop Event** - Notification when Claude stops processing
 - **Notification Event** - Custom notification triggers for workflow events
 
-Uses `terminal-notifier` for native macOS notification center integration.
+Uses native macOS `osascript` with AppleScript for notification center integration.
 
 ## Installation
 
@@ -23,8 +23,7 @@ claude-code plugins install /path/to/cloud-code-plugins/macos-notifications
 
 ## Requirements
 
-- macOS system
-- `terminal-notifier` installed (typically via Homebrew: `brew install terminal-notifier`)
+- macOS system (no additional dependencies required)
 
 ## Configuration
 
@@ -39,4 +38,4 @@ Hooks are defined in `hooks/hooks.json` and trigger automatically based on Claud
 
 ## How It Works
 
-The plugin registers hooks that execute `terminal-notifier` commands when specific Claude Code events occur, sending notifications to the macOS notification center.
+The plugin registers hooks that execute `osascript` AppleScript commands when specific Claude Code events occur, sending notifications to the macOS notification center with custom titles and sounds.
