@@ -51,6 +51,12 @@
       "version": "1.0.0",
       "source": "./project-documenter",
       "description": "Repository documentation toolkit for creating and maintaining CLAUDE.md and docs/claude/ structure"
+    },
+    {
+      "name": "reviewer-toolkit",
+      "version": "1.0.0",
+      "source": "./reviewer-toolkit",
+      "description": "Code review assistance toolkit with PR analysis, suggestions, and improvement capabilities"
     }
   ]
 }
