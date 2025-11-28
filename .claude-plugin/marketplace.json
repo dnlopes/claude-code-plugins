@@ -35,12 +35,6 @@
       "description": "Context7 MCP server for up-to-date library documentation and examples"
     },
     {
-      "name": "mcp-atlassian",
-      "version": "1.0.0",
-      "source": "./mcp-atlassian",
-      "description": "Atlassian MCP server for Jira and Confluence integration"
-    },
-    {
       "name": "mcp-shadcn",
       "version": "1.0.0",
       "source": "./mcp-shadcn",

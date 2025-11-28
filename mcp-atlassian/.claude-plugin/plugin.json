@@ -1,8 +1,0 @@
-{
-    "name": "mcp-atlassian",
-    "description": "Atlassian MCP server for Jira and Confluence integration",
-    "version": "1.0.0",
-    "author": {
-        "name": "David Lopes"
-    }
-}

@@ -31,7 +31,6 @@ claude-code plugins install /path/to/cloud-code-plugins/mcp-serena
 
 - **[mcp-serena](./mcp-serena/)** - Semantic code analysis via Serena MCP server
 - **[mcp-context7](./mcp-context7/)** - Up-to-date library documentation and examples
-- **[mcp-atlassian](./mcp-atlassian/)** - Jira and Confluence integration
 - **[mcp-shadcn](./mcp-shadcn/)** - shadcn/ui component documentation
 
 ### System
