@@ -66,6 +66,16 @@ Checks and updates stale documentation.
 4. Analyzes whether changes warrant doc updates
 5. Updates documents and refreshes front-matter
 
+### `/claude-docs:manage-principles`
+
+Add, remove, or update principles in CLAUDE.md.
+
+1. Displays current principles
+2. Offers actions: add, remove, edit, reorder
+3. For new/edited principles, validates against codebase
+4. Discusses findings with user if evidence is weak or contradictory
+5. Updates CLAUDE.md with new commit/timestamp
+
 ## Agents
 
 ### codebase-explorer
@@ -83,6 +93,13 @@ Analyzes git changes against a document's scope to determine:
 - Whether updates are needed
 - Which sections to update
 - Specific recommendations
+
+### principle-validator
+
+Validates proposed principles against the codebase:
+- Searches for evidence supporting the principle
+- Identifies counter-examples
+- Returns verdict: SUPPORTED, WEAK_EVIDENCE, NOT_SUPPORTED, or CONTRADICTED
 
 ## Skills
 
@@ -110,6 +127,9 @@ claude plugins add dnlopes/cloud-code-plugins/claude-docs
 
 # Update specific document
 /claude-docs:update-docs docs/claude/architecture.md
+
+# Manage principles
+/claude-docs:manage-principles
 ```
 
 ## Front-matter Format
