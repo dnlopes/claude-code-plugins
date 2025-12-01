@@ -1,0 +1,8 @@
+{
+    "name": "mcp-sequential-thinking",
+    "description": "Sequential Thinking MCP server for structured problem-solving through step-by-step reasoning",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}

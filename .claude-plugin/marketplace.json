@@ -41,6 +41,12 @@
       "description": "shadcn/ui MCP server for component documentation"
     },
     {
+      "name": "mcp-sequential-thinking",
+      "version": "1.0.0",
+      "source": "./mcp-sequential-thinking",
+      "description": "Sequential Thinking MCP server for structured problem-solving through step-by-step reasoning"
+    },
+    {
       "name": "project-documenter",
       "version": "1.0.0",
       "source": "./project-documenter",
