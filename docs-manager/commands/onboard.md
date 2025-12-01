@@ -18,7 +18,7 @@ ls CLAUDE.md docs/claude/ 2>/dev/null
 If CLAUDE.md or docs/claude/ already exists, ask the user:
 > This repository appears to already have Claude documentation. Would you like to:
 > 1. **Regenerate** - Replace existing documentation
-> 2. **Update** - Use `/claude-docs:update-docs` instead
+> 2. **Update** - Use `/docs-manager:update-docs` instead
 > 3. **Cancel** - Keep existing documentation
 
 ## Load Standards
@@ -195,11 +195,11 @@ Created:
 ### Next Steps
 1. Review the generated documentation
 2. Adjust principles in CLAUDE.md if needed
-3. Run `/claude-docs:update-docs` periodically to keep docs current
+3. Run `/docs-manager:update-docs` periodically to keep docs current
 
 ### To Update Later
 ```
-/claude-docs:update-docs
+/docs-manager:update-docs
 ```
 This will check for changes since last update and refresh stale docs.
 ```

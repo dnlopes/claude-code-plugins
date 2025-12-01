@@ -21,7 +21,7 @@ ls CLAUDE.md docs/claude/*.md 2>/dev/null
 ```
 
 If no documentation found:
-> No Claude documentation found. Run `/claude-docs:onboard` first to create initial documentation.
+> No Claude documentation found. Run `/docs-manager:onboard` first to create initial documentation.
 
 ## Phase 1: Inventory Documents
 
@@ -203,7 +203,7 @@ Present final summary:
 All documents now reflect: `<current_commit>` (<date>)
 
 ### Next Run
-Run `/claude-docs:update-docs` again after making more changes to the codebase.
+Run `/docs-manager:update-docs` again after making more changes to the codebase.
 ```
 
 ## Edge Cases

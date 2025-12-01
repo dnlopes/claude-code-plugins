@@ -1,4 +1,4 @@
-# claude-docs
+# docs-manager
 
 Repository onboarding and documentation maintenance for Claude context.
 
@@ -46,7 +46,7 @@ This enables git-based staleness detection.
 
 ## Commands
 
-### `/claude-docs:onboard`
+### `/docs-manager:onboard`
 
 Creates initial documentation for a repository.
 
@@ -56,7 +56,7 @@ Creates initial documentation for a repository.
 4. Generates CLAUDE.md and docs/claude/
 5. Sets up front-matter for future updates
 
-### `/claude-docs:update-docs [path]`
+### `/docs-manager:update-docs [path]`
 
 Checks and updates stale documentation.
 
@@ -66,7 +66,7 @@ Checks and updates stale documentation.
 4. Analyzes whether changes warrant doc updates
 5. Updates documents and refreshes front-matter
 
-### `/claude-docs:manage-principles`
+### `/docs-manager:manage-principles`
 
 Add, remove, or update principles in CLAUDE.md.
 
@@ -113,23 +113,23 @@ Defines the format and abstraction level for documentation:
 ## Installation
 
 ```bash
-claude plugins add dnlopes/cloud-code-plugins/claude-docs
+claude plugins add dnlopes/cloud-code-plugins/docs-manager
 ```
 
 ## Usage
 
 ```bash
 # Initial setup
-/claude-docs:onboard
+/docs-manager:onboard
 
 # Periodic updates
-/claude-docs:update-docs
+/docs-manager:update-docs
 
 # Update specific document
-/claude-docs:update-docs docs/claude/architecture.md
+/docs-manager:update-docs docs/claude/architecture.md
 
 # Manage principles
-/claude-docs:manage-principles
+/docs-manager:manage-principles
 ```
 
 ## Front-matter Format

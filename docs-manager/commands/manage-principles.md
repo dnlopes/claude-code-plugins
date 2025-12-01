@@ -16,7 +16,7 @@ test -f CLAUDE.md && echo "Found" || echo "Not found"
 
 If CLAUDE.md doesn't exist:
 > This repository doesn't have a CLAUDE.md file yet. Would you like to:
-> 1. **Onboard** - Run `/claude-docs:onboard` to create documentation
+> 1. **Onboard** - Run `/docs-manager:onboard` to create documentation
 > 2. **Cancel** - Exit without changes
 
 ## Phase 1: Parse Current Principles
