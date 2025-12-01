@@ -25,7 +25,7 @@ claude-code plugins install /path/to/cloud-code-plugins/mcp-serena
 
 ### Documentation
 
-- **[project-documenter](./project-documenter/)** - Project documentation maintenance and repository onboarding
+- **[claude-docs](./claude-docs/)** - Repository onboarding and documentation maintenance with git-based staleness tracking
 
 ### MCP Integrations
 

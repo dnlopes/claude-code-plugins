@@ -1,0 +1,8 @@
+{
+    "name": "claude-docs",
+    "description": "Repository onboarding and documentation maintenance for Claude context, with git-based staleness tracking",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}

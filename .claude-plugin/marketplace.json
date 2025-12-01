@@ -47,10 +47,10 @@
       "description": "Sequential Thinking MCP server for structured problem-solving through step-by-step reasoning"
     },
     {
-      "name": "project-documenter",
+      "name": "claude-docs",
       "version": "1.0.0",
-      "source": "./project-documenter",
-      "description": "Repository documentation toolkit for creating and maintaining CLAUDE.md and docs/claude/ structure"
+      "source": "./claude-docs",
+      "description": "Repository onboarding and documentation maintenance for Claude context, with git-based staleness tracking"
     },
     {
       "name": "reviewer-toolkit",
