@@ -43,7 +43,9 @@ Do NOT include examples that:
 - 1-2 sentence project description
 - Quick start commands (build, test, run)
 - Principles/invariants that MUST be followed
-- Links to docs/claude/ for details
+- `@` imports for docs/claude/ files (e.g., `@docs/claude/architecture.md`)
+
+**Why `@` imports:** Claude Code automatically loads CLAUDE.md at session start. Using `@path/to/file` syntax causes Claude Code to also load those files, ensuring all documentation is available immediately without manual reading.
 
 **Should NOT contain:**
 - Detailed architecture (goes in architecture.md)

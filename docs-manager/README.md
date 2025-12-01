@@ -33,7 +33,7 @@ The entry point. Contains:
 - Brief project description
 - Quick start commands
 - **Principles** - invariants that must be followed
-- Links to detailed docs
+- `@` imports for docs/claude/ files (Claude Code auto-loads these at session start)
 
 ### docs/claude/
 

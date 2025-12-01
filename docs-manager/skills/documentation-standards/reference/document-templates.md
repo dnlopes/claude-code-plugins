@@ -37,10 +37,10 @@ These rules MUST be followed when working on this codebase:
 
 ## Documentation
 
-- [Architecture](docs/claude/architecture.md) - System design and components
-- [Domain](docs/claude/domain.md) - Business concepts and terminology
-- [Patterns](docs/claude/patterns.md) - Code conventions and examples
-- [Development](docs/claude/development.md) - Build, test, deployment
+@docs/claude/architecture.md
+@docs/claude/domain.md
+@docs/claude/patterns.md
+@docs/claude/development.md
 
 ## Key Directories
 

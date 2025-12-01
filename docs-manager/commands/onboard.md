@@ -96,7 +96,7 @@ Key requirements:
 - Brief description (1-2 sentences)
 - Quick start commands
 - Principles section with the confirmed/adjusted principles
-- Links to docs/claude/
+- `@` imports for docs/claude/ files (e.g., `@docs/claude/architecture.md`) - this ensures Claude Code loads all documentation at session start
 - Front-matter with commit hash and timestamp
 
 ### Generate docs/claude/architecture.md

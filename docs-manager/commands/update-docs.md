@@ -39,7 +39,34 @@ For each document, extract front-matter:
 
 If a specific document was requested via argument, only process that one.
 
-## Phase 2: Staleness Check
+## Phase 2: Format Validation
+
+Check CLAUDE.md for outdated format (markdown links instead of `@` imports):
+
+```bash
+# Check for old-style markdown links to docs/claude/
+grep -E '\[.*\]\(docs/claude/.*\.md\)' CLAUDE.md
+```
+
+If old-style links are found:
+
+```markdown
+## Format Migration Needed
+
+CLAUDE.md uses markdown links instead of `@` imports:
+- `[Architecture](docs/claude/architecture.md)` → `@docs/claude/architecture.md`
+
+**Why this matters:** Claude Code automatically loads CLAUDE.md at session start. Using `@` imports ensures all documentation is loaded automatically, without requiring manual file reads.
+
+Would you like to migrate to `@` imports? (Recommended)
+```
+
+If user confirms, note for update in Phase 6. The conversion is:
+- Remove markdown link syntax: `[Title](docs/claude/X.md)` → `@docs/claude/X.md`
+- Remove any trailing description text on the same line
+- Keep one import per line
+
+## Phase 3: Staleness Check
 
 For each document, check if changes exist in its scope:
 
@@ -73,7 +100,7 @@ If all documents are current:
 
 Stop here if nothing is stale.
 
-## Phase 3: Analyze Stale Documents
+## Phase 4: Analyze Stale Documents
 
 For each stale document, spawn a **doc-analyzer** agent:
 
@@ -94,7 +121,7 @@ Determine:
 
 Run agents in parallel for efficiency.
 
-## Phase 4: Review Recommendations
+## Phase 5: Review Recommendations
 
 Compile agent findings and present:
 
@@ -125,7 +152,7 @@ For documents where agents recommend "No update needed":
 Ask user:
 > Would you like to proceed with the recommended updates?
 
-## Phase 5: Apply Updates
+## Phase 6: Apply Updates
 
 For each document that needs updates:
 
@@ -159,11 +186,12 @@ CLAUDE.md doesn't have scope paths. To check if it needs updates:
 - Principles rarely need updating (they're invariants)
 
 Only update CLAUDE.md if:
+- **Format migration confirmed in Phase 2** - Convert markdown links to `@` imports
 - Quick start commands changed
 - New major component was added (update directory listing)
 - A principle was violated and needs rewording
 
-## Phase 6: Validation
+## Phase 7: Validation
 
 After updates:
 
@@ -180,7 +208,7 @@ Check that:
 - All updated docs have current timestamp
 - No broken cross-references
 
-## Phase 7: Summary
+## Phase 8: Summary
 
 Present final summary:
 
