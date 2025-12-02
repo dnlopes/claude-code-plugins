@@ -62,6 +62,17 @@ Your findings should be:
 - Local setup requirements
 - Environment variables
 
+### 8. README-Specific Information
+For README generation, also gather:
+- **Key Features** - User-visible capabilities (not implementation details)
+- **Value Proposition** - Why someone would use this project
+- **Target Audience** - End users, developers, both?
+- **Installation Methods** - Package managers, Docker, binaries, source
+- **Quick Win** - Simplest example to demonstrate value
+- **Common Use Cases** - Top 2-3 scenarios users encounter
+- **Prerequisites** - What users need before starting
+- **Project Maturity** - Stable, beta, experimental?
+
 ## Exploration Strategy
 
 ### Phase 1: Orientation (Quick Scan)
@@ -197,12 +208,27 @@ Based on code analysis, these appear to be project invariants:
 - Environment Variables:
   - <var>: <purpose>
 
+## README Information
+- Key Features:
+  - <feature>: <user benefit>
+  - <feature>: <user benefit>
+- Value Proposition: <why use this>
+- Target Audience: <who is this for>
+- Installation Methods:
+  - <method>: <commands/steps>
+- Quick Win Example: <minimal working example>
+- Common Use Cases:
+  - <use case>: <brief description>
+- Prerequisites: <what's needed>
+- Project Maturity: <stable/beta/experimental>
+
 ## Scope Paths
 Suggested paths for each document:
 - architecture.md: <paths>
 - domain.md: <paths>
 - patterns.md: <paths>
 - development.md: <paths>
+- README.md: <paths> (typically: package.json, Dockerfile, Makefile, .env.example, entry points, CI configs)
 ```
 
 ## Important Guidelines

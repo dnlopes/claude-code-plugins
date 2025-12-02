@@ -30,7 +30,7 @@ Find all Claude documentation files:
 ```bash
 # List all doc files
 find docs/claude -name "*.md" -type f 2>/dev/null
-ls CLAUDE.md 2>/dev/null
+ls CLAUDE.md README.md 2>/dev/null
 ```
 
 For each document, extract front-matter:
@@ -38,6 +38,10 @@ For each document, extract front-matter:
 - `last_commit` - When doc was last updated
 
 If a specific document was requested via argument, only process that one.
+
+**Special handling:**
+- README.md should be included in inventory if it exists and has front-matter
+- If README.md exists but has no front-matter, ask user if they want to add it for tracking
 
 ## Phase 2: Format Validation
 
@@ -86,6 +90,7 @@ Present summary:
 
 | Document | Last Updated | Status |
 |----------|--------------|--------|
+| README.md | <date> | Current/Stale |
 | CLAUDE.md | <date> | Current/Stale |
 | architecture.md | <date> | Current/Stale |
 | domain.md | <date> | Current/Stale |
@@ -102,8 +107,26 @@ Stop here if nothing is stale.
 
 ## Phase 4: Analyze Stale Documents
 
-For each stale document, spawn a **doc-analyzer** agent:
+For each stale document, spawn the appropriate analyzer agent:
 
+**For README.md**, use **readme-analyzer** agent:
+```
+Analyze this README for needed updates:
+
+Document: README.md
+Content: <current content>
+Scope paths: <paths from front-matter>
+Last commit: <commit from front-matter>
+
+Determine:
+1. What changed in the scope paths
+2. Whether changes are significant enough for README updates
+3. Which sections need updating and why
+4. Specific recommendations for updates
+5. Whether to preserve or enhance existing content
+```
+
+**For other documents (CLAUDE.md, docs/claude/*)**, use **doc-analyzer** agent:
 ```
 Analyze this document for needed updates:
 
@@ -191,6 +214,15 @@ Only update CLAUDE.md if:
 - New major component was added (update directory listing)
 - A principle was violated and needs rewording
 
+### README.md Special Handling
+
+When updating README.md:
+- **Preserve existing tone and style** - Match the voice of the current README
+- **Preserve custom sections** - Don't remove user-added content
+- **Enhance, don't replace** - Update outdated info, don't rewrite from scratch
+- **Verify examples work** - Test commands and code examples
+- **Be user-focused** - README is for end users and contributors, not internal context
+
 ## Phase 7: Validation
 
 After updates:
@@ -198,15 +230,17 @@ After updates:
 ```bash
 # Verify front-matter is valid
 head -20 docs/claude/*.md
+head -20 README.md
 
 # Verify commit hashes are current
 git rev-parse HEAD
 ```
 
 Check that:
-- All updated docs have current commit hash in front-matter
+- All updated docs (including README.md) have current commit hash in front-matter
 - All updated docs have current timestamp
 - No broken cross-references
+- README examples are syntactically valid
 
 ## Phase 8: Summary
 

@@ -1,10 +1,10 @@
 # docs-manager
 
-Repository onboarding and documentation maintenance for Claude context.
+Repository onboarding and documentation maintenance for Claude context and user-facing READMEs.
 
 ## Purpose
 
-Creates and maintains documentation optimized for Claude to understand your codebase. Uses git-based tracking to detect when documentation becomes stale.
+Creates and maintains documentation optimized for Claude to understand your codebase, plus generates and maintains user-facing README.md files. Uses git-based tracking to detect when documentation becomes stale.
 
 ## Core Principle
 
@@ -16,6 +16,7 @@ If a document needs frequent updates, it's probably too detailed. Documentation 
 
 ```
 your-repo/
+├── README.md                    # User-facing documentation (generated or enhanced)
 ├── CLAUDE.md                    # Entry point + principles
 └── docs/
     └── claude/
@@ -26,6 +27,21 @@ your-repo/
         └── modules/             # Optional deep-dives
             └── [complex].md
 ```
+
+### README.md
+
+User-facing documentation for end users and contributors. Contains:
+- Project summary and features
+- Installation instructions (all methods)
+- Quick start guide with examples
+- Usage examples for common scenarios
+- Development setup guide
+- Contributing guidelines
+
+**Smart generation:**
+- If README exists: Enhances it while preserving tone, style, and custom sections
+- If no README: Creates comprehensive documentation from scratch
+- Always includes front-matter for git-based staleness tracking
 
 ### CLAUDE.md
 
@@ -51,20 +67,22 @@ This enables git-based staleness detection.
 Creates initial documentation for a repository.
 
 1. Explores the codebase systematically
-2. Extracts architecture, patterns, domain concepts
+2. Extracts architecture, patterns, domain concepts, and user-facing features
 3. Infers principles from code analysis
-4. Generates CLAUDE.md and docs/claude/
-5. Sets up front-matter for future updates
+4. Generates or enhances README.md (preserves existing content if present)
+5. Generates CLAUDE.md and docs/claude/
+6. Sets up front-matter for future updates
 
 ### `/docs-manager:update-docs [path]`
 
-Checks and updates stale documentation.
+Checks and updates stale documentation (including README.md).
 
-1. Reads front-matter from each document
+1. Reads front-matter from each document (including README.md)
 2. Checks `git diff <last_commit>..HEAD -- <scope_paths>`
 3. Identifies documents with changes in their scope
 4. Analyzes whether changes warrant doc updates
-5. Updates documents and refreshes front-matter
+5. For README: preserves tone, style, and custom sections while updating outdated info
+6. Updates documents and refreshes front-matter
 
 ### `/docs-manager:manage-principles`
 
@@ -86,6 +104,7 @@ Systematically explores a codebase to extract:
 - Domain concepts
 - Code patterns with examples
 - Suggested principles
+- README-specific information (features, use cases, installation methods)
 
 ### doc-analyzer
 
@@ -93,6 +112,14 @@ Analyzes git changes against a document's scope to determine:
 - Whether updates are needed
 - Which sections to update
 - Specific recommendations
+
+### readme-analyzer
+
+Specialized agent for README.md updates:
+- Analyzes user-facing impact of changes
+- Determines which README sections need updating
+- Preserves existing tone, style, and custom content
+- Recommends enhancements while maintaining user voice
 
 ### principle-validator
 
@@ -107,8 +134,9 @@ Validates proposed principles against the codebase:
 
 Defines the format and abstraction level for documentation:
 - Front-matter specification
-- Document templates
+- Document templates (including README template)
 - Guidelines for right-level abstraction
+- README-specific standards and sections
 
 ## Installation
 
@@ -119,14 +147,15 @@ claude plugins add dnlopes/cloud-code-plugins/docs-manager
 ## Usage
 
 ```bash
-# Initial setup
+# Initial setup (creates/enhances README + CLAUDE.md + docs/claude/)
 /docs-manager:onboard
 
-# Periodic updates
+# Periodic updates (checks all docs including README)
 /docs-manager:update-docs
 
 # Update specific document
 /docs-manager:update-docs docs/claude/architecture.md
+/docs-manager:update-docs README.md
 
 # Manage principles
 /docs-manager:manage-principles
@@ -157,3 +186,5 @@ last_updated: 2025-01-15T10:30:00Z
 4. **Minimal maintenance** - If docs need constant updates, they're too detailed
 
 5. **Principles over rules** - CLAUDE.md captures invariants, not style guides
+
+6. **Smart preservation** - Existing READMEs are enhanced, not replaced; tone and style are maintained
