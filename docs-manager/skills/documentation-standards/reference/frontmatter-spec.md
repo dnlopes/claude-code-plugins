@@ -2,7 +2,11 @@
 
 Every document in `docs/claude/` MUST have YAML front-matter with the following fields.
 
-## Required Fields
+## Front-matter Format
+
+Front-matter can be specified in two formats:
+
+### Standard Format (for docs/claude/)
 
 ```yaml
 ---
@@ -15,6 +19,34 @@ last_review_date: 2025-01-15T10:30:00Z
 last_updated: 2025-01-15T10:30:00Z
 ---
 ```
+
+### HTML Comment Format (for README.md and user-facing docs)
+
+For documents that are rendered on GitHub or other Markdown viewers where YAML front-matter would be visible, use HTML comments:
+
+```markdown
+<!--
+---
+scope:
+  paths:
+    - README.md
+    - package.json
+  summary: "Brief description of what this document covers"
+last_review_date: 2025-01-15T10:30:00Z
+last_updated: 2025-01-15T10:30:00Z
+---
+-->
+```
+
+**When to use HTML comment format:**
+- README.md files (always)
+- Any user-facing Markdown documentation where front-matter visibility is undesirable
+- Documents in repository root or docs/ directories intended for GitHub viewing
+
+**When to use standard format:**
+- docs/claude/ documentation (always)
+- Internal documentation not intended for direct viewing
+- Agent and command definition files
 
 ## Field Definitions
 
@@ -108,14 +140,7 @@ summary: "Authentication module internals and flows"
 
 CLAUDE.md does NOT use scope-based front-matter since it covers the entire repository.
 
-Instead, it uses a simpler format:
-
-```yaml
----
-last_review_date: 2025-01-15T10:30:00Z
-last_updated: 2025-01-15T10:30:00Z
----
-```
+It should NOT have any front-matter, as staleness tracking for CLAUDE.md is handled through special logic (checking if docs/claude/ files were updated, or if build/test commands changed).
 
 ## Validation Rules
 
@@ -123,7 +148,9 @@ last_updated: 2025-01-15T10:30:00Z
 2. **last_review_date must be valid:** Must be a valid ISO 8601 timestamp, typically matching last_updated
 3. **last_updated must be recent:** Should reflect when document was actually reviewed, not auto-generated
 
-## Example Complete Front-matter
+## Complete Examples
+
+### docs/claude/ document with standard front-matter
 
 ```yaml
 ---
@@ -141,3 +168,40 @@ last_updated: 2025-01-15T10:30:00Z
 
 ...document content...
 ```
+
+### README.md with HTML comment front-matter
+
+```markdown
+<!--
+---
+scope:
+  paths:
+    - README.md
+    - package.json
+    - Dockerfile
+    - .github/workflows/**
+  summary: "Project overview, installation instructions, and usage guide"
+last_review_date: 2025-01-15T10:30:00Z
+last_updated: 2025-01-15T10:30:00Z
+---
+-->
+
+# My Project
+
+A brief description of the project...
+
+## Installation
+
+...
+```
+
+## Parsing Front-matter
+
+Commands and agents must support both formats when extracting front-matter:
+
+1. **Standard format**: Match lines between `---` delimiters at the start of the file
+2. **HTML comment format**: Match lines between `<!--` and `-->` that contain `---` delimiters
+
+Example regex patterns:
+- Standard: `^---\n(.*?)\n---\n`
+- HTML comment: `^<!--\n---\n(.*?)\n---\n-->`

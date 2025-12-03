@@ -1,3 +1,4 @@
+<!--
 ---
 scope:
   paths:
@@ -11,6 +12,7 @@ scope:
 last_review_date: 2025-12-03T00:28:11Z
 last_updated: 2025-12-03T00:28:11Z
 ---
+-->
 
 # cloud-code-plugins
 

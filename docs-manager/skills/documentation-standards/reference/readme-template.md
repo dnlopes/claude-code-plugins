@@ -187,12 +187,14 @@ Planned features or improvements:
 
 ## Front-matter
 
-README.md should include front-matter for staleness tracking:
+README.md should include front-matter in HTML comment format for staleness tracking (to hide it from GitHub rendering):
 
-```yaml
+```markdown
+<!--
 ---
 scope:
   paths:
+    - README.md
     - package.json          # Version, dependencies
     - Dockerfile           # Docker setup
     - Makefile            # Build commands
@@ -200,10 +202,13 @@ scope:
     - src/main.*          # Entry points
     - .github/workflows/* # CI/CD
   summary: "User-facing documentation for installation, usage, and development"
-last_commit: abc123def456789...
+last_review_date: 2025-01-15T10:30:00Z
 last_updated: 2025-01-15T10:30:00Z
 ---
+-->
 ```
+
+**Important:** README.md must use HTML comment format (wrapped in `<!-- -->`), not standard YAML front-matter, to prevent it from appearing in GitHub's rendered view.
 
 ## Scope Paths Guidelines
 

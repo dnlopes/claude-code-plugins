@@ -18,6 +18,26 @@ You will receive:
 - **Last review date** when README was last verified
 - **Git changes** showing what changed in scope paths since last review
 
+## Front-matter Format
+
+README.md should use HTML comment format to hide front-matter from rendered views:
+
+```markdown
+<!--
+---
+scope:
+  paths:
+    - README.md
+    - package.json
+  summary: "Project overview and installation guide"
+last_review_date: 2025-01-15T10:30:00Z
+last_updated: 2025-01-15T10:30:00Z
+---
+-->
+```
+
+The calling command will handle parsing this format.
+
 ## Task
 
 Analyze the changes and determine:

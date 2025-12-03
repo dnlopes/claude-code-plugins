@@ -290,17 +290,31 @@ Required sections:
 - Development (setup, build, test, run)
 - Contributing (brief guide)
 
-Include front-matter with:
-- scope.paths covering package files, config files, entry points, CI configs
-- scope.summary
-- last_review_date and last_updated
+Include front-matter in HTML comment format (so it's hidden from GitHub rendering):
+```markdown
+<!--
+---
+scope:
+  paths:
+    - README.md
+    - package.json
+    - Dockerfile
+    - .github/workflows/**
+  summary: "Project overview, installation instructions, and usage guide"
+last_review_date: 2025-01-15T10:30:00Z
+last_updated: 2025-01-15T10:30:00Z
+---
+-->
+```
+
+Scope paths should cover: package files, config files, entry points, CI configs
 
 **If existing README (has_existing_readme = true):**
 
 Enhance the existing README by:
 1. Reading current content completely
 2. Identifying what sections exist
-3. Adding front-matter if missing
+3. Adding front-matter in HTML comment format if missing (see format above)
 4. Updating outdated information:
    - Installation steps that changed
    - Commands that changed

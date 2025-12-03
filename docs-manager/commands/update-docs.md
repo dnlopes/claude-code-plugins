@@ -33,19 +33,45 @@ find docs/claude -name "*.md" -type f 2>/dev/null
 ls CLAUDE.md README.md 2>/dev/null
 ```
 
-For each document, extract front-matter:
+For each document, extract front-matter (supporting both standard and HTML comment formats):
+
+**Standard format** (docs/claude/):
+```yaml
+---
+scope:
+  paths: [...]
+last_review_date: 2025-01-15T10:30:00Z
+---
+```
+
+**HTML comment format** (README.md):
+```markdown
+<!--
+---
+scope:
+  paths: [...]
+last_review_date: 2025-01-15T10:30:00Z
+---
+-->
+```
+
+Extract:
 - `scope.paths` - Which files to check for changes
 - `last_review_date` - When doc was last reviewed
+- `format` - Whether it's standard YAML or HTML comment format
 
 If a specific document was requested via argument, only process that one.
 
 **Special handling for README.md:**
 
-1. **README.md exists with front-matter**: Include in inventory for staleness checking
-2. **README.md exists without front-matter**: Ask user if they want to add front-matter for tracking
-3. **README.md missing**: This is fine - not all repositories need a docs-manager-tracked README. Only the docs in `docs/claude/` are required.
+1. **README.md with HTML comment front-matter**: Include in inventory for staleness checking
+2. **README.md with standard YAML front-matter**: Migrate to HTML comment format (Phase 2)
+3. **README.md without front-matter**: Ask user if they want to add front-matter for tracking
+4. **README.md missing**: This is fine - not all repositories need a docs-manager-tracked README. Only the docs in `docs/claude/` are required.
 
-## Phase 2: Format Validation
+## Phase 2: Format Validation and Migration
+
+### Check CLAUDE.md Format
 
 Check CLAUDE.md for outdated format (markdown links instead of `@` imports):
 
@@ -71,6 +97,40 @@ If user confirms, note for update in Phase 6. The conversion is:
 - Remove markdown link syntax: `[Title](docs/claude/X.md)` → `@docs/claude/X.md`
 - Remove any trailing description text on the same line
 - Keep one import per line
+
+### Check README.md Front-matter Format
+
+If README.md exists with standard YAML front-matter (not wrapped in HTML comments):
+
+```markdown
+## README.md Front-matter Migration
+
+README.md currently uses standard YAML front-matter, which is visible in GitHub rendering:
+
+```yaml
+---
+scope:
+  paths: [...]
+last_review_date: 2025-12-03T00:28:11Z
+---
+```
+
+This should be migrated to HTML comment format to hide it from rendered views:
+
+```markdown
+<!--
+---
+scope:
+  paths: [...]
+last_review_date: 2025-12-03T00:28:11Z
+---
+-->
+```
+
+Would you like to migrate README.md front-matter? (Recommended)
+```
+
+If user confirms, note for migration in Phase 6.
 
 ## Phase 3: Staleness Check
 
@@ -182,15 +242,59 @@ Ask user:
 For each document that needs updates:
 
 1. **Read current content**
-2. **Apply recommended changes** based on agent analysis
-3. **Update front-matter**:
+2. **Apply any format migrations first** (if user confirmed in Phase 2):
+   - If CLAUDE.md: Convert markdown links to `@` imports
+   - If README.md with standard front-matter: Migrate to HTML comment format
+3. **Apply recommended changes** based on agent analysis
+4. **Update front-matter** (preserving format):
    - `last_review_date`: Current timestamp
    - `last_updated`: Current timestamp
+   - Keep HTML comment format if document is README.md
+   - Keep standard format if document is in docs/claude/
 
 ```bash
 # Get current timestamp
 date -u +"%Y-%m-%dT%H:%M:%SZ"
 ```
+
+### Front-matter Format Migration
+
+When migrating README.md from standard to HTML comment format:
+
+**Before:**
+```yaml
+---
+scope:
+  paths:
+    - README.md
+  summary: "..."
+last_review_date: 2025-12-03T00:28:11Z
+last_updated: 2025-12-03T00:28:11Z
+---
+
+# Project Name
+```
+
+**After:**
+```markdown
+<!--
+---
+scope:
+  paths:
+    - README.md
+  summary: "..."
+last_review_date: 2025-12-03T00:28:11Z
+last_updated: 2025-12-03T00:28:11Z
+---
+-->
+
+# Project Name
+```
+
+Steps:
+1. Read the entire front-matter block (from first `---` to second `---` including both delimiters)
+2. Wrap it in HTML comment tags (`<!--` before, `-->` after)
+3. Ensure there's a blank line after the closing `-->`
 
 ### Update Guidelines
 
@@ -218,6 +322,7 @@ Only update CLAUDE.md if:
 ### README.md Special Handling
 
 When updating README.md:
+- **Use HTML comment format for front-matter** - Ensures front-matter is hidden from GitHub rendering
 - **Preserve existing tone and style** - Match the voice of the current README
 - **Preserve custom sections** - Don't remove user-added content
 - **Enhance, don't replace** - Update outdated info, don't rewrite from scratch
@@ -231,12 +336,14 @@ After updates:
 ```bash
 # Verify front-matter is valid
 head -20 docs/claude/*.md
-head -20 README.md
+head -25 README.md
 ```
 
 Check that:
-- All updated docs (including README.md) have current timestamp in front-matter
+- All updated docs have current timestamp in front-matter
 - Both last_review_date and last_updated are set to the same timestamp
+- README.md uses HTML comment format for front-matter (wrapped in `<!-- -->`)
+- docs/claude/ files use standard YAML front-matter format
 - No broken cross-references
 - README examples are syntactically valid
 

@@ -17,6 +17,32 @@ You will receive:
 3. **Scope paths** - From the document's front-matter
 4. **Last review date** - The timestamp when doc was last reviewed
 
+## Front-matter Parsing
+
+Documents may use two front-matter formats:
+
+**Standard format** (docs/claude/):
+```yaml
+---
+scope:
+  paths: [...]
+last_review_date: 2025-01-15T10:30:00Z
+---
+```
+
+**HTML comment format** (README.md, user-facing docs):
+```markdown
+<!--
+---
+scope:
+  paths: [...]
+last_review_date: 2025-01-15T10:30:00Z
+---
+-->
+```
+
+Your analysis should work with either format. The calling command will extract the values for you.
+
 ## Your Task
 
 1. Analyze what changed in the scope paths since last_review_date
