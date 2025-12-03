@@ -463,10 +463,6 @@ Contributions welcome! Please:
 
 See [docs/claude/development.md](docs/claude/development.md) for detailed contribution guidelines.
 
-## Migration Notes
-
-This repository was created by decomposing a monolithic `core-dev` plugin into focused, modular plugins. See [MIGRATION.md](./MIGRATION.md) for details.
-
 ## License
 
 MIT License - See LICENSE file for details
