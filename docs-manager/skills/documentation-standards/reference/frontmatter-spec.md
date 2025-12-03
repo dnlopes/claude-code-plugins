@@ -11,7 +11,7 @@ scope:
     - path/to/relevant/directory/**
     - path/to/specific/file.ts
   summary: "Brief description of what this document covers"
-last_commit: abc123def456789abcdef123456789abcdef1234
+last_review_date: 2025-01-15T10:30:00Z
 last_updated: 2025-01-15T10:30:00Z
 ---
 ```
@@ -24,7 +24,7 @@ last_updated: 2025-01-15T10:30:00Z
 
 Used by `update-docs` to determine if the document is stale by running:
 ```bash
-git diff <last_commit>..HEAD -- <paths>
+git log --since="<last_review_date>" --name-only -- <paths>
 ```
 
 **Guidelines:**
@@ -80,18 +80,23 @@ summary: "Build, test, and development workflow"
 summary: "Authentication module internals and flows"
 ```
 
-### last_commit
-**Type:** Git commit SHA (full 40-character hash)
-**Purpose:** Records the commit at which this document was last verified accurate.
+### last_review_date
+**Type:** ISO 8601 timestamp with timezone
+**Purpose:** Records when this document was last reviewed and verified accurate.
 
 **Used for:**
-- Staleness detection: `git diff <last_commit>..HEAD -- <paths>`
+- Staleness detection: `git log --since="<last_review_date>" --name-only -- <paths>`
 - Audit trail: knowing when docs were last reviewed
 
 **Update rule:** Update this field ONLY after:
-1. Reviewing changes in scope paths since last_commit
+1. Reviewing changes in scope paths since last_review_date
 2. Updating document content if needed
 3. Confirming document accurately reflects current code
+
+**Why timestamp instead of commit hash:**
+- Survives git squash merges (commit hashes become orphaned)
+- Works naturally with feature branch → squash merge workflow
+- Maintains git-based tracking while being more reliable
 
 ### last_updated
 **Type:** ISO 8601 timestamp with timezone
@@ -107,7 +112,7 @@ Instead, it uses a simpler format:
 
 ```yaml
 ---
-last_commit: abc123def456789abcdef123456789abcdef1234
+last_review_date: 2025-01-15T10:30:00Z
 last_updated: 2025-01-15T10:30:00Z
 ---
 ```
@@ -115,7 +120,7 @@ last_updated: 2025-01-15T10:30:00Z
 ## Validation Rules
 
 1. **paths must exist:** All paths in scope.paths should match at least one file in the repository
-2. **last_commit must be valid:** Must be a commit that exists in the repository history
+2. **last_review_date must be valid:** Must be a valid ISO 8601 timestamp, typically matching last_updated
 3. **last_updated must be recent:** Should reflect when document was actually reviewed, not auto-generated
 
 ## Example Complete Front-matter
@@ -128,7 +133,7 @@ scope:
     - src/routes/**
     - src/middleware/**
   summary: "API layer architecture including routing and middleware"
-last_commit: a1b2c3d4e5f6789012345678901234567890abcd
+last_review_date: 2025-01-15T10:30:00Z
 last_updated: 2025-01-15T10:30:00Z
 ---
 

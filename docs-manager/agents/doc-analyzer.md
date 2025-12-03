@@ -15,24 +15,28 @@ You will receive:
 1. **Document path** - The doc to analyze (e.g., `docs/claude/architecture.md`)
 2. **Current content** - The document's current content
 3. **Scope paths** - From the document's front-matter
-4. **Last commit** - The commit SHA when doc was last updated
+4. **Last review date** - The timestamp when doc was last reviewed
 
 ## Your Task
 
-1. Analyze what changed in the scope paths since last_commit
+1. Analyze what changed in the scope paths since last_review_date
 2. Determine if changes are significant enough to warrant doc updates
 3. Identify which sections need updating and why
 4. Provide specific recommendations
 
 ## Analysis Process
 
-### Step 1: Get the Diff
+### Step 1: Get the Changes
 
 ```bash
-git diff <last_commit>..HEAD -- <scope_paths>
+# Get list of changed files
+git log --since="<last_review_date>" --name-only --pretty=format: -- <scope_paths> | sort -u
+
+# Get detailed diff for those files
+git log --since="<last_review_date>" -p -- <scope_paths>
 ```
 
-If diff is empty, the document is current. Report: "No changes in scope paths."
+If no files changed, the document is current. Report: "No changes in scope paths."
 
 ### Step 2: Categorize Changes
 
@@ -83,11 +87,11 @@ For each significant change:
 
 ### Scope
 Paths: <scope_paths>
-Last Updated: <last_commit> (<date>)
-Commits Since: <count>
+Last Reviewed: <last_review_date>
+Changes Since: <count of commits or files changed>
 
 ### Changes Detected
-<summary of git diff - file list and change types>
+<summary of changes - file list and change types>
 
 ### Significance Assessment
 

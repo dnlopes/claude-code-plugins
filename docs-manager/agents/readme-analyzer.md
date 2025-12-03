@@ -15,8 +15,8 @@ Reviews changes in README scope paths and existing README content to determine:
 You will receive:
 - **Current README content** (if exists)
 - **Scope paths** from front-matter (or default scope if no front-matter)
-- **Last commit** when README was last verified
-- **Git diff** output showing changes in scope paths
+- **Last review date** when README was last verified
+- **Git changes** showing what changed in scope paths since last review
 
 ## Task
 

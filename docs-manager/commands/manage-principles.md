@@ -179,16 +179,15 @@ If user chooses "Modify", collect the new text and re-run validation (return to 
 
 ## Phase 5: Apply Changes
 
-Get current commit hash and timestamp:
+Get current timestamp:
 
 ```bash
-git rev-parse HEAD
 date -u +"%Y-%m-%dT%H:%M:%SZ"
 ```
 
 Update CLAUDE.md:
 
-1. **Update front-matter** - Set `last_commit` and `last_updated` to current values
+1. **Update front-matter** - Set `last_review_date` and `last_updated` to current timestamp
 2. **Update principles section** - Apply the add/remove/edit/reorder changes
 3. **Preserve all other content** - Don't modify anything outside the principles section and front-matter
 
@@ -221,7 +220,7 @@ If Done, present final summary:
 1. **<Name>**: <Description>
 2. ...
 
-**CLAUDE.md updated** with commit `<short hash>` at `<timestamp>`
+**CLAUDE.md updated** at `<timestamp>`
 ```
 
 ## Important Guidelines

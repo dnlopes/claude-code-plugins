@@ -35,13 +35,15 @@ ls CLAUDE.md README.md 2>/dev/null
 
 For each document, extract front-matter:
 - `scope.paths` - Which files to check for changes
-- `last_commit` - When doc was last updated
+- `last_review_date` - When doc was last reviewed
 
 If a specific document was requested via argument, only process that one.
 
-**Special handling:**
-- README.md should be included in inventory if it exists and has front-matter
-- If README.md exists but has no front-matter, ask user if they want to add it for tracking
+**Special handling for README.md:**
+
+1. **README.md exists with front-matter**: Include in inventory for staleness checking
+2. **README.md exists without front-matter**: Ask user if they want to add front-matter for tracking
+3. **README.md missing**: This is fine - not all repositories need a docs-manager-tracked README. Only the docs in `docs/claude/` are required.
 
 ## Phase 2: Format Validation
 
@@ -75,8 +77,8 @@ If user confirms, note for update in Phase 6. The conversion is:
 For each document, check if changes exist in its scope:
 
 ```bash
-# Get changes since last_commit in scope paths
-git diff --stat <last_commit>..HEAD -- <scope_paths>
+# Get changes since last_review_date in scope paths
+git log --since="<last_review_date>" --name-only --pretty=format: -- <scope_paths> | sort -u
 ```
 
 Categorize each document:
@@ -116,7 +118,7 @@ Analyze this README for needed updates:
 Document: README.md
 Content: <current content>
 Scope paths: <paths from front-matter>
-Last commit: <commit from front-matter>
+Last review date: <date from front-matter>
 
 Determine:
 1. What changed in the scope paths
@@ -133,7 +135,7 @@ Analyze this document for needed updates:
 Document: <path>
 Content: <current content>
 Scope paths: <paths from front-matter>
-Last commit: <commit from front-matter>
+Last review date: <date from front-matter>
 
 Determine:
 1. What changed in the scope paths
@@ -182,12 +184,11 @@ For each document that needs updates:
 1. **Read current content**
 2. **Apply recommended changes** based on agent analysis
 3. **Update front-matter**:
-   - `last_commit`: Current HEAD commit
+   - `last_review_date`: Current timestamp
    - `last_updated`: Current timestamp
 
 ```bash
-# Get current commit and timestamp
-git rev-parse HEAD
+# Get current timestamp
 date -u +"%Y-%m-%dT%H:%M:%SZ"
 ```
 
@@ -231,14 +232,11 @@ After updates:
 # Verify front-matter is valid
 head -20 docs/claude/*.md
 head -20 README.md
-
-# Verify commit hashes are current
-git rev-parse HEAD
 ```
 
 Check that:
-- All updated docs (including README.md) have current commit hash in front-matter
-- All updated docs have current timestamp
+- All updated docs (including README.md) have current timestamp in front-matter
+- Both last_review_date and last_updated are set to the same timestamp
 - No broken cross-references
 - README examples are syntactically valid
 
@@ -261,8 +259,8 @@ Present final summary:
 | <path> | No changes in scope |
 | <path> | Changes not significant |
 
-### Commit Info
-All documents now reflect: `<current_commit>` (<date>)
+### Review Date
+All documents now reviewed as of: `<timestamp>`
 
 ### Next Run
 Run `/docs-manager:update-docs` again after making more changes to the codebase.
@@ -277,10 +275,10 @@ If a document lacks proper front-matter:
 > 1. Add front-matter based on content analysis
 > 2. Skip this document
 
-### Invalid Last Commit
+### Invalid Last Review Date
 
-If `last_commit` doesn't exist in history:
-> Document `<path>` references commit `<hash>` which doesn't exist. Treating as fully stale.
+If `last_review_date` is invalid or malformed:
+> Document `<path>` has invalid last_review_date. Treating as fully stale.
 
 ### Scope Paths Match No Files
 
