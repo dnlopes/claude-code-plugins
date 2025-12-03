@@ -8,18 +8,51 @@ You are onboarding a repository to create Claude-optimized documentation.
 
 ## Pre-flight Check
 
-First, verify this is appropriate:
+Check which documentation already exists:
 
 ```bash
-# Check if already onboarded
-ls CLAUDE.md docs/claude/ 2>/dev/null
+# Check for existing documentation
+ls CLAUDE.md 2>/dev/null
+ls README.md 2>/dev/null
+find docs/claude -name "*.md" -type f 2>/dev/null
 ```
 
-If CLAUDE.md or docs/claude/ already exists, ask the user:
-> This repository appears to already have Claude documentation. Would you like to:
-> 1. **Regenerate** - Replace existing documentation
-> 2. **Update** - Use `/docs-manager:update-docs` instead
+Build an inventory of existing vs missing documentation:
+- **CLAUDE.md**: exists / missing
+- **README.md**: exists (with/without front-matter) / missing
+- **docs/claude/architecture.md**: exists / missing
+- **docs/claude/domain.md**: exists / missing
+- **docs/claude/patterns.md**: exists / missing
+- **docs/claude/development.md**: exists / missing
+
+Determine onboarding state:
+
+### Fully Onboarded
+If all core documentation exists (CLAUDE.md + all expected docs/claude/*.md):
+> This repository appears to be fully onboarded. Would you like to:
+> 1. **Regenerate** - Replace all existing documentation
+> 2. **Update** - Use `/docs-manager:update-docs` instead to update stale docs
 > 3. **Cancel** - Keep existing documentation
+
+### Partially Onboarded
+If some documentation exists but other parts are missing:
+> This repository is partially onboarded. Found:
+> - CLAUDE.md: ✓ / ✗
+> - README.md: ✓ / ✗
+> - docs/claude/architecture.md: ✓ / ✗
+> - docs/claude/domain.md: ✓ / ✗
+> - docs/claude/patterns.md: ✓ / ✗
+> - docs/claude/development.md: ✓ / ✗
+>
+> Would you like to:
+> 1. **Complete** - Generate only the missing documentation
+> 2. **Regenerate** - Replace all existing documentation
+> 3. **Cancel** - Keep existing documentation
+
+If user selects **Complete**, record which documents need to be generated and skip those that exist in Phase 4.
+
+### Not Onboarded
+If no documentation exists, proceed with full onboarding.
 
 ## Load Standards
 
@@ -45,7 +78,35 @@ If README.md exists:
 
 ## Phase 2: Exploration
 
-Spawn a **codebase-explorer** agent to systematically analyze the repository:
+**Important**: If in **Complete mode** (partial onboarding), only explore what's needed for the missing documentation.
+
+Determine exploration scope based on what needs to be generated:
+- If **CLAUDE.md missing**: Need full exploration (all items below)
+- If **any docs/claude/*.md missing**: Need exploration for those specific areas
+- If **only README.md missing**: Need lighter README-focused exploration
+
+### Partial Onboarding Exploration
+
+If only specific docs are missing, tailor the exploration:
+
+```
+Explore this repository focusing on the missing documentation:
+[Include only the relevant items below based on what's missing]
+
+- For README.md: Project identity, features, installation, quick start, development workflow
+- For architecture.md: Components, relationships, external dependencies, architectural decisions
+- For domain.md: Domain concepts, terminology, entities, business rules
+- For patterns.md: Project structure, naming conventions, error handling, testing patterns
+- For development.md: Prerequisites, setup, build/test/run commands, environment variables
+```
+
+Then skip to Phase 4 and only generate the missing documents.
+
+---
+
+### Full Onboarding Exploration
+
+For **full onboarding** (no existing docs), spawn a **codebase-explorer** agent to systematically analyze the repository:
 
 ```
 Explore this repository comprehensively. I need:
@@ -63,6 +124,8 @@ Explore this repository comprehensively. I need:
 Wait for the agent to return structured findings.
 
 ## Phase 3: Review Findings
+
+**Skip this phase if in Complete mode (partial onboarding).** Go directly to Phase 4.
 
 Present a summary to the user:
 
@@ -106,20 +169,23 @@ Wait for user confirmation or adjustments.
 
 ## Phase 4: Generate Documentation
 
-Get the current commit hash and timestamp:
+**Important**: If user selected **Complete** mode in pre-flight (partial onboarding), only generate the missing documents identified in pre-flight. Skip any documents that already exist.
+
+Get the current timestamp:
 
 ```bash
-git rev-parse HEAD
 date -u +"%Y-%m-%dT%H:%M:%SZ"
 ```
 
-Create the directory structure:
+Create the directory structure if needed:
 
 ```bash
 mkdir -p docs/claude/modules
 ```
 
 ### Generate CLAUDE.md
+
+**Skip this section if CLAUDE.md already exists.**
 
 Using the exploration findings and documentation-standards templates, create CLAUDE.md at the repository root.
 
@@ -128,9 +194,11 @@ Key requirements:
 - Quick start commands
 - Principles section with the confirmed/adjusted principles
 - `@` imports for docs/claude/ files (e.g., `@docs/claude/architecture.md`) - this ensures Claude Code loads all documentation at session start
-- Front-matter with commit hash and timestamp
+- Front-matter with last_review_date and last_updated timestamp
 
 ### Generate docs/claude/architecture.md
+
+**Skip this section if docs/claude/architecture.md already exists.**
 
 Using findings, create architecture documentation:
 - High-level overview
@@ -142,9 +210,11 @@ Using findings, create architecture documentation:
 Include proper front-matter with:
 - scope.paths covering architectural files
 - scope.summary
-- last_commit and last_updated
+- last_review_date and last_updated
 
 ### Generate docs/claude/domain.md
+
+**Skip this section if docs/claude/domain.md already exists.**
 
 Using findings, create domain documentation:
 - Glossary of terms
@@ -154,9 +224,11 @@ Using findings, create domain documentation:
 Include proper front-matter with:
 - scope.paths covering domain/model files
 - scope.summary
-- last_commit and last_updated
+- last_review_date and last_updated
 
 ### Generate docs/claude/patterns.md
+
+**Skip this section if docs/claude/patterns.md already exists.**
 
 Using findings, create patterns documentation:
 - Project structure
@@ -168,9 +240,11 @@ Using findings, create patterns documentation:
 Include proper front-matter with:
 - scope.paths covering representative files
 - scope.summary
-- last_commit and last_updated
+- last_review_date and last_updated
 
 ### Generate docs/claude/development.md
+
+**Skip this section if docs/claude/development.md already exists.**
 
 Using findings, create development documentation:
 - Prerequisites
@@ -183,9 +257,11 @@ Using findings, create development documentation:
 Include proper front-matter with:
 - scope.paths covering build/config files
 - scope.summary
-- last_commit and last_updated
+- last_review_date and last_updated
 
 ### Generate Module Docs (If Warranted)
+
+**Note**: Module docs are rarely needed and should only be created during full onboarding, not during partial completion.
 
 Only create docs/claude/modules/<name>.md for modules that:
 - Have non-obvious behavior
@@ -195,6 +271,10 @@ Only create docs/claude/modules/<name>.md for modules that:
 Most repositories will NOT need module docs. Prefer keeping things in the main documents.
 
 ### Generate or Enhance README.md
+
+**Skip this section if README.md already exists with proper front-matter.** Only generate/enhance if:
+- README.md doesn't exist, OR
+- README.md exists but is missing front-matter
 
 **If no existing README (has_existing_readme = false):**
 
@@ -213,7 +293,7 @@ Required sections:
 Include front-matter with:
 - scope.paths covering package files, config files, entry points, CI configs
 - scope.summary
-- last_commit and last_updated
+- last_review_date and last_updated
 
 **If existing README (has_existing_readme = true):**
 
@@ -260,19 +340,20 @@ head -50 README.md
 
 ## Phase 6: Summary
 
-Present to the user:
+Present to the user what was actually generated/modified:
 
 ```markdown
 ## Onboarding Complete
 
-Created:
-- `README.md` - <"Created new" or "Enhanced existing"> user-facing documentation
-- `CLAUDE.md` - Entry point with <N> principles
-- `docs/claude/architecture.md` - System overview
-- `docs/claude/domain.md` - Business concepts
-- `docs/claude/patterns.md` - Code conventions
-- `docs/claude/development.md` - Build & test workflow
-<- `docs/claude/modules/X.md` - if any created>
+**Generated documentation:**
+[List only the documents that were actually created or modified in this run]
+- `README.md` - <"Created new" / "Enhanced existing" / "Skipped (already exists)">
+- `CLAUDE.md` - <"Created new" / "Skipped (already exists)">
+- `docs/claude/architecture.md` - <"Created new" / "Skipped (already exists)">
+- `docs/claude/domain.md` - <"Created new" / "Skipped (already exists)">
+- `docs/claude/patterns.md` - <"Created new" / "Skipped (already exists)">
+- `docs/claude/development.md` - <"Created new" / "Skipped (already exists)">
+[Only list module docs if they were created]
 
 ### Next Steps
 1. Review the generated documentation
