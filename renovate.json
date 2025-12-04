@@ -1,19 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:best-practices",
-    ":configMigration",
-    "group:allNonMajor",
-    ":semanticCommitType(chore)",
-    ":semanticCommitScope(deps)",
+    ":automergeMinor",
     ":automergePr",
-    ":automergeAll",
     ":automergeRequireAllStatusChecks",
+    ":combinePatchMinorReleases",
+    ":configMigration",
     ":enableVulnerabilityAlerts",
     ":labels(renovate, dependencies)",
     ":rebaseStalePrs",
+    ":semanticCommitScope(deps)",
+    ":semanticCommitType(chore)",
     ":timezone(UTC)",
-    "security:openssf-scorecard"
+    "config:best-practices"
   ],
   "schedule": ["* 0-5 * * 4,5"],
   "reviewersFromCodeOwners": true,
@@ -24,6 +23,16 @@
         "action"
       ],
       "pinDigests": false
+    },
+    {
+      "groupName": "all-minor",
+      "matchUpdateTypes": ["minor"],
+      "automerge": true
+    },
+    {
+      "groupName": "all-patch",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
     }
   ]
 }
