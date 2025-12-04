@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  pull-requests: read
+  pull-requests: write
   contents: write
   id-token: write
   statuses: write
