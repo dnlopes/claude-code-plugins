@@ -1,0 +1,11 @@
+name: CI - Trivy
+on:
+  pull_request:
+
+concurrency:
+  group: pr-trivy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security:
+    uses: dnlopes/Reusable.Workflows/.github/workflows/trivy-scan.yaml@v1
