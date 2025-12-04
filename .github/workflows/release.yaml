@@ -9,26 +9,26 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  actions: write
-  pull-requests: write
-  statuses: write
+  pull-requests: read
   contents: write
-  checks: write
+  id-token: write
+  statuses: write
 
 jobs:
   release_drafter:
     name: Create
     runs-on: ubuntu-latest
     steps:
-      - uses: release-drafter/release-drafter@v6
-        id: draft_release
-        with:
-          config-name: release-drafter.yaml
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-        run: gh release edit "${{ steps.draft_release.outputs.tag_name }}" --draft=false --latest
+      # - name: Publish Release
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #     GH_REPO: ${{ github.repository }}
+      #   run: gh release edit "${{ steps.draft_release.outputs.tag_name }}" --draft=false --latest
