@@ -9,14 +9,15 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  pull-requests: read
+  pull-requests: write
   contents: write
-  id-token: write
-  statuses: write
 
 jobs:
-  release_drafter:
-    name: Create
+  release:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,9 +27,3 @@ jobs:
         uses: cycjimmy/semantic-release-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Publish Release
-      #   env:
-      #     GH_TOKEN: ${{ github.token }}
-      #     GH_REPO: ${{ github.repository }}
-      #   run: gh release edit "${{ steps.draft_release.outputs.tag_name }}" --draft=false --latest
