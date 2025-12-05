@@ -154,9 +154,9 @@ claude-code plugins install /path/to/cloud-code-plugins/<plugin-name>
 4. **Commit changes following conventional commit format:**
 ```bash
 git add .
-git commit -m "✨ feat(plugin-name): add new feature"
+git commit -m "feat(plugin-name): add new feature"
 # or
-git commit -m "🐛 fix(plugin-name): resolve issue"
+git commit -m "fix(plugin-name): resolve issue"
 ```
 
 ## Quality Checks
@@ -191,7 +191,7 @@ Pre-commit hooks run automatically in CI even without local installation.
    - Enforces code quality standards
 
 2. **pr-semantic.yaml**: Validates PR titles follow conventional commit format
-   - Enforces emoji-prefixed format
+   - Enforces Angular conventional commit format
    - Ensures semantic versioning compatibility
 
 ### Automated Dependency Management
@@ -272,13 +272,13 @@ git checkout -b feature/my-feature
 
 4. **Commit with conventional format:**
 ```bash
-git commit -m "✨ feat(plugin-name): add new capability"
+git commit -m "feat(plugin-name): add new capability"
 ```
 
 5. **Push and create PR:**
 ```bash
 git push origin feature/my-feature
-gh pr create --title "✨ feat(plugin-name): add new capability" --body "Description of changes"
+gh pr create --title "feat(plugin-name): add new capability" --body "Description of changes"
 ```
 
 6. **Address review feedback:**
@@ -288,7 +288,9 @@ gh pr create --title "✨ feat(plugin-name): add new capability" --body "Descrip
 
 ### Commit Message Guidelines
 
-**Format:** `<emoji> <type>(<scope>): <description>`
+**Format:** `<type>(<scope>): <description>`
+
+Follows the [Angular Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
 
 **Common types:**
 - `feat`: New features
@@ -296,22 +298,18 @@ gh pr create --title "✨ feat(plugin-name): add new capability" --body "Descrip
 - `refactor`: Code refactoring
 - `docs`: Documentation changes
 - `test`: Test additions/modifications
-- `chore`: Maintenance tasks
+- `build`: Build system changes
+- `ci`: CI configuration changes
+- `chore`: Other maintenance tasks
 
-**Common emojis:**
-- ✨ `:sparkles:` - feat
-- 🐛 `:bug:` - fix
-- ♻️ `:recycle:` - refactor
-- 📝 `:memo:` - docs
-- ✅ `:white_check_mark:` - test
-- 🔧 `:wrench:` - chore
+**Breaking changes:** Add `!` after type/scope (e.g., `feat!: breaking change`)
 
 **Examples:**
 ```
-✨ feat(docs-manager): add README generation support
-🐛 fix(git-workflow): resolve pre-commit hook bypass
-♻️ refactor(dev-toolkit): simplify agent invocation
-📝 docs(readme): update installation instructions
+feat(docs-manager): add README generation support
+fix(git-workflow): resolve pre-commit hook bypass
+refactor(dev-toolkit): simplify agent invocation
+docs(readme): update installation instructions
 ```
 
 ### Documentation Guidelines

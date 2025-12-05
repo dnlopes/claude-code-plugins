@@ -26,7 +26,7 @@ cloud-code-plugins is a modular collection of Claude Code plugins that extend Cl
 **Location**: `/dev-toolkit`, `/git-workflow`, `/reviewer-toolkit`
 
 - **dev-toolkit**: Provides comprehensive development lifecycle tools including research commands (`/research-codebase`), planning commands (`/create-plan`), implementation commands (`/implement-plan`), and specialized agents for codebase analysis, locating components, and finding patterns
-- **git-workflow**: Handles git operations and GitHub integration with commands for creating commits (`/commit`) and pull requests (`/create-pr`), enforcing conventional commit format with emojis
+- **git-workflow**: Handles git operations and GitHub integration with commands for creating commits (`/commit`) and pull requests (`/create-pr`), enforcing conventional commit format (Angular convention)
 - **reviewer-toolkit**: Offers multi-perspective code review through parallel specialized agents that analyze security, bugs, code quality, API contracts, test coverage, and historical context
 
 ### 2. Documentation Plugin

@@ -28,7 +28,7 @@ A modular collection of Claude Code plugins that enhance development workflows t
 - **Up-to-Date Library Docs**: Context7 integration for current framework and library documentation
 - **Structured Problem Solving**: Sequential thinking for complex debugging and design decisions
 - **Desktop Notifications**: macOS notification center integration for task completion alerts
-- **Quality Enforcement**: Pre-commit hooks and conventional commits with emoji prefixes
+- **Quality Enforcement**: Pre-commit hooks and conventional commits (Angular convention)
 - **Evidence-Based Documentation**: Principle validation backed by codebase analysis
 
 ## Plugin Catalog
@@ -51,7 +51,7 @@ claude-code plugins install /path/to/cloud-code-plugins/dev-toolkit
 Git operations and GitHub PR management:
 - `/git-workflow:commit` - Create well-structured commits with user approval
 - `/git-workflow:create-pr` - Branch, push, and create PR with comprehensive summary
-- `committing-work` skill - Conventional commit guidelines with emojis
+- `committing-work` skill - Conventional commit guidelines (Angular convention)
 
 **Install:**
 ```bash
@@ -434,21 +434,26 @@ claude-code plugins install /path/to/my-plugin
 
 ### Commit Guidelines
 
-**Format:** `<emoji> <type>(<scope>): <description>`
+**Format:** `<type>(<scope>): <description>`
+
+Follows the [Angular Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
 
 **Examples:**
 ```bash
-git commit -m "✨ feat(dev-toolkit): add implementation plan command"
-git commit -m "🐛 fix(git-workflow): resolve commit message formatting"
-git commit -m "📝 docs(readme): update installation instructions"
+git commit -m "feat(dev-toolkit): add implementation plan command"
+git commit -m "fix(git-workflow): resolve commit message formatting"
+git commit -m "docs(readme): update installation instructions"
 ```
 
-**Common emoji prefixes:**
-- ✨ `:sparkles:` - feat
-- 🐛 `:bug:` - fix
-- ♻️ `:recycle:` - refactor
-- 📝 `:memo:` - docs
-- ✅ `:white_check_mark:` - test
+**Common types:**
+- `feat` - New features
+- `fix` - Bug fixes
+- `refactor` - Code refactoring
+- `docs` - Documentation
+- `test` - Tests
+- `build` - Build system changes
+- `ci` - CI configuration changes
+- `chore` - Other changes
 
 ## Contributing
 

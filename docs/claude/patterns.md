@@ -70,8 +70,7 @@ Core principle: Analyze changes → Plan commits → Execute.
 
 ### Step 2: Present commit plan
 Draft a commit message following conventional commits format:
-- Use emoji prefix (✨ for features, 🐛 for fixes, etc.)
-- Format: `<emoji> <type>(<scope>): <description>`
+- Format: `<type>(<scope>): <description>`
 - Focus on "why" not "what"
 
 ### Step 3: Get user approval
@@ -81,7 +80,7 @@ Present the plan and wait for approval.
 ```bash
 git add <files>
 git commit -m "$(cat <<'EOF'
-✨ feat: add user authentication
+feat: add user authentication
 EOF
 )"
 ```
@@ -153,22 +152,14 @@ description: Use this skill before committing changes on the repository
 
 ## Key Principles
 - **Atomic commits**: Each commit contains related changes
-- **Conventional format**: `<emoji> <type>(<scope>): <description>`
+- **Conventional format**: `<type>(<scope>): <description>`
 - **Descriptive messages**: Focus on why, not what
-
-## Emoji Guide
-- ✨ `:sparkles:` - New features
-- 🐛 `:bug:` - Bug fixes
-- ♻️ `:recycle:` - Refactoring
-- 📝 `:memo:` - Documentation
-- ✅ `:white_check_mark:` - Tests
-- 🔧 `:wrench:` - Configuration
 
 ## Examples
 ```bash
-✨ feat(auth): add JWT token validation
-🐛 fix(api): resolve race condition in cache
-♻️ refactor(db): extract query builder to separate module
+feat(auth): add JWT token validation
+fix(api): resolve race condition in cache
+refactor(db): extract query builder to separate module
 ```
 
 ## Pre-commit Checklist
@@ -331,26 +322,28 @@ last_updated: 2025-12-03T00:28:11Z
 
 ## Commit Message Pattern
 
-All commits use emoji-prefixed conventional commit format.
+All commits use conventional commit format following the Angular convention.
 
-**Format**: `<emoji> <type>(<scope>): <description>`
+**Format**: `<type>(<scope>): <description>`
 
 **Examples**:
 ```
-✨ feat(docs-manager): support completing partial onboarding
-♻️ refactor(docs-manager): replace commit hash with timestamp for staleness tracking
-🐛 fix(git-workflow): resolve pre-commit hook bypass issue
-📝 docs: update README with installation instructions
-✅ test(reviewer-toolkit): add tests for security auditor
+feat(docs-manager): support completing partial onboarding
+refactor(docs-manager): replace commit hash with timestamp for staleness tracking
+fix(git-workflow): resolve pre-commit hook bypass issue
+docs: update README with installation instructions
+test(reviewer-toolkit): add tests for security auditor
 ```
 
-**Common Emoji Prefixes**:
-- ✨ `:sparkles:` - New features
-- 🐛 `:bug:` - Bug fixes
-- ♻️ `:recycle:` - Refactoring
-- 📝 `:memo:` - Documentation
-- ✅ `:white_check_mark:` - Tests
-- 🔧 `:wrench:` - Configuration
+**Common Types**:
+- `feat` - New features
+- `fix` - Bug fixes
+- `refactor` - Code refactoring
+- `docs` - Documentation
+- `test` - Tests
+- `build` - Build system changes
+- `ci` - CI configuration changes
+- `chore` - Other changes
 
 ## Error Handling Pattern
 

@@ -51,7 +51,7 @@ Multiple Task agents running concurrently for comprehensive research or analysis
 Review threshold in reviewer-toolkit that determines if a pull request can merge. High/Critical security issues are automatic merge blockers.
 
 ### Conventional Commits
-Commit message format `<emoji> <type>(<scope>): <description>` enforced by git-workflow. Examples: `✨ feat: add new feature`, `🐛 fix: resolve bug`.
+Commit message format `<type>(<scope>): <description>` enforced by git-workflow following the Angular convention. Examples: `feat: add new feature`, `fix: resolve bug`.
 
 ## Core Entities
 
@@ -162,7 +162,7 @@ Any principle or pattern documented must be backed by observable evidence in the
 Documentation staleness is tracked via timestamps and `git log`, not commit hashes, to survive squash merges and rebases.
 
 ### Conventional Commit Enforcement
-All commits must follow emoji-prefixed conventional commit format as defined by git-workflow.
+All commits must follow conventional commit format (Angular convention) as defined by git-workflow.
 
 ### Security Quality Gates
 Security issues rated High or Critical severity are automatic merge blockers in reviewer-toolkit.
