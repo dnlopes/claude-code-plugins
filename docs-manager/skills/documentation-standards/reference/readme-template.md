@@ -4,11 +4,13 @@ This template defines the structure for repository README.md files.
 
 ## Purpose
 
-The README.md is user-facing documentation that serves both end users and potential contributors. It should be:
+The README.md is **public-facing documentation** that serves end users, potential contributors, and anyone discovering the project. It should be:
 - **Welcoming** - Clear, accessible language
 - **Practical** - Focus on getting started quickly
-- **Complete** - Cover both usage and development
+- **Concise** - Essential information only, with links to detailed docs
 - **Accurate** - Reflect the actual state of the project
+
+**Key principle:** README is the entry point. Development details belong in `docs/`.
 
 ## Structure
 
@@ -89,36 +91,19 @@ Example code/commands
 Include enough detail for users to accomplish typical tasks.
 ```
 
-#### 7. Development
+#### 7. Documentation Index
 ```markdown
-## Development
+## Documentation
 
-Information for contributors:
+Detailed documentation is available in `docs/`:
 
-### Prerequisites
-- Required tools and versions
-- System dependencies
-
-### Setup
-\`\`\`bash
-# Clone and install
-\`\`\`
-
-### Building
-\`\`\`bash
-# Build commands
-\`\`\`
-
-### Testing
-\`\`\`bash
-# Test commands
-\`\`\`
-
-### Running Locally
-\`\`\`bash
-# Development server/commands
-\`\`\`
+- [Architecture](docs/architecture.md) - System design and components
+- [Domain](docs/domain.md) - Business concepts and terminology
+- [Patterns](docs/patterns.md) - Code conventions and examples
+- [Development](docs/development.md) - Build, test, and contribute
 ```
+
+This section replaces detailed development content in the README. Point users to the appropriate documentation file for in-depth information.
 
 #### 8. Contributing
 ```markdown
@@ -127,25 +112,12 @@ Information for contributors:
 Brief guide on how to contribute:
 - How to report issues
 - How to submit PRs
-- Code style/conventions (brief)
-- Link to CONTRIBUTING.md if it exists
+- Link to docs/development.md for detailed setup
 
-Keep this section concise.
+Keep this section concise - detailed contribution info goes in docs/development.md.
 ```
 
 ### Optional Sections
-
-#### Architecture (for complex projects)
-```markdown
-## Architecture
-
-High-level overview:
-- Main components and how they interact
-- Data flow
-- External dependencies
-
-Can include a simple diagram if helpful.
-```
 
 #### API Reference (for libraries)
 ```markdown
@@ -153,16 +125,6 @@ Can include a simple diagram if helpful.
 
 Key API functions/classes with examples.
 Or: Link to full API documentation.
-```
-
-#### Deployment (for applications)
-```markdown
-## Deployment
-
-How to deploy to production:
-- Deployment options
-- Environment setup
-- Configuration requirements
 ```
 
 #### Troubleshooting
@@ -185,6 +147,20 @@ Planned features or improvements:
 - [ ] Future feature 2
 ```
 
+### Sections NOT in README
+
+The following content should NOT be in README.md - it belongs in `docs/`:
+
+| Content | Location |
+|---------|----------|
+| Detailed development setup | `docs/development.md` |
+| Build system details | `docs/development.md` |
+| Architecture explanations | `docs/architecture.md` |
+| Domain concepts/glossary | `docs/domain.md` |
+| Code patterns/conventions | `docs/patterns.md` |
+| Environment variables | `docs/development.md` |
+| Deployment procedures | `docs/development.md` |
+
 ## Front-matter
 
 README.md should include front-matter in HTML comment format for staleness tracking (to hide it from GitHub rendering):
@@ -201,7 +177,7 @@ scope:
     - .env.example        # Config examples
     - src/main.*          # Entry points
     - .github/workflows/* # CI/CD
-  summary: "User-facing documentation for installation, usage, and development"
+  summary: "User-facing documentation for installation, usage, and quick start"
 last_review_date: 2025-01-15T10:30:00Z
 last_updated: 2025-01-15T10:30:00Z
 ---
@@ -215,13 +191,13 @@ last_updated: 2025-01-15T10:30:00Z
 README scope should track files that affect:
 - Installation process (package manifests, setup scripts)
 - Usage examples (if tied to specific entry points)
-- Development workflow (build tools, test configs)
 - Project metadata (version, description)
 
 **Don't track:**
-- Implementation files that don't affect user-facing behavior
+- Implementation files (covered by docs/)
 - Internal documentation
-- Test files (unless they demonstrate usage)
+- Test files
+- Development-only configurations
 
 ## Tone and Style
 
@@ -261,6 +237,7 @@ When updating an existing README:
 3. **Maintain voice** - Match the existing tone and style
 4. **Keep examples** - Preserve working code examples
 5. **Update outdated info** - Fix installation steps, commands, or examples that changed
+6. **Add docs index** - If missing, add the Documentation section pointing to docs/
 
 ## When to Update
 
@@ -268,7 +245,6 @@ README should be updated when:
 - Installation process changes
 - New major features are added
 - Usage examples become outdated
-- Development setup changes
 - Project description/scope evolves
 
 **Don't update for:**
@@ -276,3 +252,4 @@ README should be updated when:
 - Bug fixes that don't affect usage
 - Minor version bumps
 - Code reorganization that doesn't impact users
+- Development workflow changes (those go in docs/development.md)

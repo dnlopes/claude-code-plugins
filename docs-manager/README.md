@@ -16,46 +16,42 @@ If a document needs frequent updates, it's probably too detailed. Documentation 
 
 ```
 your-repo/
-├── README.md                    # User-facing documentation (generated or enhanced)
-├── CLAUDE.md                    # Entry point + principles
+├── README.md                    # User-facing documentation (public, concise)
+├── CLAUDE.md                    # Entry point + principles for Claude
 └── docs/
-    └── claude/
-        ├── architecture.md      # System design, components
-        ├── domain.md            # Business concepts, glossary
-        ├── patterns.md          # Code conventions, examples
-        ├── development.md       # Build, test, run
-        └── modules/             # Optional deep-dives
-            └── [complex].md
+    ├── architecture.md          # System design, components
+    ├── domain.md                # Business concepts, glossary
+    ├── patterns.md              # Code conventions, examples
+    ├── development.md           # Build, test, run, contribute
+    └── modules/                 # Optional deep-dives
+        └── [complex].md
 ```
 
 ### README.md
 
-User-facing documentation for end users and contributors. Contains:
+Public-facing documentation for end users and contributors. Contains:
 - Project summary and features
-- Installation instructions (all methods)
+- Installation instructions
 - Quick start guide with examples
 - Usage examples for common scenarios
-- Development setup guide
-- Contributing guidelines
+- Documentation index (links to docs/)
+- Brief contributing guidelines
 
-**Smart generation:**
-- If README exists: Enhances it while preserving tone, style, and custom sections
-- If no README: Creates comprehensive documentation from scratch
-- Always includes front-matter for git-based staleness tracking
+**Key principle:** README is concise and user-focused. Development details go in docs/development.md.
 
 ### CLAUDE.md
 
-The entry point. Contains:
+The entry point for Claude. Contains:
 - Brief project description
 - Quick start commands
 - **Principles** - invariants that must be followed
-- `@` imports for docs/claude/ files (Claude Code auto-loads these at session start)
+- `@` imports for docs/ files (Claude Code auto-loads these at session start)
 
-### docs/claude/
+### docs/
 
 Each document has front-matter tracking:
 - **scope.paths** - Which files/directories the doc covers
-- **last_commit** - Git commit when doc was last verified
+- **last_review_date** - Timestamp when doc was last verified
 - **last_updated** - Timestamp of last update
 
 This enables git-based staleness detection.
@@ -69,19 +65,19 @@ Creates initial documentation for a repository.
 1. Explores the codebase systematically
 2. Extracts architecture, patterns, domain concepts, and user-facing features
 3. Infers principles from code analysis
-4. Generates or enhances README.md (preserves existing content if present)
-5. Generates CLAUDE.md and docs/claude/
+4. Generates or enhances README.md (public-facing, concise)
+5. Generates CLAUDE.md and docs/
 6. Sets up front-matter for future updates
 
 ### `/docs-manager:update-docs [path]`
 
 Checks and updates stale documentation (including README.md).
 
-1. Reads front-matter from each document (including README.md)
-2. Checks `git diff <last_commit>..HEAD -- <scope_paths>`
+1. Reads front-matter from each document
+2. Checks for changes since last review using `git log`
 3. Identifies documents with changes in their scope
 4. Analyzes whether changes warrant doc updates
-5. For README: preserves tone, style, and custom sections while updating outdated info
+5. Migrates legacy `docs/claude/` to `docs/` if needed
 6. Updates documents and refreshes front-matter
 
 ### `/docs-manager:manage-principles`
@@ -90,9 +86,9 @@ Add, remove, or update principles in CLAUDE.md.
 
 1. Displays current principles
 2. Offers actions: add, remove, edit, reorder
-3. For new/edited principles, validates against codebase
-4. Discusses findings with user if evidence is weak or contradictory
-5. Updates CLAUDE.md with new commit/timestamp
+3. Validates new/edited principles against codebase
+4. Discusses findings if evidence is weak
+5. Updates CLAUDE.md with new timestamp
 
 ## Agents
 
@@ -104,7 +100,7 @@ Systematically explores a codebase to extract:
 - Domain concepts
 - Code patterns with examples
 - Suggested principles
-- README-specific information (features, use cases, installation methods)
+- README-specific information (features, use cases, installation)
 
 ### doc-analyzer
 
@@ -118,8 +114,8 @@ Analyzes git changes against a document's scope to determine:
 Specialized agent for README.md updates:
 - Analyzes user-facing impact of changes
 - Determines which README sections need updating
-- Preserves existing tone, style, and custom content
-- Recommends enhancements while maintaining user voice
+- Preserves existing tone and custom content
+- Recommends moving dev content to docs/development.md
 
 ### principle-validator
 
@@ -134,9 +130,9 @@ Validates proposed principles against the codebase:
 
 Defines the format and abstraction level for documentation:
 - Front-matter specification
-- Document templates (including README template)
+- Document templates
+- README template (public-facing focus)
 - Guidelines for right-level abstraction
-- README-specific standards and sections
 
 ## Installation
 
@@ -147,33 +143,28 @@ claude plugins add dnlopes/cloud-code-plugins/docs-manager
 ## Usage
 
 ```bash
-# Initial setup (creates/enhances README + CLAUDE.md + docs/claude/)
+# Initial setup (creates/enhances README + CLAUDE.md + docs/)
 /docs-manager:onboard
 
 # Periodic updates (checks all docs including README)
 /docs-manager:update-docs
 
 # Update specific document
-/docs-manager:update-docs docs/claude/architecture.md
+/docs-manager:update-docs docs/architecture.md
 /docs-manager:update-docs README.md
 
 # Manage principles
 /docs-manager:manage-principles
 ```
 
-## Front-matter Format
+## Documentation
 
-```yaml
----
-scope:
-  paths:
-    - src/api/**
-    - src/routes/**
-  summary: "API layer architecture"
-last_commit: abc123def456789...
-last_updated: 2025-01-15T10:30:00Z
----
-```
+Detailed documentation is available in this plugin's reference files:
+
+- [Documentation Standards](skills/documentation-standards/SKILL.md) - Core philosophy and guidelines
+- [README Template](skills/documentation-standards/reference/readme-template.md) - README structure
+- [Document Templates](skills/documentation-standards/reference/document-templates.md) - Templates for docs/
+- [Front-matter Spec](skills/documentation-standards/reference/frontmatter-spec.md) - Staleness tracking format
 
 ## Design Philosophy
 
@@ -181,10 +172,10 @@ last_updated: 2025-01-15T10:30:00Z
 
 2. **Right abstraction** - High enough to be stable, detailed enough to be useful
 
-3. **Git-tracked** - Staleness detection through commit tracking
+3. **Git-tracked** - Staleness detection through timestamp tracking
 
 4. **Minimal maintenance** - If docs need constant updates, they're too detailed
 
 5. **Principles over rules** - CLAUDE.md captures invariants, not style guides
 
-6. **Smart preservation** - Existing READMEs are enhanced, not replaced; tone and style are maintained
+6. **README is public-facing** - Development details go in docs/development.md

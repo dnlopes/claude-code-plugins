@@ -1,5 +1,5 @@
 ---
-description: Create CLAUDE.md and docs/claude/ documentation for a repository
+description: Create CLAUDE.md and docs/ documentation for a repository
 ---
 
 # Repository Onboarding
@@ -14,21 +14,25 @@ Check which documentation already exists:
 # Check for existing documentation
 ls CLAUDE.md 2>/dev/null
 ls README.md 2>/dev/null
+find docs -name "*.md" -type f 2>/dev/null | grep -v docs/claude
 find docs/claude -name "*.md" -type f 2>/dev/null
 ```
 
 Build an inventory of existing vs missing documentation:
 - **CLAUDE.md**: exists / missing
 - **README.md**: exists (with/without front-matter) / missing
-- **docs/claude/architecture.md**: exists / missing
-- **docs/claude/domain.md**: exists / missing
-- **docs/claude/patterns.md**: exists / missing
-- **docs/claude/development.md**: exists / missing
+- **docs/architecture.md**: exists / missing
+- **docs/domain.md**: exists / missing
+- **docs/patterns.md**: exists / missing
+- **docs/development.md**: exists / missing
+
+**Legacy path detection:**
+If documentation exists at `docs/claude/` instead of `docs/`, note this for migration in Phase 4.
 
 Determine onboarding state:
 
 ### Fully Onboarded
-If all core documentation exists (CLAUDE.md + all expected docs/claude/*.md):
+If all core documentation exists (CLAUDE.md + all expected docs/*.md):
 > This repository appears to be fully onboarded. Would you like to:
 > 1. **Regenerate** - Replace all existing documentation
 > 2. **Update** - Use `/docs-manager:update-docs` instead to update stale docs
@@ -39,10 +43,10 @@ If some documentation exists but other parts are missing:
 > This repository is partially onboarded. Found:
 > - CLAUDE.md: ✓ / ✗
 > - README.md: ✓ / ✗
-> - docs/claude/architecture.md: ✓ / ✗
-> - docs/claude/domain.md: ✓ / ✗
-> - docs/claude/patterns.md: ✓ / ✗
-> - docs/claude/development.md: ✓ / ✗
+> - docs/architecture.md: ✓ / ✗
+> - docs/domain.md: ✓ / ✗
+> - docs/patterns.md: ✓ / ✗
+> - docs/development.md: ✓ / ✗
 >
 > Would you like to:
 > 1. **Complete** - Generate only the missing documentation
@@ -82,7 +86,7 @@ If README.md exists:
 
 Determine exploration scope based on what needs to be generated:
 - If **CLAUDE.md missing**: Need full exploration (all items below)
-- If **any docs/claude/*.md missing**: Need exploration for those specific areas
+- If **any docs/*.md missing**: Need exploration for those specific areas
 - If **only README.md missing**: Need lighter README-focused exploration
 
 ### Partial Onboarding Exploration
@@ -93,7 +97,7 @@ If only specific docs are missing, tailor the exploration:
 Explore this repository focusing on the missing documentation:
 [Include only the relevant items below based on what's missing]
 
-- For README.md: Project identity, features, installation, quick start, development workflow
+- For README.md: Project identity, features, installation, quick start
 - For architecture.md: Components, relationships, external dependencies, architectural decisions
 - For domain.md: Domain concepts, terminology, entities, business rules
 - For patterns.md: Project structure, naming conventions, error handling, testing patterns
@@ -146,9 +150,8 @@ Based on code analysis, these appear to be project invariants:
 ### README Status
 <If has_existing_readme:>
 **Existing README found** - Will be enhanced with:
-- Updated features section
-- Improved installation steps
-- Current development workflow
+- Documentation index linking to docs/
+- Updated features section if needed
 - Custom sections will be preserved
 
 <If no README:>
@@ -156,8 +159,8 @@ Based on code analysis, these appear to be project invariants:
 - Project summary and features
 - Installation and quick start
 - Usage examples
-- Development guide
-- Contributing guidelines
+- Documentation index (linking to docs/)
+- Brief contributing guidelines
 
 ### Would you like to:
 - **Proceed** with these findings
@@ -180,7 +183,25 @@ date -u +"%Y-%m-%dT%H:%M:%SZ"
 Create the directory structure if needed:
 
 ```bash
-mkdir -p docs/claude/modules
+mkdir -p docs/modules
+```
+
+### Migrate Legacy Path (if needed)
+
+If documentation exists at `docs/claude/` instead of `docs/`:
+
+```bash
+# Check for legacy path
+if [ -d "docs/claude" ]; then
+  # Move files to new location
+  mv docs/claude/*.md docs/ 2>/dev/null
+  # Move modules if they exist
+  if [ -d "docs/claude/modules" ]; then
+    mv docs/claude/modules/* docs/modules/ 2>/dev/null
+    rmdir docs/claude/modules 2>/dev/null
+  fi
+  rmdir docs/claude 2>/dev/null
+fi
 ```
 
 ### Generate CLAUDE.md
@@ -193,12 +214,12 @@ Key requirements:
 - Brief description (1-2 sentences)
 - Quick start commands
 - Principles section with the confirmed/adjusted principles
-- `@` imports for docs/claude/ files (e.g., `@docs/claude/architecture.md`) - this ensures Claude Code loads all documentation at session start
+- `@` imports for docs/ files (e.g., `@docs/architecture.md`) - this ensures Claude Code loads all documentation at session start
 - Front-matter with last_review_date and last_updated timestamp
 
-### Generate docs/claude/architecture.md
+### Generate docs/architecture.md
 
-**Skip this section if docs/claude/architecture.md already exists.**
+**Skip this section if docs/architecture.md already exists.**
 
 Using findings, create architecture documentation:
 - High-level overview
@@ -212,9 +233,9 @@ Include proper front-matter with:
 - scope.summary
 - last_review_date and last_updated
 
-### Generate docs/claude/domain.md
+### Generate docs/domain.md
 
-**Skip this section if docs/claude/domain.md already exists.**
+**Skip this section if docs/domain.md already exists.**
 
 Using findings, create domain documentation:
 - Glossary of terms
@@ -226,9 +247,9 @@ Include proper front-matter with:
 - scope.summary
 - last_review_date and last_updated
 
-### Generate docs/claude/patterns.md
+### Generate docs/patterns.md
 
-**Skip this section if docs/claude/patterns.md already exists.**
+**Skip this section if docs/patterns.md already exists.**
 
 Using findings, create patterns documentation:
 - Project structure
@@ -242,9 +263,9 @@ Include proper front-matter with:
 - scope.summary
 - last_review_date and last_updated
 
-### Generate docs/claude/development.md
+### Generate docs/development.md
 
-**Skip this section if docs/claude/development.md already exists.**
+**Skip this section if docs/development.md already exists.**
 
 Using findings, create development documentation:
 - Prerequisites
@@ -253,6 +274,7 @@ Using findings, create development documentation:
 - Test commands
 - Run locally
 - Environment variables
+- Contributing guidelines
 
 Include proper front-matter with:
 - scope.paths covering build/config files
@@ -263,7 +285,7 @@ Include proper front-matter with:
 
 **Note**: Module docs are rarely needed and should only be created during full onboarding, not during partial completion.
 
-Only create docs/claude/modules/<name>.md for modules that:
+Only create docs/modules/<name>.md for modules that:
 - Have non-obvious behavior
 - Are complex enough to warrant separate documentation
 - Cannot be adequately covered in architecture.md
@@ -287,8 +309,8 @@ Required sections:
 - Installation (all methods: package manager, Docker, source)
 - Quick Start (minimal working example)
 - Usage (2-3 common use cases with examples)
-- Development (setup, build, test, run)
-- Contributing (brief guide)
+- Documentation index (linking to docs/)
+- Contributing (brief guide, linking to docs/development.md)
 
 Include front-matter in HTML comment format (so it's hidden from GitHub rendering):
 ```markdown
@@ -315,18 +337,19 @@ Enhance the existing README by:
 1. Reading current content completely
 2. Identifying what sections exist
 3. Adding front-matter in HTML comment format if missing (see format above)
-4. Updating outdated information:
+4. Adding Documentation index section if missing (linking to docs/)
+5. Updating outdated information:
    - Installation steps that changed
    - Commands that changed
    - Features that are missing
    - Prerequisites that are outdated
-5. Preserving:
+6. Preserving:
    - Custom sections
    - Existing tone and style
    - Working examples
    - User-added content
 
-Add missing required sections if they don't exist, but maintain the existing structure and voice.
+**Development content should NOT be in README.** If the existing README has detailed development sections, note that this content now belongs in docs/development.md. You may keep a brief "Development" section that links to docs/development.md.
 
 **Guidelines for both:**
 - Use concrete examples, not placeholders
@@ -335,6 +358,7 @@ Add missing required sections if they don't exist, but maintain the existing str
 - Reference actual file paths where relevant
 - Keep tone user-facing and welcoming
 - Don't oversell or make false claims
+- Include Documentation index section
 
 ## Phase 5: Validation
 
@@ -344,10 +368,11 @@ After generating all documents:
 2. **Check cross-references** - Links between docs work
 3. **Verify examples** - File:line references are accurate
 4. **Verify README** - Commands work, paths are correct, examples are valid
+5. **Verify CLAUDE.md imports** - Uses `@docs/` not `@docs/claude/`
 
 ```bash
 # List created files
-find docs/claude -name "*.md" | head -20
+find docs -name "*.md" | head -20
 cat CLAUDE.md | head -30
 head -50 README.md
 ```
@@ -363,10 +388,10 @@ Present to the user what was actually generated/modified:
 [List only the documents that were actually created or modified in this run]
 - `README.md` - <"Created new" / "Enhanced existing" / "Skipped (already exists)">
 - `CLAUDE.md` - <"Created new" / "Skipped (already exists)">
-- `docs/claude/architecture.md` - <"Created new" / "Skipped (already exists)">
-- `docs/claude/domain.md` - <"Created new" / "Skipped (already exists)">
-- `docs/claude/patterns.md` - <"Created new" / "Skipped (already exists)">
-- `docs/claude/development.md` - <"Created new" / "Skipped (already exists)">
+- `docs/architecture.md` - <"Created new" / "Skipped (already exists)">
+- `docs/domain.md` - <"Created new" / "Skipped (already exists)">
+- `docs/patterns.md` - <"Created new" / "Skipped (already exists)">
+- `docs/development.md` - <"Created new" / "Skipped (already exists)">
 [Only list module docs if they were created]
 
 ### Next Steps
@@ -395,3 +420,5 @@ This will check for changes since last update and refresh stale docs (including 
 5. **Verify before documenting** - Read actual files, don't assume from names.
 
 6. **Ask when uncertain** - If you're not sure about a principle or pattern, ask the user rather than guessing.
+
+7. **README is public-facing** - Development details belong in docs/development.md, not README.

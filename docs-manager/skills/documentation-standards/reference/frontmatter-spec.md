@@ -1,12 +1,12 @@
 # Front-matter Specification
 
-Every document in `docs/claude/` MUST have YAML front-matter with the following fields.
+Every document in `docs/` MUST have YAML front-matter with the following fields.
 
 ## Front-matter Format
 
 Front-matter can be specified in two formats:
 
-### Standard Format (for docs/claude/)
+### Standard Format (for docs/)
 
 ```yaml
 ---
@@ -41,10 +41,10 @@ last_updated: 2025-01-15T10:30:00Z
 **When to use HTML comment format:**
 - README.md files (always)
 - Any user-facing Markdown documentation where front-matter visibility is undesirable
-- Documents in repository root or docs/ directories intended for GitHub viewing
+- Documents in repository root intended for GitHub viewing
 
 **When to use standard format:**
-- docs/claude/ documentation (always)
+- docs/ documentation (always)
 - Internal documentation not intended for direct viewing
 - Agent and command definition files
 
@@ -140,7 +140,7 @@ summary: "Authentication module internals and flows"
 
 CLAUDE.md does NOT use scope-based front-matter since it covers the entire repository.
 
-It should NOT have any front-matter, as staleness tracking for CLAUDE.md is handled through special logic (checking if docs/claude/ files were updated, or if build/test commands changed).
+It should NOT have any front-matter, as staleness tracking for CLAUDE.md is handled through special logic (checking if docs/ files were updated, or if build/test commands changed).
 
 ## Validation Rules
 
@@ -150,7 +150,7 @@ It should NOT have any front-matter, as staleness tracking for CLAUDE.md is hand
 
 ## Complete Examples
 
-### docs/claude/ document with standard front-matter
+### docs/ document with standard front-matter
 
 ```yaml
 ---

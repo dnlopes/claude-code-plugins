@@ -223,11 +223,11 @@ Based on code analysis, these appear to be project invariants:
 - Project Maturity: <stable/beta/experimental>
 
 ## Scope Paths
-Suggested paths for each document:
-- architecture.md: <paths>
-- domain.md: <paths>
-- patterns.md: <paths>
-- development.md: <paths>
+Suggested paths for each document (all in docs/):
+- docs/architecture.md: <paths>
+- docs/domain.md: <paths>
+- docs/patterns.md: <paths>
+- docs/development.md: <paths>
 - README.md: <paths> (typically: package.json, Dockerfile, Makefile, .env.example, entry points, CI configs)
 ```
 

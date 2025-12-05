@@ -10,14 +10,14 @@ You are updating Claude documentation by checking for changes since each documen
 ## Arguments
 
 - **No argument**: Check and update all docs
-- **Specific path**: Only check/update that document (e.g., `docs/claude/architecture.md`)
+- **Specific path**: Only check/update that document (e.g., `docs/architecture.md`)
 
 ## Pre-flight Check
 
 Verify documentation exists:
 
 ```bash
-ls CLAUDE.md docs/claude/*.md 2>/dev/null
+ls CLAUDE.md docs/*.md 2>/dev/null
 ```
 
 If no documentation found:
@@ -28,14 +28,52 @@ If no documentation found:
 Find all Claude documentation files:
 
 ```bash
-# List all doc files
+# List all doc files (new location)
+find docs -name "*.md" -type f 2>/dev/null | grep -v docs/claude
+# Check for legacy location
 find docs/claude -name "*.md" -type f 2>/dev/null
 ls CLAUDE.md README.md 2>/dev/null
 ```
 
+### Legacy Path Migration
+
+If documentation exists at `docs/claude/` instead of `docs/`:
+
+> **Legacy path detected:** Documentation exists at `docs/claude/` instead of the new `docs/` location.
+>
+> Would you like to migrate the documentation to the new path?
+> - Files will be moved from `docs/claude/` to `docs/`
+> - CLAUDE.md `@` imports will be updated
+> - Front-matter paths will remain unchanged (they're relative to repo root)
+
+If user confirms migration:
+
+```bash
+# Create new structure
+mkdir -p docs/modules
+
+# Move files
+mv docs/claude/*.md docs/ 2>/dev/null
+
+# Move modules if they exist
+if [ -d "docs/claude/modules" ]; then
+  mv docs/claude/modules/* docs/modules/ 2>/dev/null
+  rmdir docs/claude/modules 2>/dev/null
+fi
+
+# Remove empty legacy directory
+rmdir docs/claude 2>/dev/null
+```
+
+Then update CLAUDE.md to change `@docs/claude/` imports to `@docs/`:
+- `@docs/claude/architecture.md` → `@docs/architecture.md`
+- `@docs/claude/domain.md` → `@docs/domain.md`
+- `@docs/claude/patterns.md` → `@docs/patterns.md`
+- `@docs/claude/development.md` → `@docs/development.md`
+
 For each document, extract front-matter (supporting both standard and HTML comment formats):
 
-**Standard format** (docs/claude/):
+**Standard format** (docs/):
 ```yaml
 ---
 scope:
@@ -67,17 +105,19 @@ If a specific document was requested via argument, only process that one.
 1. **README.md with HTML comment front-matter**: Include in inventory for staleness checking
 2. **README.md with standard YAML front-matter**: Migrate to HTML comment format (Phase 2)
 3. **README.md without front-matter**: Ask user if they want to add front-matter for tracking
-4. **README.md missing**: This is fine - not all repositories need a docs-manager-tracked README. Only the docs in `docs/claude/` are required.
+4. **README.md missing**: This is fine - not all repositories need a docs-manager-tracked README. Only the docs in `docs/` are required.
 
 ## Phase 2: Format Validation and Migration
 
 ### Check CLAUDE.md Format
 
-Check CLAUDE.md for outdated format (markdown links instead of `@` imports):
+Check CLAUDE.md for outdated format (markdown links instead of `@` imports, or legacy paths):
 
 ```bash
-# Check for old-style markdown links to docs/claude/
-grep -E '\[.*\]\(docs/claude/.*\.md\)' CLAUDE.md
+# Check for old-style markdown links to docs/
+grep -E '\[.*\]\(docs/.*\.md\)' CLAUDE.md
+# Check for legacy paths
+grep -E '@docs/claude/' CLAUDE.md
 ```
 
 If old-style links are found:
@@ -86,15 +126,27 @@ If old-style links are found:
 ## Format Migration Needed
 
 CLAUDE.md uses markdown links instead of `@` imports:
-- `[Architecture](docs/claude/architecture.md)` → `@docs/claude/architecture.md`
+- `[Architecture](docs/architecture.md)` → `@docs/architecture.md`
 
 **Why this matters:** Claude Code automatically loads CLAUDE.md at session start. Using `@` imports ensures all documentation is loaded automatically, without requiring manual file reads.
 
 Would you like to migrate to `@` imports? (Recommended)
 ```
 
+If legacy paths are found:
+
+```markdown
+## Path Migration Needed
+
+CLAUDE.md uses the legacy `docs/claude/` path:
+- `@docs/claude/architecture.md` → `@docs/architecture.md`
+
+Would you like to update to the new path? (Recommended)
+```
+
 If user confirms, note for update in Phase 6. The conversion is:
-- Remove markdown link syntax: `[Title](docs/claude/X.md)` → `@docs/claude/X.md`
+- Remove markdown link syntax: `[Title](docs/X.md)` → `@docs/X.md`
+- Update legacy paths: `@docs/claude/X.md` → `@docs/X.md`
 - Remove any trailing description text on the same line
 - Keep one import per line
 
@@ -186,9 +238,10 @@ Determine:
 3. Which sections need updating and why
 4. Specific recommendations for updates
 5. Whether to preserve or enhance existing content
+6. Whether the README has development content that should move to docs/development.md
 ```
 
-**For other documents (CLAUDE.md, docs/claude/*)**, use **doc-analyzer** agent:
+**For other documents (CLAUDE.md, docs/*)**, use **doc-analyzer** agent:
 ```
 Analyze this document for needed updates:
 
@@ -243,14 +296,14 @@ For each document that needs updates:
 
 1. **Read current content**
 2. **Apply any format migrations first** (if user confirmed in Phase 2):
-   - If CLAUDE.md: Convert markdown links to `@` imports
+   - If CLAUDE.md: Convert markdown links to `@` imports, update legacy paths
    - If README.md with standard front-matter: Migrate to HTML comment format
 3. **Apply recommended changes** based on agent analysis
 4. **Update front-matter** (preserving format):
    - `last_review_date`: Current timestamp
    - `last_updated`: Current timestamp
    - Keep HTML comment format if document is README.md
-   - Keep standard format if document is in docs/claude/
+   - Keep standard format if document is in docs/
 
 ```bash
 # Get current timestamp
@@ -309,12 +362,12 @@ When modifying documents:
 ### CLAUDE.md Special Handling
 
 CLAUDE.md doesn't have scope paths. To check if it needs updates:
-- Check if any docs/claude/ files were updated
+- Check if any docs/ files were updated
 - Check if build/test commands changed
 - Principles rarely need updating (they're invariants)
 
 Only update CLAUDE.md if:
-- **Format migration confirmed in Phase 2** - Convert markdown links to `@` imports
+- **Format migration confirmed in Phase 2** - Convert markdown links to `@` imports or update legacy paths
 - Quick start commands changed
 - New major component was added (update directory listing)
 - A principle was violated and needs rewording
@@ -328,6 +381,7 @@ When updating README.md:
 - **Enhance, don't replace** - Update outdated info, don't rewrite from scratch
 - **Verify examples work** - Test commands and code examples
 - **Be user-focused** - README is for end users and contributors, not internal context
+- **Development content should move to docs/development.md** - If README has detailed dev setup, suggest moving it
 
 ## Phase 7: Validation
 
@@ -335,7 +389,7 @@ After updates:
 
 ```bash
 # Verify front-matter is valid
-head -20 docs/claude/*.md
+head -20 docs/*.md
 head -25 README.md
 ```
 
@@ -343,7 +397,8 @@ Check that:
 - All updated docs have current timestamp in front-matter
 - Both last_review_date and last_updated are set to the same timestamp
 - README.md uses HTML comment format for front-matter (wrapped in `<!-- -->`)
-- docs/claude/ files use standard YAML front-matter format
+- docs/ files use standard YAML front-matter format
+- CLAUDE.md uses `@docs/` imports (not `@docs/claude/`)
 - No broken cross-references
 - README examples are syntactically valid
 
@@ -365,6 +420,12 @@ Present final summary:
 |----------|--------|
 | <path> | No changes in scope |
 | <path> | Changes not significant |
+
+### Migrations Applied
+[If any migrations were applied:]
+- Moved docs from `docs/claude/` to `docs/`
+- Updated CLAUDE.md imports to use `@docs/`
+- Converted README.md front-matter to HTML comment format
 
 ### Review Date
 All documents now reviewed as of: `<timestamp>`
@@ -415,3 +476,5 @@ If a document has extensive changes in scope:
 5. **Parallel analysis** - Spawn doc-analyzer agents in parallel for efficiency.
 
 6. **User confirmation** - Always show recommendations before applying updates.
+
+7. **README is public-facing** - Development details belong in docs/development.md.

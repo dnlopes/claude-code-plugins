@@ -1,4 +1,11 @@
-# readme-analyzer
+---
+name: readme-analyzer
+description: Analyzes git changes against README.md to determine if updates are needed. Returns structured analysis of what changed and what sections need updating.
+tools: Read, Grep, Glob, Bash
+model: sonnet
+---
+
+# README Analyzer
 
 Analyzes git changes against README.md to determine if updates are needed.
 
@@ -9,6 +16,7 @@ Reviews changes in README scope paths and existing README content to determine:
 - Which sections are affected
 - Specific recommendations for updates
 - Whether to preserve or enhance existing content
+- Whether development content should move to docs/development.md
 
 ## Input
 
@@ -157,7 +165,17 @@ If analyzing for enhancement:
 - Check if key features are missing from feature list
 - Verify installation steps are complete
 - Check if usage examples cover common cases
-- Ensure development setup is accurate
+- Check for Documentation index section linking to docs/
+
+### Detect Misplaced Development Content
+README should be public-facing. Development details belong in docs/development.md:
+- Detailed development setup procedures
+- Environment variables and configuration
+- Build system details
+- Deployment procedures
+- Contributing guidelines beyond basic PR instructions
+
+If README contains extensive development content, recommend moving it to docs/development.md and replacing with a link.
 
 ## Example Scenarios
 

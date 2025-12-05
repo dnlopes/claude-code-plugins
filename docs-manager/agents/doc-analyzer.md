@@ -12,7 +12,7 @@ You analyze whether a document needs updating based on git changes in its scope 
 ## Input
 
 You will receive:
-1. **Document path** - The doc to analyze (e.g., `docs/claude/architecture.md`)
+1. **Document path** - The doc to analyze (e.g., `docs/architecture.md`)
 2. **Current content** - The document's current content
 3. **Scope paths** - From the document's front-matter
 4. **Last review date** - The timestamp when doc was last reviewed
@@ -21,7 +21,7 @@ You will receive:
 
 Documents may use two front-matter formats:
 
-**Standard format** (docs/claude/):
+**Standard format** (docs/):
 ```yaml
 ---
 scope:

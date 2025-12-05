@@ -1,6 +1,6 @@
 # Document Templates
 
-Templates for each document type in docs/claude/.
+Templates for each document type in docs/.
 
 ## CLAUDE.md Template
 
@@ -37,10 +37,10 @@ These rules MUST be followed when working on this codebase:
 
 ## Documentation
 
-@docs/claude/architecture.md
-@docs/claude/domain.md
-@docs/claude/patterns.md
-@docs/claude/development.md
+@docs/architecture.md
+@docs/domain.md
+@docs/patterns.md
+@docs/development.md
 
 ## Key Directories
 
@@ -272,6 +272,16 @@ last_updated: <ISO_TIMESTAMP>
 ## Deployment
 
 <Brief overview of deployment process>
+
+## Contributing
+
+### Code Style
+<Brief code style guidelines>
+
+### Pull Request Process
+1. <step>
+2. <step>
+3. <step>
 ```
 
 ## modules/[name].md Template

@@ -1,6 +1,6 @@
 ---
 name: documentation-standards
-description: Standards for Claude-optimized repository documentation. Use when creating or updating docs/claude/ documentation to ensure correct format, abstraction level, and front-matter.
+description: Standards for Claude-optimized repository documentation. Use when creating or updating docs/ documentation to ensure correct format, abstraction level, and front-matter.
 ---
 
 # Documentation Standards
@@ -43,7 +43,7 @@ Do NOT include examples that:
 - 1-2 sentence project description
 - Quick start commands (build, test, run)
 - Principles/invariants that MUST be followed
-- `@` imports for docs/claude/ files (e.g., `@docs/claude/architecture.md`)
+- `@` imports for docs/ files (e.g., `@docs/architecture.md`)
 
 **Why `@` imports:** Claude Code automatically loads CLAUDE.md at session start. Using `@path/to/file` syntax causes Claude Code to also load those files, ensuring all documentation is available immediately without manual reading.
 
@@ -52,7 +52,25 @@ Do NOT include examples that:
 - Code examples (goes in patterns.md)
 - Business domain explanations (goes in domain.md)
 
-### docs/claude/architecture.md
+### README.md (Root)
+**Purpose:** Public-facing entry point for users and contributors.
+
+**Should contain:**
+- Project summary and tagline
+- Key features (user-visible capabilities)
+- Installation instructions
+- Quick start guide with examples
+- Usage examples for common scenarios
+- Documentation index linking to docs/
+- Brief contributing guidelines
+
+**Should NOT contain:**
+- Detailed development setup (goes in docs/development.md)
+- Architecture explanations (goes in docs/architecture.md)
+- Domain concepts (goes in docs/domain.md)
+- Code patterns (goes in docs/patterns.md)
+
+### docs/architecture.md
 **Purpose:** System design and component relationships.
 
 **Should contain:**
@@ -64,7 +82,7 @@ Do NOT include examples that:
 
 **Scope paths:** Typically root directories, main entry points, core modules.
 
-### docs/claude/domain.md
+### docs/domain.md
 **Purpose:** Business concepts and terminology.
 
 **Should contain:**
@@ -75,7 +93,7 @@ Do NOT include examples that:
 
 **Scope paths:** Domain models, entities, business logic directories.
 
-### docs/claude/patterns.md
+### docs/patterns.md
 **Purpose:** Code conventions with illustrative examples.
 
 **Should contain:**
@@ -87,19 +105,22 @@ Do NOT include examples that:
 
 **Scope paths:** Representative files that demonstrate patterns.
 
-### docs/claude/development.md
+### docs/development.md
 **Purpose:** How to work with the codebase.
 
 **Should contain:**
+- Prerequisites with versions
+- Setup steps
 - Build commands
 - Test commands
 - Local development setup
 - Environment variables needed
 - Deployment process overview
+- Contributing guidelines (detailed)
 
 **Scope paths:** Build files (Makefile, package.json), config files, CI/CD configs.
 
-### docs/claude/modules/[name].md (Optional)
+### docs/modules/[name].md (Optional)
 **Purpose:** Deep-dive on complex modules that warrant separate documentation.
 
 **Create only when:**
@@ -120,3 +141,7 @@ See: [reference/frontmatter-spec.md](reference/frontmatter-spec.md)
 ## Document Templates
 
 See: [reference/document-templates.md](reference/document-templates.md)
+
+## README Template
+
+See: [reference/readme-template.md](reference/readme-template.md)
