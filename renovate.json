@@ -25,13 +25,8 @@
       "pinDigests": false
     },
     {
-      "groupName": "all-minor",
-      "matchUpdateTypes": ["minor"],
-      "automerge": true
-    },
-    {
-      "groupName": "all-patch",
-      "matchUpdateTypes": ["patch"],
+      "groupName": "all-minor-patch",
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     }
   ]
