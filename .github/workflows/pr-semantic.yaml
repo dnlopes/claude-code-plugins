@@ -1,4 +1,4 @@
-name: PR
+name: CI - Conventions
 on:
   pull_request:
     types: [opened, reopened, edited, labeled, unlabeled, synchronize]
@@ -14,10 +14,10 @@ permissions:
 
 jobs:
   pr_labels:
-    name: Add labels
+    name: Labels
     runs-on: ubuntu-latest
     steps:
-      - uses: srvaroa/labeler@b4493338d7929ddc4ffc95fadf6f28c73bae2e90
+      - uses: srvaroa/labeler@v1.13.0
         with:
           config_path: .github/labeler-config.yaml
         env:
