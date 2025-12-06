@@ -77,8 +77,7 @@ Checks and updates stale documentation (including README.md).
 2. Checks for changes since last review using `git log`
 3. Identifies documents with changes in their scope
 4. Analyzes whether changes warrant doc updates
-5. Migrates legacy `docs/claude/` to `docs/` if needed
-6. Updates documents and refreshes front-matter
+5. Updates documents and refreshes front-matter
 
 ### `/docs-manager:manage-principles`
 

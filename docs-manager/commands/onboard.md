@@ -14,8 +14,7 @@ Check which documentation already exists:
 # Check for existing documentation
 ls CLAUDE.md 2>/dev/null
 ls README.md 2>/dev/null
-find docs -name "*.md" -type f 2>/dev/null | grep -v docs/claude
-find docs/claude -name "*.md" -type f 2>/dev/null
+find docs -name "*.md" -type f 2>/dev/null
 ```
 
 Build an inventory of existing vs missing documentation:
@@ -25,9 +24,6 @@ Build an inventory of existing vs missing documentation:
 - **docs/domain.md**: exists / missing
 - **docs/patterns.md**: exists / missing
 - **docs/development.md**: exists / missing
-
-**Legacy path detection:**
-If documentation exists at `docs/claude/` instead of `docs/`, note this for migration in Phase 4.
 
 Determine onboarding state:
 
@@ -209,24 +205,6 @@ Create the directory structure if needed:
 mkdir -p docs/modules
 ```
 
-### Migrate Legacy Path (if needed)
-
-If documentation exists at `docs/claude/` instead of `docs/`:
-
-```bash
-# Check for legacy path
-if [ -d "docs/claude" ]; then
-  # Move files to new location
-  mv docs/claude/*.md docs/ 2>/dev/null
-  # Move modules if they exist
-  if [ -d "docs/claude/modules" ]; then
-    mv docs/claude/modules/* docs/modules/ 2>/dev/null
-    rmdir docs/claude/modules 2>/dev/null
-  fi
-  rmdir docs/claude 2>/dev/null
-fi
-```
-
 ### Generate CLAUDE.md
 
 **Skip this section if CLAUDE.md already exists.**
@@ -404,9 +382,8 @@ After generating all documents:
 2. **Check cross-references** - Links between docs work
 3. **Verify examples** - File:line references are accurate
 4. **Verify README** - Commands work, paths are correct, examples are valid
-5. **Verify CLAUDE.md imports** - Uses `@docs/` not `@docs/claude/`
-6. **Verify build system usage** - Commands use make/npm/etc., not raw commands
-7. **Verify principles are actionable** - Each principle tells developers what to DO
+5. **Verify build system usage** - Commands use make/npm/etc., not raw commands
+6. **Verify principles are actionable** - Each principle tells developers what to DO
 
 ```bash
 # List created files

@@ -28,48 +28,10 @@ If no documentation found:
 Find all Claude documentation files:
 
 ```bash
-# List all doc files (new location)
-find docs -name "*.md" -type f 2>/dev/null | grep -v docs/claude
-# Check for legacy location
-find docs/claude -name "*.md" -type f 2>/dev/null
+# List all doc files
+find docs -name "*.md" -type f 2>/dev/null
 ls CLAUDE.md README.md 2>/dev/null
 ```
-
-### Legacy Path Migration
-
-If documentation exists at `docs/claude/` instead of `docs/`:
-
-> **Legacy path detected:** Documentation exists at `docs/claude/` instead of the new `docs/` location.
->
-> Would you like to migrate the documentation to the new path?
-> - Files will be moved from `docs/claude/` to `docs/`
-> - CLAUDE.md `@` imports will be updated
-> - Front-matter paths will remain unchanged (they're relative to repo root)
-
-If user confirms migration:
-
-```bash
-# Create new structure
-mkdir -p docs/modules
-
-# Move files
-mv docs/claude/*.md docs/ 2>/dev/null
-
-# Move modules if they exist
-if [ -d "docs/claude/modules" ]; then
-  mv docs/claude/modules/* docs/modules/ 2>/dev/null
-  rmdir docs/claude/modules 2>/dev/null
-fi
-
-# Remove empty legacy directory
-rmdir docs/claude 2>/dev/null
-```
-
-Then update CLAUDE.md to change `@docs/claude/` imports to `@docs/`:
-- `@docs/claude/architecture.md` → `@docs/architecture.md`
-- `@docs/claude/domain.md` → `@docs/domain.md`
-- `@docs/claude/patterns.md` → `@docs/patterns.md`
-- `@docs/claude/development.md` → `@docs/development.md`
 
 For each document, extract front-matter (supporting both standard and HTML comment formats):
 
@@ -103,88 +65,10 @@ If a specific document was requested via argument, only process that one.
 **Special handling for README.md:**
 
 1. **README.md with HTML comment front-matter**: Include in inventory for staleness checking
-2. **README.md with standard YAML front-matter**: Migrate to HTML comment format (Phase 2)
-3. **README.md without front-matter**: Ask user if they want to add front-matter for tracking
-4. **README.md missing**: This is fine - not all repositories need a docs-manager-tracked README. Only the docs in `docs/` are required.
+2. **README.md without front-matter**: Ask user if they want to add front-matter for tracking
+3. **README.md missing**: This is fine - not all repositories need a docs-manager-tracked README. Only the docs in `docs/` are required.
 
-## Phase 2: Format Validation and Migration
-
-### Check CLAUDE.md Format
-
-Check CLAUDE.md for outdated format (markdown links instead of `@` imports, or legacy paths):
-
-```bash
-# Check for old-style markdown links to docs/
-grep -E '\[.*\]\(docs/.*\.md\)' CLAUDE.md
-# Check for legacy paths
-grep -E '@docs/claude/' CLAUDE.md
-```
-
-If old-style links are found:
-
-```markdown
-## Format Migration Needed
-
-CLAUDE.md uses markdown links instead of `@` imports:
-- `[Architecture](docs/architecture.md)` → `@docs/architecture.md`
-
-**Why this matters:** Claude Code automatically loads CLAUDE.md at session start. Using `@` imports ensures all documentation is loaded automatically, without requiring manual file reads.
-
-Would you like to migrate to `@` imports? (Recommended)
-```
-
-If legacy paths are found:
-
-```markdown
-## Path Migration Needed
-
-CLAUDE.md uses the legacy `docs/claude/` path:
-- `@docs/claude/architecture.md` → `@docs/architecture.md`
-
-Would you like to update to the new path? (Recommended)
-```
-
-If user confirms, note for update in Phase 6. The conversion is:
-- Remove markdown link syntax: `[Title](docs/X.md)` → `@docs/X.md`
-- Update legacy paths: `@docs/claude/X.md` → `@docs/X.md`
-- Remove any trailing description text on the same line
-- Keep one import per line
-
-### Check README.md Front-matter Format
-
-If README.md exists with standard YAML front-matter (not wrapped in HTML comments):
-
-```markdown
-## README.md Front-matter Migration
-
-README.md currently uses standard YAML front-matter, which is visible in GitHub rendering:
-
-```yaml
----
-scope:
-  paths: [...]
-last_review_date: 2025-12-03T00:28:11Z
----
-```
-
-This should be migrated to HTML comment format to hide it from rendered views:
-
-```markdown
-<!--
----
-scope:
-  paths: [...]
-last_review_date: 2025-12-03T00:28:11Z
----
--->
-```
-
-Would you like to migrate README.md front-matter? (Recommended)
-```
-
-If user confirms, note for migration in Phase 6.
-
-## Phase 3: Staleness Check
+## Phase 2: Staleness Check
 
 For each document, check if changes exist in its scope:
 
@@ -219,7 +103,7 @@ If all documents are current:
 
 Stop here if nothing is stale.
 
-## Phase 4: Analyze Stale Documents
+## Phase 3: Analyze Stale Documents
 
 For each stale document, spawn the appropriate analyzer agent:
 
@@ -259,7 +143,7 @@ Determine:
 
 Run agents in parallel for efficiency.
 
-## Phase 5: Review Recommendations
+## Phase 4: Review Recommendations
 
 Compile agent findings and present:
 
@@ -290,16 +174,13 @@ For documents where agents recommend "No update needed":
 Ask user:
 > Would you like to proceed with the recommended updates?
 
-## Phase 6: Apply Updates
+## Phase 5: Apply Updates
 
 For each document that needs updates:
 
 1. **Read current content**
-2. **Apply any format migrations first** (if user confirmed in Phase 2):
-   - If CLAUDE.md: Convert markdown links to `@` imports, update legacy paths
-   - If README.md with standard front-matter: Migrate to HTML comment format
-3. **Apply recommended changes** based on agent analysis
-4. **Update front-matter** (preserving format):
+2. **Apply recommended changes** based on agent analysis
+3. **Update front-matter** (preserving format):
    - `last_review_date`: Current timestamp
    - `last_updated`: Current timestamp
    - Keep HTML comment format if document is README.md
@@ -309,45 +190,6 @@ For each document that needs updates:
 # Get current timestamp
 date -u +"%Y-%m-%dT%H:%M:%SZ"
 ```
-
-### Front-matter Format Migration
-
-When migrating README.md from standard to HTML comment format:
-
-**Before:**
-```yaml
----
-scope:
-  paths:
-    - README.md
-  summary: "..."
-last_review_date: 2025-12-03T00:28:11Z
-last_updated: 2025-12-03T00:28:11Z
----
-
-# Project Name
-```
-
-**After:**
-```markdown
-<!--
----
-scope:
-  paths:
-    - README.md
-  summary: "..."
-last_review_date: 2025-12-03T00:28:11Z
-last_updated: 2025-12-03T00:28:11Z
----
--->
-
-# Project Name
-```
-
-Steps:
-1. Read the entire front-matter block (from first `---` to second `---` including both delimiters)
-2. Wrap it in HTML comment tags (`<!--` before, `-->` after)
-3. Ensure there's a blank line after the closing `-->`
 
 ### Update Guidelines
 
@@ -367,7 +209,6 @@ CLAUDE.md doesn't have scope paths. To check if it needs updates:
 - Principles rarely need updating (they're invariants)
 
 Only update CLAUDE.md if:
-- **Format migration confirmed in Phase 2** - Convert markdown links to `@` imports or update legacy paths
 - Quick start commands changed
 - New major component was added (update directory listing)
 - A principle was violated and needs rewording
@@ -383,7 +224,7 @@ When updating README.md:
 - **Be user-focused** - README is for end users and contributors, not internal context
 - **Development content should move to docs/development.md** - If README has detailed dev setup, suggest moving it
 
-## Phase 7: Validation
+## Phase 6: Validation
 
 After updates:
 
@@ -398,11 +239,10 @@ Check that:
 - Both last_review_date and last_updated are set to the same timestamp
 - README.md uses HTML comment format for front-matter (wrapped in `<!-- -->`)
 - docs/ files use standard YAML front-matter format
-- CLAUDE.md uses `@docs/` imports (not `@docs/claude/`)
 - No broken cross-references
 - README examples are syntactically valid
 
-## Phase 8: Summary
+## Phase 7: Summary
 
 Present final summary:
 
@@ -420,12 +260,6 @@ Present final summary:
 |----------|--------|
 | <path> | No changes in scope |
 | <path> | Changes not significant |
-
-### Migrations Applied
-[If any migrations were applied:]
-- Moved docs from `docs/claude/` to `docs/`
-- Updated CLAUDE.md imports to use `@docs/`
-- Converted README.md front-matter to HTML comment format
 
 ### Review Date
 All documents now reviewed as of: `<timestamp>`
