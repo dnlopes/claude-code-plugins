@@ -27,7 +27,7 @@ description: Use this skill before creating pull requests
     - `chore`: Other changes that don't modify src or test files
     - `revert`: Reverts a previous commit
 - **Language**: Always use English for PR titles and descriptions
-- **Breaking changes**: Add `!` after type/scope for breaking changes (e.g., `feat!: remove deprecated API`)
+- **Breaking changes**: Add `!` after type/scope for breaking changes, for example `feat!: remove deprecated API`
 - Use GitHub CLI to create pull-requests:
 ```bash
 gh pr create --base main --head <branch> --title "<pr-title>" --body "<pr-body>"
