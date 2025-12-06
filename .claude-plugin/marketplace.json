@@ -12,7 +12,7 @@
     },
     {
       "name": "git-workflow",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": "./git-workflow",
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
