@@ -14,7 +14,7 @@ description: Use this skill before committing changes on the repository.
 - **Commit message**: commit messages must be constructed based on the changes detected
 - **Atomic commits**: Each commit should contain related changes that serve a single purpose
 - **Split large changes**: If changes touch multiple concerns, split them into separate commits
-- **Conventional commit format**: Use the Angular convention format `<type>(<scope>): <description>`:
+- **Conventional commit format**: Use the Angular convention format **type(scope): description**:
   - `<scope>` section is optional and indicates the affected module/component
   - `<type>` section is one of:
     - `feat`: A new feature
@@ -31,7 +31,7 @@ description: Use this skill before committing changes on the repository.
 - **Present tense, imperative mood**: Write commit messages as commands (e.g., "add feature" not "added feature")
 - **Ignore not relevant changes**: Changed files unrelated to the work done should be ignored (e.g., temporary files). If unsure, ask the user for guidance.
 - **Concise first line**: Keep the first line under 72 characters
-- **Breaking changes**: Add `!` after type/scope for breaking changes, for example `feat!: remove deprecated API`, or include `BREAKING CHANGE:` in the footer
+- **Breaking changes**: Add **!** after type/scope for breaking changes (e.g., **feat!: remove deprecated API**), or include **BREAKING CHANGE:** in the footer
 
 ### Guidelines for Splitting Commits
 
