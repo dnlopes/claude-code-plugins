@@ -1,31 +1,42 @@
 # README Template
 
-This template defines the structure for repository README.md files.
+This template defines the **Core + Optional** structure for repository README.md files.
 
 ## Purpose
 
-The README.md is **public-facing documentation** that serves end users, potential contributors, and anyone discovering the project. It should be:
+The README.md is **public-facing documentation** that serves users discovering the project. It should be:
 - **Welcoming** - Clear, accessible language
 - **Practical** - Focus on getting started quickly
 - **Concise** - Essential information only, with links to detailed docs
 - **Accurate** - Reflect the actual state of the project
 
-**Key principle:** README is the entry point. Development details belong in `docs/`.
+**Key principle:** README is for USERS of the repository's output. Development details belong in `docs/development.md`.
 
-## Structure
+**Audience:** Users of what the repository provides (library consumers, CLI users, app users, etc.)
 
-### Required Sections
+---
 
-#### 1. Header
+## Required Sections
+
+These sections should ALWAYS be included.
+
+### 1. Header (Required)
+
 ```markdown
 # Project Name
 
-Brief tagline (one sentence describing what it does)
+Brief tagline (one sentence describing what it does and who it's for)
 
 [Optional: Badges for build status, version, coverage, etc.]
 ```
 
-#### 2. Summary
+**Guidelines:**
+- Project name is the h1
+- Tagline immediately answers "what is this?"
+- Badges are optional but helpful for project status
+
+### 2. Summary (Required)
+
 ```markdown
 ## Summary
 
@@ -35,135 +46,261 @@ Brief tagline (one sentence describing what it does)
 - Key value proposition
 ```
 
-#### 3. Features
-```markdown
-## Features
+**Guidelines:**
+- Maximum 3 sentences
+- Focus on value to users
+- Avoid implementation details
 
-- Feature 1 - Brief description
-- Feature 2 - Brief description
-- Feature 3 - Brief description
+### 3. Installation (Required)
 
-Focus on user-visible capabilities, not implementation details.
-```
-
-#### 4. Installation
 ```markdown
 ## Installation
 
-Clear steps for installing/setting up:
-- Package manager commands
-- Docker setup
-- Binary downloads
-- Building from source
+### npm
+\`\`\`bash
+npm install project-name
+\`\`\`
 
-Include prerequisites if needed.
+### Homebrew (if applicable)
+\`\`\`bash
+brew install project-name
+\`\`\`
+
+### From source (if applicable)
+\`\`\`bash
+git clone ...
+make install
+\`\`\`
+
+**Requirements:** <prerequisites if any>
 ```
 
-#### 5. Quick Start
+**Guidelines:**
+- Include all supported installation methods
+- Show actual commands, not placeholders
+- List prerequisites if any
+
+### 4. Quick Start (Required)
+
 ```markdown
 ## Quick Start
 
-Minimal example to get something running immediately:
-
 \`\`\`bash
-# Commands here
+# Minimal commands to get something working
 \`\`\`
 
 Expected output or result.
 ```
 
-#### 6. Usage
-```markdown
-## Usage
+**Guidelines:**
+- Should work in under 60 seconds
+- Show expected outcome
+- Use real, tested commands
 
-Common use cases with examples:
+### 5. Documentation Index (Required)
 
-### Use Case 1
-\`\`\`
-Example code/commands
-\`\`\`
-
-### Use Case 2
-\`\`\`
-Example code/commands
-\`\`\`
-
-Include enough detail for users to accomplish typical tasks.
-```
-
-#### 7. Documentation Index
 ```markdown
 ## Documentation
 
 Detailed documentation is available in `docs/`:
 
-- [Architecture](docs/architecture.md) - System design and components
-- [Domain](docs/domain.md) - Business concepts and terminology
+- [Architecture](docs/architecture.md) - System design and internals
+- [Domain](docs/domain.md) - Concepts and terminology
 - [Patterns](docs/patterns.md) - Code conventions and examples
-- [Development](docs/development.md) - Build, test, and contribute
+- [Development](docs/development.md) - Contributing and development setup
 ```
 
-This section replaces detailed development content in the README. Point users to the appropriate documentation file for in-depth information.
+**Guidelines:**
+- Links to all docs/ files
+- Brief description of each
+- Keeps README concise by pointing to details elsewhere
 
-#### 8. Contributing
+---
+
+## Optional Sections
+
+Include these when the trigger condition is met. **Do not include optional sections with generic or filler content.**
+
+### Features
+**Include when:** Project has multiple user-visible capabilities worth highlighting
+
 ```markdown
-## Contributing
+## Features
 
-Brief guide on how to contribute:
-- How to report issues
-- How to submit PRs
-- Link to docs/development.md for detailed setup
-
-Keep this section concise - detailed contribution info goes in docs/development.md.
+- **Feature Name** - User benefit description
+- **Feature Name** - User benefit description
+- **Feature Name** - User benefit description
 ```
 
-### Optional Sections
+**Guidelines:**
+- Focus on user benefits, not implementation
+- Keep descriptions brief
+- 3-7 features typically
 
-#### API Reference (for libraries)
+**Skip when:** Summary already covers the main functionality adequately
+
+### Usage / Examples
+**Include when:** Quick Start isn't enough to show common use cases
+
+```markdown
+## Usage
+
+### Common Use Case 1
+\`\`\`
+Example code/commands
+\`\`\`
+
+### Common Use Case 2
+\`\`\`
+Example code/commands
+\`\`\`
+```
+
+**Guidelines:**
+- Real, working examples
+- Cover 2-3 most common scenarios
+- Show expected output where helpful
+
+**Skip when:** Quick Start is sufficient
+
+### API Reference (for libraries)
+**Include when:** Library has a public API users need to know
+
 ```markdown
 ## API Reference
 
-Key API functions/classes with examples.
-Or: Link to full API documentation.
+### functionName(param1, param2)
+
+Description of what it does.
+
+\`\`\`javascript
+// Example usage
+const result = functionName('value', { option: true });
+\`\`\`
 ```
 
-#### Troubleshooting
+**Guidelines:**
+- Cover main functions/classes
+- Include examples for each
+- Link to full API docs if extensive
+
+**Skip when:** Not a library, or API is self-explanatory
+
+### CLI Reference (for CLI tools)
+**Include when:** CLI tool has commands/flags users need to know
+
+```markdown
+## CLI Reference
+
+\`\`\`
+project-name <command> [options]
+
+Commands:
+  init          Initialize a new project
+  build         Build the project
+  deploy        Deploy to production
+
+Options:
+  --help        Show help
+  --version     Show version
+\`\`\`
+```
+
+**Guidelines:**
+- Show command structure
+- List main commands and options
+- Link to --help for full details
+
+**Skip when:** Not a CLI tool, or CLI is covered in Quick Start
+
+### Configuration
+**Include when:** Significant configuration options exist
+
+```markdown
+## Configuration
+
+Create a `config.yaml` file:
+
+\`\`\`yaml
+option1: value
+option2: value
+\`\`\`
+
+### Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| option1 | `value` | What it does |
+```
+
+**Guidelines:**
+- Show example configuration
+- Document important options
+- Table format for scanability
+
+**Skip when:** No configuration needed, or Quick Start covers it
+
+### Troubleshooting
+**Include when:** Common issues are known
+
 ```markdown
 ## Troubleshooting
 
-Common issues and solutions:
+### Issue: Error message X
+**Solution:** How to fix it
 
-### Issue 1
-**Problem:** Description
-**Solution:** How to fix
+### Issue: Y doesn't work
+**Solution:** Steps to resolve
 ```
 
-#### Roadmap
+**Guidelines:**
+- Address actually common issues
+- Include specific error messages when possible
+
+**Skip when:** No common issues known
+
+### Contributing
+**Include when:** Repository accepts contributions
+
 ```markdown
-## Roadmap
+## Contributing
 
-Planned features or improvements:
-- [ ] Future feature 1
-- [ ] Future feature 2
+Contributions are welcome! See [docs/development.md](docs/development.md) for setup instructions.
+
+Quick steps:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
 ```
 
-### Sections NOT in README
+**Guidelines:**
+- Keep brief - details go in docs/development.md
+- Be welcoming
+- Link to detailed guide
 
-The following content should NOT be in README.md - it belongs in `docs/`:
+**Skip when:** Internal project not accepting contributions
+
+---
+
+## Sections NOT in README
+
+Move this content to the appropriate location:
 
 | Content | Location |
 |---------|----------|
-| Detailed development setup | `docs/development.md` |
-| Build system details | `docs/development.md` |
-| Architecture explanations | `docs/architecture.md` |
-| Domain concepts/glossary | `docs/domain.md` |
-| Code patterns/conventions | `docs/patterns.md` |
-| Environment variables | `docs/development.md` |
-| Deployment procedures | `docs/development.md` |
+| Development environment setup | docs/development.md |
+| Build system details | docs/development.md |
+| Architecture explanations | docs/architecture.md |
+| Domain concepts/glossary | docs/domain.md |
+| Code patterns/conventions | docs/patterns.md |
+| All environment variables | docs/development.md |
+| Detailed deployment procedures | docs/development.md |
+
+---
 
 ## Front-matter
 
-README.md should include front-matter in HTML comment format for staleness tracking (to hide it from GitHub rendering):
+README.md should include front-matter in HTML comment format (hidden from GitHub rendering):
 
 ```markdown
 <!--
@@ -184,9 +321,9 @@ last_updated: 2025-01-15T10:30:00Z
 -->
 ```
 
-**Important:** README.md must use HTML comment format (wrapped in `<!-- -->`), not standard YAML front-matter, to prevent it from appearing in GitHub's rendered view.
+**Important:** Use HTML comment format (`<!-- -->`) to hide front-matter from GitHub rendering.
 
-## Scope Paths Guidelines
+### Scope Paths Guidelines
 
 README scope should track files that affect:
 - Installation process (package manifests, setup scripts)
@@ -199,6 +336,8 @@ README scope should track files that affect:
 - Test files
 - Development-only configurations
 
+---
+
 ## Tone and Style
 
 - **User-facing** - Write for someone discovering the project
@@ -207,31 +346,12 @@ README scope should track files that affect:
 - **Concise** - Respect the reader's time
 - **Honest** - Don't oversell or make false claims
 
-## Examples vs Implementation Details
-
-**Good examples:**
-```markdown
-## Quick Start
-
-\`\`\`bash
-npm install myproject
-myproject serve --port 3000
-\`\`\`
-
-Your app is now running at http://localhost:3000
-```
-
-**Avoid implementation details:**
-```markdown
-## Quick Start
-
-The CLI uses Commander.js to parse arguments and starts an Express server
-on the specified port. The server initializes middleware in the following order...
-```
+---
 
 ## Preserving Existing Content
 
 When updating an existing README:
+
 1. **Preserve custom sections** - Keep non-standard sections the user added
 2. **Enhance, don't replace** - Improve existing content rather than rewriting
 3. **Maintain voice** - Match the existing tone and style
@@ -239,9 +359,11 @@ When updating an existing README:
 5. **Update outdated info** - Fix installation steps, commands, or examples that changed
 6. **Add docs index** - If missing, add the Documentation section pointing to docs/
 
-## When to Update
+---
 
-README should be updated when:
+## When to Update README
+
+**Update when:**
 - Installation process changes
 - New major features are added
 - Usage examples become outdated

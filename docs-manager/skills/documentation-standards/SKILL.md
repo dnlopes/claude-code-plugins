@@ -7,7 +7,7 @@ description: Standards for Claude-optimized repository documentation. Use when c
 
 ## Core Philosophy
 
-**Documentation exists to provide Claude with useful context, not to mirror the codebase.**
+**Documentation exists to provide useful context, not to mirror the codebase.**
 
 ### The Right Abstraction Level
 
@@ -34,26 +34,47 @@ Do NOT include examples that:
 - Will become stale when implementation changes
 - Cover edge cases rather than common patterns
 
+---
+
+## Audience Split
+
+Documentation serves two distinct audiences. Understanding this split is critical for generating useful content.
+
+### Human-Focused Documentation
+
+**Documents:** README.md, docs/development.md
+
+**Audience:** Humans reading on GitHub
+- README: Users of what the repository provides
+- development.md: Developers who want to contribute
+
+**Characteristics:**
+- Practical, action-oriented language
+- Welcoming tone
+- Focus on "how do I..." questions
+- Concrete examples that work
+- No jargon about "Claude-optimized"
+
+### Claude-Optimized Documentation
+
+**Documents:** CLAUDE.md, docs/architecture.md, docs/domain.md, docs/patterns.md
+
+**Audience:** Claude (AI context for understanding the codebase)
+
+**Characteristics:**
+- Patterns and concepts over implementation details
+- Right abstraction level for stability
+- Focused on developer guidance (for CLAUDE.md principles)
+- Structured for efficient context consumption
+
+---
+
 ## Document Types
 
-### CLAUDE.md (Root)
-**Purpose:** Entry point for Claude. Quick orientation + immutable principles.
-
-**Should contain:**
-- 1-2 sentence project description
-- Quick start commands (build, test, run)
-- Principles/invariants that MUST be followed
-- `@` imports for docs/ files (e.g., `@docs/architecture.md`)
-
-**Why `@` imports:** Claude Code automatically loads CLAUDE.md at session start. Using `@path/to/file` syntax causes Claude Code to also load those files, ensuring all documentation is available immediately without manual reading.
-
-**Should NOT contain:**
-- Detailed architecture (goes in architecture.md)
-- Code examples (goes in patterns.md)
-- Business domain explanations (goes in domain.md)
-
 ### README.md (Root)
-**Purpose:** Public-facing entry point for users and contributors.
+**Purpose:** Public-facing entry point for users of the repository's output.
+
+**Audience:** Users (human-focused)
 
 **Should contain:**
 - Project summary and tagline
@@ -70,53 +91,94 @@ Do NOT include examples that:
 - Domain concepts (goes in docs/domain.md)
 - Code patterns (goes in docs/patterns.md)
 
+### CLAUDE.md (Root)
+**Purpose:** Entry point for Claude. Quick orientation + actionable principles.
+
+**Audience:** Claude (AI-optimized)
+
+**Should contain:**
+- 1-2 sentence project description
+- Quick start commands (build, test, run) - using build system interfaces
+- Principles/invariants that developers MUST follow
+- `@` imports for docs/ files (e.g., `@docs/architecture.md`)
+
+**Principles must be:**
+- Actionable - tells developers what to DO
+- Invariants - must be maintained
+- Consequential - violating them causes problems
+
+**Should NOT contain:**
+- Observations about infrastructure ("releases are automated")
+- Tech stack descriptions ("we use TypeScript")
+- Detailed architecture (goes in architecture.md)
+- Code examples (goes in patterns.md)
+
 ### docs/architecture.md
 **Purpose:** System design and component relationships.
 
-**Should contain:**
-- High-level system overview
-- Major components and their responsibilities
-- How components interact (data flow)
-- External dependencies and integrations
-- Key architectural decisions and their rationale
+**Audience:** Claude (AI-optimized)
 
-**Scope paths:** Typically root directories, main entry points, core modules.
+**Required sections:**
+- Overview (2-3 sentences, high-level)
+- Components (with Location, Responsibility, Interactions)
+
+**Optional sections (include when applicable):**
+- Data Flow (when non-trivial)
+- External Dependencies (when external integrations exist)
+- Key Architectural Decisions (when evident)
+
+**Scope paths:** Root directories, main entry points, core modules.
 
 ### docs/domain.md
 **Purpose:** Business concepts and terminology.
 
-**Should contain:**
-- Glossary of domain terms
-- Core business entities and their relationships
-- Business rules and constraints
-- Domain-specific patterns
+**Audience:** Claude (AI-optimized)
+
+**Required sections:**
+- Glossary (domain-specific terms, not technical terms)
+
+**Optional sections (include when applicable):**
+- Core Entities (when domain model exists)
+- Business Rules (when business constraints exist)
+- Domain Patterns (when complex domain logic exists)
+
+**Note:** For utility libraries or purely technical projects, this document may be minimal or skipped entirely.
 
 **Scope paths:** Domain models, entities, business logic directories.
 
 ### docs/patterns.md
 **Purpose:** Code conventions with illustrative examples.
 
-**Should contain:**
-- Project structure conventions
-- Naming conventions
-- Error handling patterns (with 1 example)
-- Testing patterns (with 1 example)
-- Common patterns used throughout (with examples)
+**Audience:** Claude (AI-optimized)
+
+**Required sections:**
+- Project Structure (directory layout with conventions)
+- Naming Conventions (files, functions, types)
+
+**Optional sections (include when applicable):**
+- Error Handling (when consistent pattern exists)
+- Testing Patterns (when tests exist with consistent approach)
+- Common Patterns (when repeating patterns observed)
 
 **Scope paths:** Representative files that demonstrate patterns.
 
 ### docs/development.md
 **Purpose:** How to work with the codebase.
 
-**Should contain:**
-- Prerequisites with versions
-- Setup steps
-- Build commands
-- Test commands
-- Local development setup
-- Environment variables needed
-- Deployment process overview
-- Contributing guidelines (detailed)
+**Audience:** Human developers (human-focused)
+
+**Required sections:**
+- Prerequisites (with versions)
+- Setup (step-by-step)
+- Build (using build system interfaces)
+- Test (using build system interfaces)
+- Run Locally
+
+**Optional sections (include when applicable):**
+- Environment Variables (when env vars are used)
+- Common Tasks (when helpful shortcuts exist)
+- Deployment (when deployment process exists)
+- Contributing (when repo accepts contributions)
 
 **Scope paths:** Build files (Makefile, package.json), config files, CI/CD configs.
 
@@ -134,14 +196,45 @@ Do NOT include examples that:
 - Utility/helper modules
 - Modules with self-explanatory code
 
-## Front-matter Specification
+---
 
-See: [reference/frontmatter-spec.md](reference/frontmatter-spec.md)
+## Build System Priority
 
-## Document Templates
+**Commands documented must use the project's build system interfaces.**
 
-See: [reference/document-templates.md](reference/document-templates.md)
+| If project has... | Document this | NOT this |
+|-------------------|---------------|----------|
+| Makefile | `make test` | `go test ./...` |
+| package.json scripts | `npm test` | `jest` |
+| docker-compose.yml | `docker-compose up` | `docker run ...` |
+| Taskfile.yml | `task test` | raw commands |
 
-## README Template
+The build system IS the interface. Raw commands are implementation details that can change.
 
-See: [reference/readme-template.md](reference/readme-template.md)
+---
+
+## Core + Optional Structure
+
+All documents use a **Core + Optional** structure:
+
+- **Required sections** - Always include these
+- **Optional sections** - Include only when the trigger condition is met
+- **Skip guidance** - When to omit optional sections
+
+**Important:** Do NOT include optional sections just because they exist in the template. Empty or generic content is worse than missing sections.
+
+---
+
+## Reference Documentation
+
+- [Front-matter Specification](reference/frontmatter-spec.md) - Staleness tracking format
+- [Document Templates](reference/document-templates.md) - Core + Optional templates for each doc type
+- [README Template](reference/readme-template.md) - README-specific structure and guidelines
+
+### Good/Bad Examples
+- [Principles Examples](reference/principles-examples.md) - What makes a good principle
+- [Architecture Examples](reference/architecture-examples.md) - Architecture content guidelines
+- [Domain Examples](reference/domain-examples.md) - Domain documentation guidelines
+- [Patterns Examples](reference/patterns-examples.md) - Code patterns documentation
+- [Development Examples](reference/development-examples.md) - Development docs guidelines
+- [README Examples](reference/readme-examples.md) - User-facing documentation guidelines
