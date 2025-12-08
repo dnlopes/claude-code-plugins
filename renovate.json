@@ -14,7 +14,7 @@
     ":semanticCommitTypeAll(chore)",
     ":timezone(UTC)"
   ],
-  "schedule": ["* 0-5 * * 4,5"],
+  "schedule": ["* * 1,15 * *"],
   "reviewersFromCodeOwners": true,
   "automergeStrategy": "squash",
   "packageRules": [
