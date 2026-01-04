@@ -17,18 +17,6 @@
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
     {
-      "name": "macos-notifications",
-      "version": "1.0.0",
-      "source": "./macos-notifications",
-      "description": "Native macOS notification hooks using osascript - zero dependencies"
-    },
-    {
-      "name": "mcp-serena",
-      "version": "1.0.0",
-      "source": "./mcp-serena",
-      "description": "Serena MCP server for semantic code analysis and understanding"
-    },
-    {
       "name": "mcp-context7",
       "version": "1.0.0",
       "source": "./mcp-context7",
@@ -39,12 +27,6 @@
       "version": "1.0.0",
       "source": "./mcp-shadcn",
       "description": "shadcn/ui MCP server for component documentation"
-    },
-    {
-      "name": "mcp-sequential-thinking",
-      "version": "1.0.0",
-      "source": "./mcp-sequential-thinking",
-      "description": "Sequential Thinking MCP server for structured problem-solving through step-by-step reasoning"
     },
     {
       "name": "docs-manager",
