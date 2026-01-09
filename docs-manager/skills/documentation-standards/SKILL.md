@@ -1,6 +1,6 @@
 ---
 name: documentation-standards
-description: Standards for Claude-optimized repository documentation. Use when creating or updating docs/ documentation to ensure correct format, abstraction level, and front-matter.
+description: Standards for Claude-optimized repository documentation. Use when creating or updating documentation to ensure correct format, abstraction level, and front-matter.
 ---
 
 # Documentation Standards
