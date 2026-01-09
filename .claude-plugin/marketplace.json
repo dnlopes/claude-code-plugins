@@ -24,7 +24,7 @@
     },
     {
       "name": "docs-manager",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": "./docs-manager",
       "description": "Repository onboarding and documentation maintenance for Claude context, with git-based staleness tracking"
     },
