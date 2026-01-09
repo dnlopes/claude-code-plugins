@@ -27,11 +27,7 @@ This repository provides plugins that extend Claude Code with specialized capabi
 | [git-workflow](git-workflow/) | Conventional commits and PR management |
 | [docs-manager](docs-manager/) | Repository documentation generation and maintenance |
 | [reviewer-toolkit](reviewer-toolkit/) | Multi-perspective code review with specialized agents |
-| [mcp-context7](mcp-context7/) | Library documentation via Context7 MCP |
-| [mcp-serena](mcp-serena/) | Semantic code analysis via Serena MCP |
 | [mcp-shadcn](mcp-shadcn/) | shadcn/ui component documentation |
-| [mcp-sequential-thinking](mcp-sequential-thinking/) | Structured reasoning MCP integration |
-| [macos-notifications](macos-notifications/) | Native macOS notifications for Claude Code events |
 
 ## Installation
 
@@ -49,9 +45,7 @@ claude plugins add /path/to/cloud-code-plugins/plugin-name
 
 **Requirements:**
 - Claude Code CLI installed
-- For MCP plugins: `uvx` (Python servers) or `npx` (Node servers)
 - For git-workflow: GitHub CLI (`gh`)
-- For macos-notifications: macOS
 
 ## Quick Start
 
@@ -94,9 +88,7 @@ Then in Claude Code:
 - **Documentation Management** - Generate and maintain CLAUDE.md, README, and docs/ with git-based staleness tracking
 - **Code Review** - Multi-perspective review covering security, bugs, tests, and historical context
 - **Git Automation** - Conventional commit enforcement and comprehensive PR creation
-- **Library Documentation** - Access current documentation for popular libraries via MCP
-- **Semantic Analysis** - IDE-like code navigation and symbol search
-- **Native Notifications** - macOS notification center integration for task completion
+- **UI Components** - Access shadcn/ui component documentation via MCP
 
 ## Documentation
 

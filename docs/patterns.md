@@ -22,11 +22,7 @@ cloud-code-plugins/
 ├── git-workflow/          # Git operations plugin
 ├── docs-manager/          # Documentation plugin
 ├── reviewer-toolkit/      # Code review plugin
-├── mcp-context7/          # Context7 MCP integration
-├── mcp-serena/            # Serena MCP integration
 ├── mcp-shadcn/            # shadcn/ui MCP integration
-├── mcp-sequential-thinking/  # Sequential Thinking MCP
-├── macos-notifications/   # macOS notification hooks
 └── .github/               # CI/CD workflows
 ```
 
@@ -101,45 +97,6 @@ skills/documentation-standards/
     ├── frontmatter-spec.md     # Supporting documentation
     ├── document-templates.md
     └── principles-examples.md
-```
-
-### MCP Server Configuration
-
-MCP integrations declare server configuration in `.mcp.json`:
-
-```json
-// Example from mcp-serena/.mcp.json
-{
-  "mcpServers": {
-    "serena": {
-      "command": "uvx",
-      "args": ["--from", "git+https://github.com/oraios/serena@v0.1.4", "serena", "start-mcp-server"]
-    }
-  }
-}
-```
-
-### Hook Configuration
-
-Hooks bind to Claude Code lifecycle events:
-
-```json
-// Example from macos-notifications/hooks/hooks.json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "osascript -e 'display notification \"Task complete\" with title \"Claude Code\"'"
-          }
-        ]
-      }
-    ]
-  }
-}
 ```
 
 ### Agent Spawning in Commands

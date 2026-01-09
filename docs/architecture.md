@@ -83,22 +83,13 @@ Key commands:
 
 ### MCP Integrations (mcp-*)
 
-**Location:** `mcp-context7/`, `mcp-serena/`, `mcp-shadcn/`, `mcp-sequential-thinking/`
+**Location:** `mcp-shadcn/`
 **Responsibility:** Bridge Claude Code to external MCP servers
 **Interacts with:** External services via MCP protocol
 
 | Plugin | MCP Server | Purpose |
 |--------|------------|---------|
-| mcp-context7 | Context7 | Library documentation access |
-| mcp-serena | Serena | Semantic code analysis |
 | mcp-shadcn | shadcn/ui | UI component documentation |
-| mcp-sequential-thinking | Sequential Thinking | Structured reasoning |
-
-### Platform Integration (macos-notifications)
-
-**Location:** `macos-notifications/`
-**Responsibility:** Native macOS notifications for Claude Code lifecycle events
-**Interacts with:** macOS notification center via osascript
 
 ## Data Flow
 
@@ -124,6 +115,3 @@ Claude Code → .mcp.json config → MCP Server (external)
 | Dependency | Purpose | Integration Point |
 |------------|---------|-------------------|
 | GitHub CLI (`gh`) | PR operations | git-workflow commands |
-| uvx | Python MCP servers | mcp-serena |
-| npx | Node MCP servers | mcp-sequential-thinking |
-| osascript | macOS notifications | macos-notifications hooks |

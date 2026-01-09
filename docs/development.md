@@ -18,9 +18,6 @@ last_updated: 2025-12-06T02:02:02Z
 - Claude Code CLI installed and configured
 - Git
 - GitHub CLI (`gh`) for PR operations
-- Optional: `uvx` for Python MCP servers (mcp-serena)
-- Optional: `npx` for Node MCP servers (mcp-sequential-thinking)
-- Optional: macOS for notification hooks
 
 ## Setup
 

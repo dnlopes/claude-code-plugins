@@ -17,12 +17,6 @@
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
     {
-      "name": "mcp-context7",
-      "version": "1.0.0",
-      "source": "./mcp-context7",
-      "description": "Context7 MCP server for up-to-date library documentation and examples"
-    },
-    {
       "name": "mcp-shadcn",
       "version": "1.0.0",
       "source": "./mcp-shadcn",

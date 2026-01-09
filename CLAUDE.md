@@ -40,4 +40,3 @@ These rules MUST be followed when working on this codebase:
 | `docs-manager/` | Repository onboarding and documentation maintenance |
 | `reviewer-toolkit/` | Multi-perspective code review |
 | `mcp-*/` | MCP server integrations |
-| `macos-notifications/` | Native desktop notifications |
