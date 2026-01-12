@@ -1,6 +1,6 @@
 # git-workflow
 
-Git operations and GitHub PR management with best practices enforcement.
+Git operations with best practices enforcement.
 
 ## Purpose
 
@@ -11,7 +11,6 @@ Streamlines version control workflows by providing commands and skills for creat
 ### Commands
 
 - `/git-workflow:commit` - Create git commits with user approval and proper message formatting
-- `/git-workflow:create-pr` - Create a new branch, push to remote, and open a GitHub pull request
 
 ### Skills
 
@@ -21,7 +20,7 @@ Streamlines version control workflows by providing commands and skills for creat
 ## Installation
 
 ```bash
-claude-code plugins install /path/to/cloud-code-plugins/git-workflow
+claude plugins add dnlopes/cloud-code-plugins/git-workflow
 ```
 
 ## Quick Example
@@ -29,9 +28,6 @@ claude-code plugins install /path/to/cloud-code-plugins/git-workflow
 ```bash
 # Create a commit with proper formatting
 /git-workflow:commit
-
-# Create and push a branch, then open a PR
-/git-workflow:create-pr
 ```
 
 ## How It Works
@@ -41,8 +37,3 @@ The commit command:
 2. Drafts clear, descriptive commit messages
 3. Presents a plan for your approval
 4. Executes the commits
-
-The create-pr command:
-1. Reviews commit history since branching
-2. Creates a comprehensive PR summary
-3. Pushes changes and opens the PR via `gh`
