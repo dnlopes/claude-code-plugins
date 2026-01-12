@@ -6,13 +6,13 @@
   "plugins": [
     {
       "name": "dev-toolkit",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "source": "./dev-toolkit",
       "description": "Complete development workflow toolkit with planning, research, implementation, and code review capabilities"
     },
     {
       "name": "git-workflow",
-      "version": "1.0.1",
+      "version": "2.0.0",
       "source": "./git-workflow",
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
@@ -36,7 +36,7 @@
     },
     {
       "name": "ui-dev",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "source": "./ui-dev",
       "description": "UI development toolkit"
     }
