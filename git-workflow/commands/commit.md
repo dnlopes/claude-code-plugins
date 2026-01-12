@@ -10,7 +10,6 @@ description: Create git commits with user approval and no Claude attribution
 **Core principle:** Analyze changes → Plan commits → Execute.
 
 ## The Process
-**IMPORTANT:** use skill `committing-work` to learn how to draft good commit messages and how to organize commits.
 
 ### Step 1: Think about what changed
 
@@ -27,6 +26,7 @@ description: Create git commits with user approval and no Claude attribution
 4. Focus on why the changes were made, not just what
 
 ### Step 3: Present your plan to the user
+
 > **IMPORTANT** this step can be skipped if the user explicitely allowed.
 
 1. List the files you plan to add for each commit
@@ -34,6 +34,7 @@ description: Create git commits with user approval and no Claude attribution
 3. Ask: "I plan to create [N] commit(s) with these changes. Shall I proceed?"
 
 ### Step 4: Execute planned commits
-1. Use `git add` with specific files (never use `-A` or `.`)
+
+- Use `git add` with specific files (never use `-A` or `.`)
 - Create commits with your planned messages
 - Show the result with `git log --oneline -n [number]`

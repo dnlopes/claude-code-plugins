@@ -5,10 +5,6 @@ description: Use this skill before committing changes on the repository.
 
 # Committing Work
 
-## Overview
-
-**Announce at start:** "🟢 I'm using the committing-work skill to complete this work."
-
 ## Key Principles
 
 - **Commit message**: commit messages must be constructed based on the changes detected
@@ -41,11 +37,12 @@ When analyzing the diff, consider splitting commits based on these criteria:
 2. **Different types of changes**: Mixing features, fixes, refactoring, etc.
 3. **File patterns**: Changes to different types of files (e.g., source code vs documentation)
 4. **Logical grouping**: Changes that would be easier to understand or review separately
-6. **Size**: Very large changes that would be clearer if broken down
+5. **Size**: Very large changes that would be clearer if broken down
 
 ### Examples
 
 Good commit messages:
+
 - feat: add user authentication system
 - fix: resolve memory leak in rendering process
 - docs: update API documentation with new endpoints
@@ -64,6 +61,7 @@ Good commit messages:
 - feat(a11y): improve form accessibility for screen readers
 
 Example of splitting commits:
+
 - First commit: feat(types): add new solc version type definitions
 - Second commit: docs: update documentation for new solc versions
 - Third commit: build: update package.json dependencies

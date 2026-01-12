@@ -5,10 +5,6 @@ description: Use this skill before creating pull requests
 
 # Committing Work
 
-## Overview
-
-**Announce at start:** "🟢 I'm using the creating-pull-requests skill to complete this work."
-
 ## Key Principles
 
 - Pull-request titles must follow all the commit message rules as described in skill `committing-work`
@@ -29,6 +25,7 @@ description: Use this skill before creating pull requests
 - **Language**: Always use English for PR titles and descriptions
 - **Breaking changes**: Add **!** after type/scope for breaking changes (e.g., **feat!: remove deprecated API**)
 - Use GitHub CLI to create pull-requests:
+
 ```bash
 gh pr create --base main --head <branch> --title "<pr-title>" --body "<pr-body>"
 ```
@@ -36,6 +33,7 @@ gh pr create --base main --head <branch> --title "<pr-title>" --body "<pr-body>"
 ### Examples
 
 Good pull request titles:
+
 - feat: add user authentication system
 - fix: resolve memory leak in rendering process
 - docs: update API documentation with new endpoints
