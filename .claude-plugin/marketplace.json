@@ -33,6 +33,12 @@
       "version": "1.0.0",
       "source": "./reviewer-toolkit",
       "description": "Code review assistance toolkit with PR analysis, suggestions, and improvement capabilities"
+    },
+    {
+      "name": "ui-dev",
+      "version": "1.0.0",
+      "source": "./ui-dev",
+      "description": "UI development toolkit"
     }
   ]
 }

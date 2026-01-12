@@ -1,0 +1,8 @@
+{
+    "name": "ui-dev",
+    "description": "UI development toolkit",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}
