@@ -1,18 +1,12 @@
 # dev-toolkit
 
-Complete development lifecycle toolkit for planning, research, implementation, and codebase analysis.
+Development toolkit providing specialized agents and language-specific best practices for codebase analysis.
 
 ## Purpose
 
-Provides end-to-end development workflow support through specialized agents, interactive planning commands, and language-specific best practices.
+Provides development workflow support through specialized agents and language-specific best practices.
 
 ## Features
-
-### Commands
-
-- `/dev-toolkit:create-plan` - Create detailed implementation plans through interactive research and collaboration
-- `/dev-toolkit:implement-plan` - Execute approved technical plans phase by phase with verification
-- `/dev-toolkit:research-codebase` - Conduct comprehensive codebase research using parallel agents
 
 ### Agents
 
@@ -29,22 +23,9 @@ Provides end-to-end development workflow support through specialized agents, int
 ## Installation
 
 ```bash
-claude-code plugins install /path/to/cloud-code-plugins/dev-toolkit
-```
-
-## Quick Example
-
-```bash
-# Create an implementation plan for a new feature
-/dev-toolkit:create-plan
-
-# Research how authentication is implemented
-/dev-toolkit:research-codebase "How does user authentication work?"
-
-# Execute an approved plan
-/dev-toolkit:implement-plan docs/plans/2025-11-26-add-auth.md
+claude plugins add dnlopes/cloud-code-plugins/dev-toolkit
 ```
 
 ## Agent Usage
 
-Agents are invoked automatically by commands, but can also be used directly via the Task tool when you need focused, specialized research or analysis.
+Agents can be used directly via the Task tool when you need focused, specialized research or analysis.
