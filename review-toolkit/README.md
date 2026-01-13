@@ -10,8 +10,7 @@ Provides multi-perspective code review through specialized agents that examine s
 
 ### Commands
 
-- `/review-toolkit:review-pr` - Review a GitHub pull request with multiple specialized agents
-- `/review-toolkit:review-local-changes` - Review uncommitted local changes before committing
+- `/review-toolkit:review-pr` - Review code changes with multiple specialized agents (works with PRs or current branch vs main)
 
 ### Agents
 
@@ -32,21 +31,21 @@ claude-code plugins install /path/to/cloud-code-plugins/review-toolkit
 
 ```bash
 # Review a GitHub PR
-/review-toolkit:review-pr 123
+/review-toolkit:review-pr
 
-# Review local changes before committing
-/review-toolkit:review-local-changes
+# Review current branch against main (when no PR exists)
+/review-toolkit:review-pr
 ```
 
 ## How It Works
 
 The review process:
 
-1. Fetches changes (from PR or local diff)
+1. Determines context (PR diff or branch diff against main)
 2. Spawns specialized review agents in parallel
 3. Each agent analyzes from their perspective
-4. Results are synthesized into actionable feedback
-5. Critical issues are prioritized
+4. Issues are scored for confidence and impact
+5. Results are filtered and posted as PR comment or console output
 
 ## Review Perspectives
 
