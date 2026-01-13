@@ -5,7 +5,6 @@ scope:
     - "*/commands/*.md"
     - "*/.claude-plugin/plugin.json"
   summary: "Code patterns and conventions"
-last_review_date: 2026-01-13T23:12:02Z
 last_updated: 2026-01-13T23:12:02Z
 ---
 

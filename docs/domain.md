@@ -5,7 +5,6 @@ scope:
     - "*/commands/*.md"
     - "*/skills/*/SKILL.md"
   summary: "Plugin concepts and terminology"
-last_review_date: 2026-01-13T23:12:02Z
 last_updated: 2026-01-13T23:12:02Z
 ---
 

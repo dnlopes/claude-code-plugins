@@ -5,7 +5,6 @@ scope:
     - README.md
     - .claude-plugin/marketplace.json
   summary: "Project overview and installation"
-last_review_date: 2026-01-13T23:12:02Z
 last_updated: 2026-01-13T23:12:02Z
 ---
 -->

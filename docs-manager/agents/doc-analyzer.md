@@ -15,7 +15,7 @@ You receive:
 - **Document path** - e.g., `docs/architecture.md` or `README.md`
 - **Current content** - The document's content
 - **Scope paths** - From front-matter
-- **Last review date** - Timestamp from front-matter
+- **Last updated** - Timestamp from front-matter
 - **Document type** - `technical` or `user-facing`
 
 ## Process
@@ -23,7 +23,7 @@ You receive:
 ### 1. Get Changes
 
 ```bash
-git log --since="<last_review_date>" --name-only --pretty=format: -- <scope_paths> | sort -u
+git log --since="<last_updated>" --name-only --pretty=format: -- <scope_paths> | sort -u
 ```
 
 If no files changed: "No changes in scope paths."
@@ -68,7 +68,7 @@ For each significant change:
 
 ### Scope
 Paths: <scope_paths>
-Last Reviewed: <date>
+Last Updated: <date>
 Changes Since: <count>
 
 ### Changes Detected

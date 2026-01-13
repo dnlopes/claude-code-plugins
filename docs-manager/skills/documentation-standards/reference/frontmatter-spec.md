@@ -13,7 +13,6 @@ scope:
     - path/to/directory/**
     - path/to/file.ts
   summary: "Brief description of coverage"
-last_review_date: 2025-01-15T10:30:00Z
 last_updated: 2025-01-15T10:30:00Z
 ---
 ```
@@ -30,7 +29,6 @@ scope:
     - README.md
     - package.json
   summary: "Project overview and installation"
-last_review_date: 2025-01-15T10:30:00Z
 last_updated: 2025-01-15T10:30:00Z
 ---
 -->
@@ -55,7 +53,7 @@ last_updated: 2025-01-15T10:30:00Z
 
 Used for staleness detection:
 ```bash
-git log --since="<last_review_date>" --name-only -- <paths>
+git log --since="<last_updated>" --name-only -- <paths>
 ```
 
 **Examples:**
@@ -77,22 +75,16 @@ paths:
 **Type:** String
 **Purpose:** One sentence describing coverage area
 
-### last_review_date
+### last_updated
 
 **Type:** ISO 8601 timestamp (UTC)
-**Purpose:** When document was last reviewed and verified accurate
+**Purpose:** When document was last reviewed/updated
 
 **Why timestamps instead of commit hashes:**
 - Survives git squash merges (hashes become orphaned)
 - Works with feature branch → squash merge workflow
 
-### last_updated
-
-**Type:** ISO 8601 timestamp (UTC)
-**Purpose:** When document content was last modified
-
 ## Validation Rules
 
 1. All paths in scope.paths should match at least one file
 2. Timestamps must be valid ISO 8601 format
-3. last_review_date typically matches last_updated

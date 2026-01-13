@@ -6,7 +6,6 @@ scope:
     - renovate.json
     - trivy.yaml
   summary: "Build, test, and development workflow"
-last_review_date: 2026-01-13T23:12:02Z
 last_updated: 2026-01-13T23:12:02Z
 ---
 

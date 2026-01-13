@@ -31,7 +31,7 @@ ls README.md 2>/dev/null
 
 For each document, extract front-matter:
 - `scope.paths` - Files to check for changes
-- `last_review_date` - When last reviewed
+- `last_updated` - When last updated
 
 If specific document requested via argument, only process that one.
 
@@ -44,7 +44,7 @@ If specific document requested via argument, only process that one.
 For each document with scope paths:
 
 ```bash
-git log --since="<last_review_date>" --name-only --pretty=format: -- <scope_paths> | sort -u
+git log --since="<last_updated>" --name-only --pretty=format: -- <scope_paths> | sort -u
 ```
 
 Categorize:
@@ -82,7 +82,7 @@ Analyze this document for needed updates:
 Document: <path>
 Content: <current content>
 Scope paths: <paths>
-Last review date: <date>
+Last updated: <date>
 Document type: <technical (architecture, domain, patterns) or user-facing (README, development)>
 
 Determine:
@@ -124,9 +124,8 @@ For each document needing updates:
 
 1. Read current content
 2. Apply recommended changes
-3. Update front-matter timestamps:
+3. Update front-matter timestamp:
    ```yaml
-   last_review_date: <current timestamp>
    last_updated: <current timestamp>
    ```
 

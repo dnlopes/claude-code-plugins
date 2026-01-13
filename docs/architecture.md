@@ -6,7 +6,6 @@ scope:
     - "*/commands/*.md"
     - "*/skills/*/SKILL.md"
   summary: "System architecture and component relationships"
-last_review_date: 2026-01-13T23:12:02Z
 last_updated: 2026-01-13T23:12:02Z
 ---
 
@@ -23,7 +22,7 @@ A monorepo of Claude Code plugins where each plugin provides specialized agents,
 **Responsibility:** Codebase analysis, pattern discovery, web research, and development methodology
 **Interacts with:** Used as foundation by other plugins for exploration tasks
 
-### docs-manager (v2.0.0)
+### docs-manager (v2.1.0)
 **Location:** `docs-manager/`
 **Responsibility:** AI-optimized documentation generation and maintenance with git-based staleness tracking
 **Interacts with:** dev-toolkit agents for codebase exploration

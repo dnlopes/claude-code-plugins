@@ -68,7 +68,6 @@ scope:
   paths:
     - <module-path>/**
   summary: "<Module name> technical documentation"
-last_review_date: <ISO_TIMESTAMP>
 last_updated: <ISO_TIMESTAMP>
 ---
 
@@ -122,7 +121,6 @@ scope:
   paths:
     - <structural directories>
   summary: "System architecture and component relationships"
-last_review_date: <ISO_TIMESTAMP>
 last_updated: <ISO_TIMESTAMP>
 ---
 
@@ -170,7 +168,6 @@ scope:
   paths:
     - <domain/model directories>
   summary: "Business domain concepts and terminology"
-last_review_date: <ISO_TIMESTAMP>
 last_updated: <ISO_TIMESTAMP>
 ---
 
@@ -200,7 +197,6 @@ scope:
   paths:
     - <representative files>
   summary: "Code patterns and conventions"
-last_review_date: <ISO_TIMESTAMP>
 last_updated: <ISO_TIMESTAMP>
 ---
 
@@ -244,7 +240,6 @@ scope:
     - package.json
     - docker-compose.yml
   summary: "Build, test, and development workflow"
-last_review_date: <ISO_TIMESTAMP>
 last_updated: <ISO_TIMESTAMP>
 ---
 
@@ -300,7 +295,6 @@ scope:
     - README.md
     - package.json
   summary: "Project overview and installation"
-last_review_date: <ISO_TIMESTAMP>
 last_updated: <ISO_TIMESTAMP>
 ---
 -->
