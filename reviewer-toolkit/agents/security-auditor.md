@@ -1,6 +1,7 @@
 ---
 name: security-auditor
 description: Use this agent when reviewing local code changes or pull requests to identify security vulnerabilities and risks. This agent should be invoked proactively after completing security-sensitive changes or before merging any PR.
+color: red
 ---
 
 # Security Auditor Agent

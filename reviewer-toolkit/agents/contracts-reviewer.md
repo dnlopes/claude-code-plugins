@@ -1,6 +1,7 @@
 ---
 name: contracts-reviewer
 description: Use this agent when reviewing local code changes or pull requests to analyze API, data models, and type design. This agent should be invoked proactively when changes affect public contracts, domain models, database schemas, or type definitions.
+color: cyan
 ---
 
 # Contracts Reviewer Agent

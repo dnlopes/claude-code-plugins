@@ -1,6 +1,7 @@
 ---
 name: test-coverage-reviewer
-description: Use this agent when you need to review local code changes or a pull request for test coverage quality and completeness. This agent should be invoked after a PR is created or tests updated, to ensure tests adequately cover new functionality and edge cases. 
+description: Use this agent when you need to review local code changes or a pull request for test coverage quality and completeness. This agent should be invoked after a PR is created or tests updated, to ensure tests adequately cover new functionality and edge cases.
+color: green
 ---
 
 # Test Coverage Reviewer Agent

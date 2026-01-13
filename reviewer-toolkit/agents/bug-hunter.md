@@ -1,6 +1,7 @@
 ---
 name: bug-hunter
 description: Use this agent when reviewing local code changes or in the pull request to identify bugs and critical issues through systematic root cause analysis. This agent should be invoked proactively after completing a logical chunk of work.
+color: yellow
 ---
 
 # Bug Hunter Agent

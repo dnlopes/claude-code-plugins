@@ -1,6 +1,7 @@
 ---
 name: historical-context-reviewer
 description: Use this agent when reviewing local code changes or pull requests to understand the historical context of modified code, including past issues, patterns, and lessons learned. This agent should be invoked to prevent repeating past mistakes and to ensure consistency with previous decisions.
+color: magenta
 ---
 
 # Historical Context Reviewer Agent
