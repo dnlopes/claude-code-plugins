@@ -1,85 +1,55 @@
 ---
-description: Check and update stale Claude documentation based on git changes
+name: update-docs
+description: Check and update stale documentation based on git changes
 argument-hint: "[doc-path]"
 ---
 
 # Update Documentation
 
-You are updating Claude documentation by checking for changes since each document was last updated.
+Check and update stale documentation.
 
-## Arguments
-
-- **No argument**: Check and update all docs
-- **Specific path**: Only check/update that document (e.g., `docs/architecture.md`)
-
-## Pre-flight Check
+## Pre-flight
 
 Verify documentation exists:
 
 ```bash
-ls CLAUDE.md docs/*.md 2>/dev/null
+ls AGENTS.md docs/*.md 2>/dev/null
 ```
 
-If no documentation found:
-> No Claude documentation found. Run `/docs-manager:onboard` first to create initial documentation.
+**If no documentation:**
+> No documentation found. Run `/docs-manager:onboard` first.
 
-## Phase 1: Inventory Documents
+## Inventory
 
-Find all Claude documentation files:
+Find all documentation files:
 
 ```bash
-# List all doc files
-find docs -name "*.md" -type f 2>/dev/null
-ls CLAUDE.md README.md 2>/dev/null
+find . -name "AGENTS.md" -type f
+find docs -name "*.md" -type f
+ls README.md 2>/dev/null
 ```
 
-For each document, extract front-matter (supporting both standard and HTML comment formats):
+For each document, extract front-matter:
+- `scope.paths` - Files to check for changes
+- `last_review_date` - When last reviewed
 
-**Standard format** (docs/):
-```yaml
----
-scope:
-  paths: [...]
-last_review_date: 2025-01-15T10:30:00Z
----
-```
+If specific document requested via argument, only process that one.
 
-**HTML comment format** (README.md):
-```markdown
-<!--
----
-scope:
-  paths: [...]
-last_review_date: 2025-01-15T10:30:00Z
----
--->
-```
+**Special cases:**
+- AGENTS.md without scope: Check if any docs/ files were updated
+- README.md without front-matter: Ask if user wants to add tracking
 
-Extract:
-- `scope.paths` - Which files to check for changes
-- `last_review_date` - When doc was last reviewed
-- `format` - Whether it's standard YAML or HTML comment format
+## Staleness
 
-If a specific document was requested via argument, only process that one.
-
-**Special handling for README.md:**
-
-1. **README.md with HTML comment front-matter**: Include in inventory for staleness checking
-2. **README.md without front-matter**: Ask user if they want to add front-matter for tracking
-3. **README.md missing**: This is fine - not all repositories need a docs-manager-tracked README. Only the docs in `docs/` are required.
-
-## Phase 2: Staleness Check
-
-For each document, check if changes exist in its scope:
+For each document with scope paths:
 
 ```bash
-# Get changes since last_review_date in scope paths
 git log --since="<last_review_date>" --name-only --pretty=format: -- <scope_paths> | sort -u
 ```
 
-Categorize each document:
-- **Current**: No changes in scope paths
-- **Stale**: Changes detected in scope paths
+Categorize:
+- **Current**: No changes in scope
+- **Stale**: Changes detected
 
 Present summary:
 
@@ -88,163 +58,90 @@ Present summary:
 
 | Document | Last Updated | Status |
 |----------|--------------|--------|
-| README.md | <date> | Current/Stale |
-| CLAUDE.md | <date> | Current/Stale |
-| architecture.md | <date> | Current/Stale |
-| domain.md | <date> | Current/Stale |
-| patterns.md | <date> | Current/Stale |
-| development.md | <date> | Current/Stale |
+| AGENTS.md | <date> | Current/Stale |
+| docs/architecture.md | <date> | Current/Stale |
+| ... | ... | ... |
 
 **Stale documents:** <N>
 ```
 
-If all documents are current:
-> All documentation is up to date. No changes detected in scope paths since last update.
+**If all current:**
+> All documentation is up to date.
 
-Stop here if nothing is stale.
+Stop here.
 
-## Phase 3: Analyze Stale Documents
+## Analyze
 
-For each stale document, spawn the appropriate analyzer agent:
+**IMPORTANT:** Load skill `documentation-standards` for templates and proper abstraction levels.
 
-**For README.md**, use **readme-analyzer** agent:
-```
-Analyze this README for needed updates:
+For each stale document, use the Task tool with subagent_type='doc-analyzer' to analyze the document:
 
-Document: README.md
-Content: <current content>
-Scope paths: <paths from front-matter>
-Last review date: <date from front-matter>
-
-Determine:
-1. What changed in the scope paths
-2. Whether changes are significant enough for README updates
-3. Which sections need updating and why
-4. Specific recommendations for updates
-5. Whether to preserve or enhance existing content
-6. Whether the README has development content that should move to docs/development.md
-```
-
-**For other documents (CLAUDE.md, docs/*)**, use **doc-analyzer** agent:
 ```
 Analyze this document for needed updates:
 
 Document: <path>
 Content: <current content>
-Scope paths: <paths from front-matter>
-Last review date: <date from front-matter>
+Scope paths: <paths>
+Last review date: <date>
+Document type: <technical (architecture, domain, patterns) or user-facing (README, development)>
 
 Determine:
-1. What changed in the scope paths
-2. Whether changes are significant enough for doc updates
-3. Which sections need updating and why
-4. Specific recommendations for updates
+1. What changed in scope paths
+2. Whether changes warrant updates
+3. Which sections need updating
+4. Specific recommendations
 ```
 
 Run agents in parallel for efficiency.
 
-## Phase 4: Review Recommendations
+## Review
 
-Compile agent findings and present:
+Compile findings:
 
 ```markdown
 ## Update Recommendations
 
 ### <document_path>
-**Changes detected:** <summary>
+**Changes:** <summary>
 **Needs update:** Yes/No
 
 <If Yes:>
 **Sections to update:**
 - <section>: <what needs to change>
-- <section>: <what needs to change>
-
-**New content to add:**
-- <description>
 
 ---
-
-### <next document>
-...
 ```
 
-For documents where agents recommend "No update needed":
-> Changes in scope paths are implementation details that don't affect documentation.
+For "No update needed":
+> Changes are implementation details that don't affect documentation.
 
 Ask user:
-> Would you like to proceed with the recommended updates?
+> Proceed with recommended updates?
 
-## Phase 5: Apply Updates
+## Update
 
-For each document that needs updates:
+For each document needing updates:
 
-1. **Read current content**
-2. **Apply recommended changes** based on agent analysis
-3. **Update front-matter** (preserving format):
-   - `last_review_date`: Current timestamp
-   - `last_updated`: Current timestamp
-   - Keep HTML comment format if document is README.md
-   - Keep standard format if document is in docs/
+1. Read current content
+2. Apply recommended changes
+3. Update front-matter timestamps:
+   ```yaml
+   last_review_date: <current timestamp>
+   last_updated: <current timestamp>
+   ```
 
 ```bash
-# Get current timestamp
 date -u +"%Y-%m-%dT%H:%M:%SZ"
 ```
 
-### Update Guidelines
+**Guidelines:**
+- Preserve structure
+- Minimal changes
+- Maintain abstraction level
+- Update examples if locations changed
+- Don't expand scope
 
-When modifying documents:
-
-1. **Preserve structure** - Keep the same sections and format
-2. **Minimal changes** - Only update what the analysis identified
-3. **Maintain abstraction level** - Don't add detail that wasn't there before
-4. **Update examples** - If a referenced example changed location, update the reference
-5. **Don't expand scope** - If changes suggest the doc is covering too much, note it for user review
-
-### CLAUDE.md Special Handling
-
-CLAUDE.md doesn't have scope paths. To check if it needs updates:
-- Check if any docs/ files were updated
-- Check if build/test commands changed
-- Principles rarely need updating (they're invariants)
-
-Only update CLAUDE.md if:
-- Quick start commands changed
-- New major component was added (update directory listing)
-- A principle was violated and needs rewording
-
-### README.md Special Handling
-
-When updating README.md:
-- **Use HTML comment format for front-matter** - Ensures front-matter is hidden from GitHub rendering
-- **Preserve existing tone and style** - Match the voice of the current README
-- **Preserve custom sections** - Don't remove user-added content
-- **Enhance, don't replace** - Update outdated info, don't rewrite from scratch
-- **Verify examples work** - Test commands and code examples
-- **Be user-focused** - README is for end users and contributors, not internal context
-- **Development content should move to docs/development.md** - If README has detailed dev setup, suggest moving it
-
-## Phase 6: Validation
-
-After updates:
-
-```bash
-# Verify front-matter is valid
-head -20 docs/*.md
-head -25 README.md
-```
-
-Check that:
-- All updated docs have current timestamp in front-matter
-- Both last_review_date and last_updated are set to the same timestamp
-- README.md uses HTML comment format for front-matter (wrapped in `<!-- -->`)
-- docs/ files use standard YAML front-matter format
-- No broken cross-references
-- README examples are syntactically valid
-
-## Phase 7: Summary
-
-Present final summary:
+## Summary
 
 ```markdown
 ## Update Complete
@@ -252,8 +149,7 @@ Present final summary:
 ### Documents Updated
 | Document | Changes Made |
 |----------|--------------|
-| <path> | <brief summary> |
-| <path> | <brief summary> |
+| <path> | <summary> |
 
 ### Documents Unchanged
 | Document | Reason |
@@ -261,54 +157,20 @@ Present final summary:
 | <path> | No changes in scope |
 | <path> | Changes not significant |
 
-### Review Date
-All documents now reviewed as of: `<timestamp>`
-
-### Next Run
-Run `/docs-manager:update-docs` again after making more changes to the codebase.
+**Review date:** <timestamp>
 ```
 
 ## Edge Cases
 
-### Document Missing Front-matter
+- **Missing front-matter**: Offer to add it
+- **Invalid timestamp**: Treat as fully stale
+- **Scope paths match nothing**: Suggest fixing scope paths
+- **Too many changes**: Suggest narrowing scope if doc needs frequent updates
 
-If a document lacks proper front-matter:
-> Document `<path>` is missing front-matter. Would you like me to:
-> 1. Add front-matter based on content analysis
-> 2. Skip this document
+## Guidelines
 
-### Invalid Last Review Date
-
-If `last_review_date` is invalid or malformed:
-> Document `<path>` has invalid last_review_date. Treating as fully stale.
-
-### Scope Paths Match No Files
-
-If scope paths don't match any files:
-> Document `<path>` has scope paths that match no files. This may indicate:
-> - Files were deleted
-> - Scope paths need updating
-> Would you like to analyze and fix the scope paths?
-
-### Too Many Changes
-
-If a document has extensive changes in scope:
-> Document `<path>` has significant changes (<N> files, <M> lines).
-> Consider whether this document's scope is too broad.
-> Would you like to proceed with analysis or narrow the scope first?
-
-## Important Guidelines
-
-1. **Conservative updates** - Only update what clearly needs updating. When in doubt, skip.
-
-2. **Preserve abstraction level** - If the doc was high-level, keep it high-level.
-
-3. **Don't expand scope** - Updates should refresh existing content, not add new detail.
-
-4. **Watch for scope creep** - If docs need frequent updates, they might be too detailed.
-
-5. **Parallel analysis** - Spawn doc-analyzer agents in parallel for efficiency.
-
-6. **User confirmation** - Always show recommendations before applying updates.
-
-7. **README is public-facing** - Development details belong in docs/development.md.
+1. **Conservative updates** - Only update what clearly needs it
+2. **Preserve abstraction** - Don't add detail
+3. **Don't expand scope** - Refresh existing, don't add new
+4. **Watch for scope creep** - Frequent updates = too detailed
+5. **User confirmation** - Show recommendations before applying
