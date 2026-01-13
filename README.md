@@ -5,7 +5,7 @@ scope:
     - README.md
     - .claude-plugin/marketplace.json
   summary: "Project overview and installation"
-last_updated: 2026-01-13T23:12:02Z
+last_updated: 2026-01-13T23:34:59Z
 ---
 -->
 
@@ -25,8 +25,7 @@ This collection extends Claude Code with domain-expert agents that understand sy
 | **docs-manager** | AI-optimized documentation with git-based staleness tracking |
 | **git-workflow** | Structured commits and pull request creation |
 | **review-toolkit** | Multi-agent code review with confidence/impact scoring |
-| **mcp-shadcn** | shadcn/ui component documentation via MCP |
-| **ui-dev** | Frontend design generation and browser automation |
+| **ui-dev** | Frontend design generation, browser automation, and shadcn/ui MCP server |
 
 ## Installation
 
