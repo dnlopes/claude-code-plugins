@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: Create AGENTS.md and docs/ documentation for a repository
+description: Create AGENTS.md, CLAUDE.md, and docs/ documentation for a repository
 ---
 
 # Repository Onboarding
@@ -36,9 +36,9 @@ Build inventory:
 
 ## Explore
 
-Load `documentation-standards` skill for templates and format.
+**IMPORTANT:** Load skill `documentation-standards` for templates and format.
 
-Spawn `codebase-explorer` agent:
+Use the Task tool with subagent_type='codebase-explorer' to explore the repository:
 
 ```
 Explore this repository comprehensively:
@@ -111,11 +111,12 @@ Create AGENTS.md at repository root using template from `documentation-standards
 - [ ] Brief description (1-2 sentences)
 - [ ] Quick start with BUILD SYSTEM commands
 - [ ] Actionable principles only
-- [ ] Dual-format doc references (@ and markdown links)
+- [ ] Dual-format doc references (`@docs/file.md` for Claude Code imports, `[text](docs/file.md)` for human readers)
 
 ### Generate CLAUDE.md
 
-Create CLAUDE.md with single line:
+Claude Code reads `CLAUDE.md` by convention. Create it as a single-line redirect to keep all documentation in `AGENTS.md` (which other tools and humans can also use):
+
 ```markdown
 @AGENTS.md
 ```
