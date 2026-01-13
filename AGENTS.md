@@ -45,5 +45,4 @@ These rules MUST be followed:
 | `docs-manager/` | AI-optimized documentation with git-based staleness tracking |
 | `git-workflow/` | Structured commits and PR creation |
 | `review-toolkit/` | Multi-agent code review with confidence scoring |
-| `mcp-shadcn/` | shadcn/ui component access via MCP server |
-| `ui-dev/` | Frontend design and browser automation |
+| `ui-dev/` | Frontend design, browser automation, and shadcn/ui MCP server |

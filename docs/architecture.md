@@ -38,15 +38,10 @@ A monorepo of Claude Code plugins where each plugin provides specialized agents,
 **Responsibility:** Multi-agent code review with parallel execution and confidence/impact scoring
 **Interacts with:** git-workflow for PR operations, spawns 6 specialized review agents
 
-### mcp-shadcn (v1.0.0)
-**Location:** `mcp-shadcn/`
-**Responsibility:** MCP server providing shadcn/ui component documentation access
-**Interacts with:** External shadcn/ui API via MCP protocol
-
-### ui-dev (v1.1.0)
+### ui-dev (v1.2.0)
 **Location:** `ui-dev/`
-**Responsibility:** Frontend design generation and headless browser automation
-**Interacts with:** Can use mcp-shadcn for component references
+**Responsibility:** Frontend design generation, headless browser automation, and shadcn/ui component documentation via MCP
+**Interacts with:** External shadcn/ui API via MCP protocol
 
 ## Data Flow
 

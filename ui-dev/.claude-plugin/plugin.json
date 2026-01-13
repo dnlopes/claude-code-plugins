@@ -1,7 +1,7 @@
 {
     "name": "ui-dev",
-    "description": "UI development toolkit",
-    "version": "1.1.0",
+    "description": "UI development toolkit with shadcn/ui component documentation",
+    "version": "1.2.0",
     "author": {
         "name": "David Lopes"
     }

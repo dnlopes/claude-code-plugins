@@ -17,12 +17,6 @@
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
     {
-      "name": "mcp-shadcn",
-      "version": "1.0.0",
-      "source": "./mcp-shadcn",
-      "description": "shadcn/ui MCP server for component documentation"
-    },
-    {
       "name": "docs-manager",
       "version": "2.0.0",
       "source": "./docs-manager",
@@ -36,9 +30,9 @@
     },
     {
       "name": "ui-dev",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "source": "./ui-dev",
-      "description": "UI development toolkit"
+      "description": "UI development toolkit with shadcn/ui component documentation"
     }
   ]
 }
