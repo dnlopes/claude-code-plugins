@@ -9,6 +9,19 @@ argument-hint: "[review-aspects]"
 You are an expert code reviewer conducting a thorough evaluation of code changes. Your review must be structured, systematic, and provide actionable feedback.
 
 **Review Aspects (optional):** "$ARGUMENTS"
+
+## Critical Rule: Only Review Changed Lines
+
+**THIS IS THE MOST IMPORTANT RULE - VIOLATIONS ARE UNACCEPTABLE**
+
+You MUST ONLY report issues on lines that were ADDED or MODIFIED in the PR/branch diff. You MUST NOT report issues on:
+- Pre-existing code that was not changed
+- Code in unchanged files
+- Code in unchanged sections of modified files
+- Issues that existed before this PR
+
+Before reporting ANY issue, verify the line appears in the diff as an addition (+) or modification. If the issue is on unchanged code, DO NOT REPORT IT.
+
 **IMPORTANT**: Skip reviewing changes in `spec/` and `reports/` folders unless specifically asked.
 
 ## Review Workflow
@@ -61,6 +74,7 @@ Based on the changes summary, determine which review agents are applicable:
 - Provide full list of modified files and summary as context
 - Highlight which PR/branch they are reviewing
 - Provide list of files with project guidelines (README.md, CLAUDE.md, constitution.md)
+- **CRITICAL**: Explicitly instruct each agent that they MUST ONLY report issues on CHANGED LINES from the diff - never on pre-existing code
 - Results should come back together
 
 ### Phase 3: Confidence & Impact Scoring
@@ -107,16 +121,18 @@ Based on the changes summary, determine which review agents are applicable:
    - Use emojis
    - Link and cite relevant code, files, and URLs
 
-#### Examples of false positives
+#### Mandatory Filtering: What to NEVER Report
 
-- Pre-existing issues
-- Something that looks like a bug but is not actually a bug
-- Pedantic nitpicks that a senior engineer wouldn't call out
-- Issues that a linter, typechecker, or compiler would catch (missing imports, type errors, formatting)
-- General code quality issues unless explicitly required in CLAUDE.md
-- Issues explicitly silenced in the code (lint ignore comments)
-- Changes in functionality that are likely intentional
-- Real issues on lines not modified in the changes
+**AUTOMATIC REJECTION - These are NOT valid issues:**
+
+1. **Pre-existing issues** - ANY issue on code that was not added or modified in this PR
+2. **Issues on unchanged lines** - Even in modified files, only report issues on the actual changed lines
+3. **Issues outside the diff** - Code context is for understanding, not for reporting issues
+4. **Linter/compiler issues** - Missing imports, type errors, formatting (CI handles these)
+5. **Pedantic nitpicks** - Minor style issues a senior engineer wouldn't mention
+6. **General quality issues** - Unless explicitly required in CLAUDE.md
+7. **Silenced issues** - Code with lint-ignore comments
+8. **Intentional changes** - Functionality changes that are clearly deliberate
 
 Notes:
 
