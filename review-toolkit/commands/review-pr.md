@@ -22,6 +22,8 @@ You MUST ONLY report issues on lines that were ADDED or MODIFIED in the PR/branc
 
 Before reporting ANY issue, verify the line appears in the diff as an addition (+) or modification. If the issue is on unchanged code, DO NOT REPORT IT.
 
+**SILENT FILTERING**: When you encounter pre-existing issues or issues on unchanged code, silently skip them. Do NOT mention them in your output, do NOT say "I found X issues but they are pre-existing so I'm ignoring them", and do NOT list them as "ignored" or "excluded". Simply pretend they don't exist.
+
 **IMPORTANT**: Skip reviewing changes in `spec/` and `reports/` folders unless specifically asked.
 
 ## Review Workflow
@@ -143,79 +145,47 @@ Notes:
 
 ### Review Report Template
 
-Use this format for posting the review (either as PR comment or console output):
+**IMPORTANT**: You MUST use this EXACT format. Do not add extra sections, explanations, or variations.
 
 ```markdown
-# PR Review Report
+## Code Review
 
-**Quality Gate**: ⬜ PASS (Can merge) / ⬜ FAIL (Requires fixes)
+**Result**: ✅ PASS / ❌ FAIL
 
-**Blocking Issues Count**: X
-- Security
-   - Score: X/Y *(Passed security checks / Total applicable checks)*
-   - Vulnerabilities: Critical: X, High: X, Medium: X, Low: X
-- Test Coverage
-   - Score: X/Y *(Covered scenarios / Total critical scenarios)*
-- Code Quality
-   - Score: X/Y *(Count of checked (correct) items / Total applicable items)*
+### Issues Found
 
-## 🔄 Required Actions
-
-### 🚫 Must Fix Before Merge
-*(Blocking issues that prevent merge)*
-
-1.
-
-### ⚠️ Better to Fix Before Merge
-*(Issues that can be addressed in this or next PRs)*
-
-1.
-
-### 💡 Consider for Future
-*(Suggestions for improvement, not blocking)*
-
-1.
-
----
-
-## 🐛 Found Issues & Bugs
-
-| Link to file | Issue | Evidence | Impact |
-|--------------|-------|----------|--------|
-| <link to file> | <brief description> | <evidence> | <impact> |
-
-Impact types:
-- Critical: Runtime errors, data loss, or system crash
-- High: Break core features or corrupt data under normal usage
-- Medium: Errors under edge cases or degrade performance
-- Low: Code smells that don't affect functionality
-
-### Security Vulnerabilities Found
-
-| Severity | Link to file | Vulnerability Type | Specific Risk | Required Fix |
-|----------|--------------|-------------------|---------------|--------------|
-| <severity> | <link to file> | <description> | <specific risk> | <required fix> |
-
-**Severity Classification**:
-   - **Critical**: Unauthorized system access or full shutdown
-   - **High**: Unauthorized actions or sensitive data access
-   - **Medium**: Edge case issues or performance degradation
-   - **Low**: No real impact but violates security practices
+| File | Line | Type | Issue | Fix |
+|------|------|------|-------|-----|
+| `path/file.ts` | 42 | 🔴 Bug | Description | Suggested fix |
+| `path/file.ts` | 58 | 🟡 Security | Description | Suggested fix |
+| `path/file.ts` | 73 | 🔵 Quality | Description | Suggested fix |
 ```
 
-Note:
+**Type legend** (use these exact labels):
+- 🔴 Bug - Logic errors, crashes, data issues
+- 🟡 Security - Vulnerabilities, auth issues
+- 🔵 Quality - Maintainability, patterns
+- 🟢 Test - Missing test coverage
 
-- `<link to file>` must use full SHA and line range, eg: `https://github.com/owner/repo/blob/1d54823877c4de72b2316a64032a54afc404e619/README.md#L13-L17`
-- Provide at least 1 line of context before and after
+**Rules for output**:
+1. One row per issue, max 5-7 issues
+2. File path without repository prefix
+3. Line number must be from the diff
+4. Issue description: 10 words max
+5. Fix suggestion: 10 words max
+6. No explanations outside the table
+7. No scores, checklists, or verbose sections
 
 ### If No Issues Found
 
 ```markdown
-# PR Review Report
+## Code Review
 
-No issues found. Checked for bugs and CLAUDE.md compliance.
+**Result**: ✅ PASS
+
+No issues found.
 ```
 
 ## Remember
 
-The goal is to catch bugs and security issues while maintaining development velocity, not to enforce perfection. Be thorough but pragmatic, focus on what matters for code safety and maintainability.
+Be concise. One table, clear issues, done. No verbose explanations or multiple sections.

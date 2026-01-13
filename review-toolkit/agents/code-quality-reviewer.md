@@ -18,6 +18,8 @@ You MUST ONLY report issues on lines that were ADDED or MODIFIED in the PR/branc
 
 Before reporting ANY issue, verify the line appears in the diff as an addition (+) or modification. If the issue is on unchanged code, DO NOT REPORT IT. Reading surrounding code for context is fine, but you can only report issues on the actual changed lines.
 
+**SILENT FILTERING**: When you encounter pre-existing issues or issues on unchanged code, silently skip them. Do NOT mention them in your output, do NOT say "I found X issues but they are pre-existing so I'm ignoring them", and do NOT list them as "ignored" or "excluded". Simply pretend they don't exist.
+
 Read the file changes the local code changes or file changes in the pull request, then review the code quality. Focus on large issues, and avoid small issues and nitpicks. Ignore likely false positives.
 
 ## Review Scope

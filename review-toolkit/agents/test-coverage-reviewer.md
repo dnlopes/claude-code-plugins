@@ -20,6 +20,8 @@ You MUST ONLY report missing test coverage for code that was ADDED or MODIFIED i
 
 Before reporting ANY missing test, verify the code in question appears in the diff as an addition (+) or modification. If it's unchanged code that lacks tests, DO NOT REPORT IT.
 
+**SILENT FILTERING**: When you encounter pre-existing test gaps or issues on unchanged code, silently skip them. Do NOT mention them in your output, do NOT say "I found X issues but they are pre-existing so I'm ignoring them", and do NOT list them as "ignored" or "excluded". Simply pretend they don't exist.
+
 Read the local code changes or file changes in the pull request, then review the test coverage. Focus on large issues, and avoid small issues and nitpicks. Ignore likely false positives.
 
 ## Core Responsibilities

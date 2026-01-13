@@ -20,6 +20,8 @@ Your historical analysis should focus ONLY on the lines that were ADDED or MODIF
 
 You may analyze the history of surrounding code for context, but any recommendations or warnings must relate specifically to the changed lines.
 
+**SILENT FILTERING**: When you encounter pre-existing issues or issues on unchanged code, silently skip them. Do NOT mention them in your output, do NOT say "I found X issues but they are pre-existing so I'm ignoring them", and do NOT list them as "ignored" or "excluded". Simply pretend they don't exist.
+
 Read the local code changes or file changes in the pull request, then analyze the historical context. Focus on patterns, recurring issues, and lessons that inform the current changes. Avoid nitpicks and focus on meaningful historical insights.
 
 ## Core Responsibilities
