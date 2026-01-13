@@ -1,232 +1,193 @@
 ---
-description: Add, remove, or update principles in CLAUDE.md with evidence-based validation
+name: manage-principles
+description: Add, remove, or update principles in AGENTS.md
 ---
 
 # Manage Principles
 
-You are helping the user manage the principles in their CLAUDE.md file.
+Manage principles in AGENTS.md.
 
-## Pre-flight Check
+## Pre-flight
 
-First, verify CLAUDE.md exists:
-
-```bash
-test -f CLAUDE.md && echo "Found" || echo "Not found"
-```
-
-If CLAUDE.md doesn't exist:
-> This repository doesn't have a CLAUDE.md file yet. Would you like to:
-> 1. **Onboard** - Run `/docs-manager:onboard` to create documentation
-> 2. **Cancel** - Exit without changes
-
-## Phase 1: Parse Current Principles
-
-Read CLAUDE.md and extract the current principles:
+Check AGENTS.md exists:
 
 ```bash
-cat CLAUDE.md
+test -f AGENTS.md && echo "Found" || echo "Not found"
 ```
 
-Parse the `## Principles` section. Principles typically follow this format:
+**If not found:**
+> No AGENTS.md found. Run `/docs-manager:onboard` first.
+
+## Parse
+
+Read AGENTS.md and extract current principles:
+
+```bash
+cat AGENTS.md
+```
+
+Principles are in the `## Principles` section, typically:
 ```markdown
 ## Principles
 
-These rules MUST be followed when working on this codebase:
+These rules MUST be followed:
 
-1. **Principle Name**: Description
-2. **Principle Name**: Description
+1. **Name**: Description
+2. **Name**: Description
 ```
 
-Present the current state:
+Present current state:
 
 ```markdown
 ## Current Principles
 
-<If principles exist:>
 1. **<Name>**: <Description>
 2. **<Name>**: <Description>
-...
 
-<If no principles section or empty:>
-No principles currently defined.
+<Or: "No principles defined">
 ```
 
-## Phase 2: Choose Action
+## Choose
 
-Ask the user what they want to do:
+Ask user:
 
 > **What would you like to do?**
 > 1. **Add** - Add a new principle
-> 2. **Remove** - Remove an existing principle
-> 3. **Edit** - Modify an existing principle
-> 4. **Reorder** - Change the order of principles
-> 5. **Done** - Exit without further changes
+> 2. **Remove** - Remove a principle
+> 3. **Edit** - Modify a principle
+> 4. **Reorder** - Change order
+> 5. **Done** - Exit
 
-Wait for user selection.
-
-## Phase 3: Execute Action
+## Execute
 
 ### If Add:
 
-Ask the user for the new principle:
-> Please provide the new principle in the format:
+> Provide the new principle:
 > **Name**: Description
 >
-> Example: **No Magic Numbers**: All numeric constants must be named and documented.
+> Example: **No Magic Numbers**: All numeric constants must be named.
 
-Once provided, proceed to **Phase 4: Validation**.
+Proceed to **Validate**.
 
 ### If Remove:
 
-Ask which principle to remove:
-> Which principle would you like to remove? (Enter the number)
+> Which principle to remove? (Enter number)
 
-Confirm before removing:
-> You're about to remove:
-> **<Principle Name>**: <Description>
->
-> Are you sure? (yes/no)
+Confirm:
+> Remove **<Name>**: <Description>?
 
-If confirmed, skip validation and proceed to **Phase 5: Apply Changes**.
+Skip validation, proceed to **Apply**.
 
 ### If Edit:
 
-Ask which principle to edit:
-> Which principle would you like to edit? (Enter the number)
+> Which principle to edit? (Enter number)
 
-Show current text and ask for new version:
+Show current:
 > Current: **<Name>**: <Description>
 >
-> Please provide the updated principle (or just the description if keeping the name):
+> Provide updated version:
 
-If the edit is substantive (not just typo fixes), proceed to **Phase 4: Validation**.
-If it's a minor edit (typos, clarification), skip to **Phase 5: Apply Changes**.
+If substantive edit, proceed to **Validate**.
+If minor (typos), proceed to **Apply**.
 
 ### If Reorder:
 
-Show numbered list and ask for new order:
 > Current order:
 > 1. **<Name>**
 > 2. **<Name>**
-> 3. **<Name>**
 >
-> Enter the new order as comma-separated numbers (e.g., "3,1,2"):
+> Enter new order (e.g., "2,1,3"):
 
-Validate the input covers all principles, then skip to **Phase 5: Apply Changes**.
+Proceed to **Apply**.
 
 ### If Done:
 
-Exit the command with a summary of any changes made.
+Go to **Summary**.
 
-## Phase 4: Validation
+## Validate
 
-For new or significantly edited principles, spawn a **principle-validator** agent:
+For new or edited principles, use the Task tool with subagent_type='principle-validator' to validate the principle:
 
 ```
-Validate this principle against the codebase:
+Validate this principle:
 
-Principle: <the principle text>
+Principle: <text>
 
-Search for evidence that this principle is actually followed in the code. Look for:
-- Consistent patterns across files
-- Tests or linters that enforce it
-- Documentation that mentions it
-- Counter-examples that violate it
-
-Return your assessment with specific file references.
+Search for evidence this is followed in the codebase.
+Look for counter-examples.
+Return verdict with file references.
 ```
-
-Wait for the agent to return.
-
-### Based on Validation Result:
 
 **If SUPPORTED:**
-> ✓ Evidence found for this principle:
-> <summary of evidence>
->
-> Proceeding to add/update the principle.
-
-Proceed to **Phase 5: Apply Changes**.
+> ✓ Evidence found: <summary>
+> Proceeding.
 
 **If WEAK_EVIDENCE:**
-> ⚠ Limited evidence found:
-> <summary of what was found>
+> ⚠ Limited evidence: <summary>
 >
-> Would you like to:
-> 1. **Add anyway** - Keep the principle as stated
-> 2. **Modify** - Adjust the principle based on findings
-> 3. **Cancel** - Don't add this principle
+> 1. **Add anyway**
+> 2. **Modify** based on findings
+> 3. **Cancel**
 
 **If NOT_SUPPORTED:**
-> ✗ No evidence found for this principle.
-> <summary of search performed>
+> ✗ No evidence found.
 >
-> This principle doesn't appear to be reflected in the current codebase. Would you like to:
-> 1. **Add anyway** - This is an aspirational principle we want to enforce going forward
-> 2. **Modify** - Adjust to match what's actually in the code
-> 3. **Cancel** - Don't add this principle
+> 1. **Add anyway** (aspirational)
+> 2. **Modify** to match code
+> 3. **Cancel**
 
 **If CONTRADICTED:**
-> ✗ Evidence contradicts this principle:
-> <examples of contradictions>
+> ✗ Evidence contradicts: <examples>
 >
-> The codebase appears to follow a different pattern. Would you like to:
-> 1. **Add anyway** - We want to change the codebase to follow this principle
-> 2. **Modify** - Adjust to match the actual pattern: "<suggested rewording>"
-> 3. **Cancel** - Don't add this principle
+> 1. **Add anyway** (want to change codebase)
+> 2. **Modify**: "<suggestion>"
+> 3. **Cancel**
 
-If user chooses "Modify", collect the new text and re-run validation (return to Phase 4).
+If **Modify**, collect new text and re-validate.
 
-## Phase 5: Apply Changes
+## Apply
 
-Get current timestamp:
-
+Get timestamp:
 ```bash
 date -u +"%Y-%m-%dT%H:%M:%SZ"
 ```
 
-Update CLAUDE.md:
+Update AGENTS.md:
+1. Update front-matter `last_updated`
+2. Apply principle changes
+3. Preserve all other content
 
-1. **Update front-matter** - Set `last_review_date` and `last_updated` to current timestamp
-2. **Update principles section** - Apply the add/remove/edit/reorder changes
-3. **Preserve all other content** - Don't modify anything outside the principles section and front-matter
-
-Write the updated CLAUDE.md file.
-
-Show the diff:
+Show diff:
 ```bash
-git diff CLAUDE.md
+git diff AGENTS.md
 ```
 
-## Phase 6: Continue or Finish
+## Loop
 
-Ask if the user wants to make more changes:
 > Changes applied. Would you like to:
-> 1. **Continue** - Make more changes to principles
+> 1. **Continue** - More changes
 > 2. **Done** - Finish
 
-If Continue, return to **Phase 2: Choose Action**.
+If Continue, return to **Choose**.
 
-If Done, present final summary:
+## Summary
 
 ```markdown
 ## Summary
 
 **Changes made:**
 - <Added/Removed/Edited/Reordered>: <details>
-- ...
 
 **Current principles:**
 1. **<Name>**: <Description>
-2. ...
 
-**CLAUDE.md updated** at `<timestamp>`
+**AGENTS.md updated:** <timestamp>
 ```
 
-## Important Guidelines
+## Guidelines
 
-1. **Preserve formatting** - Keep the exact markdown structure of CLAUDE.md
-2. **Don't modify other sections** - Only touch front-matter and principles
-3. **Validate meaningfully** - The agent should do real searches, not rubber-stamp
-4. **Respect user decisions** - If they want to add an aspirational principle, let them
-5. **Keep principles concise** - Each should be a clear, actionable rule
+1. **Preserve formatting** - Keep exact structure
+2. **Don't modify other sections** - Only principles and front-matter
+3. **Validate meaningfully** - Real searches, not rubber stamps
+4. **Respect user decisions** - Aspirational principles are valid
+5. **Keep principles concise** - Clear, actionable rules
