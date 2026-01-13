@@ -1,7 +1,7 @@
 {
     "name": "docs-manager",
-    "description": "Repository onboarding and documentation maintenance for Claude context, with git-based staleness tracking",
-    "version": "1.0.1",
+    "description": "Repository documentation for AI agents, with git-based staleness tracking",
+    "version": "2.0.0",
     "author": {
         "name": "David Lopes"
     }
