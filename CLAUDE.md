@@ -38,5 +38,5 @@ These rules MUST be followed when working on this codebase:
 | `dev-toolkit/` | Planning, research, implementation, and code review |
 | `git-workflow/` | Conventional commits and PR management |
 | `docs-manager/` | Repository onboarding and documentation maintenance |
-| `reviewer-toolkit/` | Multi-perspective code review |
+| `review-toolkit/` | Multi-perspective code review |
 | `mcp-*/` | MCP server integrations |

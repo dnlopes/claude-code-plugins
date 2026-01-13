@@ -21,7 +21,7 @@ cloud-code-plugins/
 ├── dev-toolkit/           # Development workflow plugin
 ├── git-workflow/          # Git operations plugin
 ├── docs-manager/          # Documentation plugin
-├── reviewer-toolkit/      # Code review plugin
+├── review-toolkit/      # Code review plugin
 ├── mcp-shadcn/            # shadcn/ui MCP integration
 └── .github/               # CI/CD workflows
 ```

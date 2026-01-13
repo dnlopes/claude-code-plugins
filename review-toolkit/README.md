@@ -1,4 +1,4 @@
-# reviewer-toolkit
+# review-toolkit
 
 Comprehensive code review with security, quality, and test coverage analysis.
 
@@ -10,8 +10,8 @@ Provides multi-perspective code review through specialized agents that examine s
 
 ### Commands
 
-- `/reviewer-toolkit:review-pr` - Review a GitHub pull request with multiple specialized agents
-- `/reviewer-toolkit:review-local-changes` - Review uncommitted local changes before committing
+- `/review-toolkit:review-pr` - Review a GitHub pull request with multiple specialized agents
+- `/review-toolkit:review-local-changes` - Review uncommitted local changes before committing
 
 ### Agents
 
@@ -25,17 +25,17 @@ Provides multi-perspective code review through specialized agents that examine s
 ## Installation
 
 ```bash
-claude-code plugins install /path/to/cloud-code-plugins/reviewer-toolkit
+claude-code plugins install /path/to/cloud-code-plugins/review-toolkit
 ```
 
 ## Quick Example
 
 ```bash
 # Review a GitHub PR
-/reviewer-toolkit:review-pr 123
+/review-toolkit:review-pr 123
 
 # Review local changes before committing
-/reviewer-toolkit:review-local-changes
+/review-toolkit:review-local-changes
 ```
 
 ## How It Works

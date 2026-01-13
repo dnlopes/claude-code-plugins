@@ -29,9 +29,9 @@
       "description": "Repository onboarding and documentation maintenance for Claude context, with git-based staleness tracking"
     },
     {
-      "name": "reviewer-toolkit",
-      "version": "1.0.0",
-      "source": "./reviewer-toolkit",
+      "name": "review-toolkit",
+      "version": "1.1.0",
+      "source": "./review-toolkit",
       "description": "Code review assistance toolkit with PR analysis, suggestions, and improvement capabilities"
     },
     {

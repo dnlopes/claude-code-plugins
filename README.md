@@ -26,7 +26,7 @@ This repository provides plugins that extend Claude Code with specialized capabi
 | [dev-toolkit](dev-toolkit/) | Planning, research, implementation, and code review workflows |
 | [git-workflow](git-workflow/) | Conventional commits and PR management |
 | [docs-manager](docs-manager/) | Repository documentation generation and maintenance |
-| [reviewer-toolkit](reviewer-toolkit/) | Multi-perspective code review with specialized agents |
+| [review-toolkit](review-toolkit/) | Multi-perspective code review with specialized agents |
 | [mcp-shadcn](mcp-shadcn/) | shadcn/ui component documentation |
 
 ## Installation

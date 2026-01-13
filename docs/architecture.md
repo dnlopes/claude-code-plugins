@@ -71,9 +71,9 @@ Key commands:
 - `update-docs` - Refresh stale documentation based on git changes
 - `manage-principles` - Add/remove principles with evidence validation
 
-### Reviewer Toolkit (reviewer-toolkit)
+### Reviewer Toolkit (review-toolkit)
 
-**Location:** `reviewer-toolkit/`
+**Location:** `review-toolkit/`
 **Responsibility:** Multi-perspective code review with specialized analysis agents
 **Interacts with:** Task tool for parallel review agents
 
