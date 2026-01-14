@@ -22,7 +22,7 @@ A monorepo of Claude Code plugins where each plugin provides specialized agents,
 **Responsibility:** Codebase analysis, pattern discovery, web research, and development methodology
 **Interacts with:** Used as foundation by other plugins for exploration tasks
 
-### docs-manager (v2.1.0)
+### docs-manager (v2.2.0)
 **Location:** `docs-manager/`
 **Responsibility:** AI-optimized documentation generation and maintenance with git-based staleness tracking
 **Interacts with:** dev-toolkit agents for codebase exploration
@@ -41,6 +41,11 @@ A monorepo of Claude Code plugins where each plugin provides specialized agents,
 **Location:** `ui-dev/`
 **Responsibility:** Frontend design generation, headless browser automation, and shadcn/ui component documentation via MCP
 **Interacts with:** External shadcn/ui API via MCP protocol
+
+### governor (v1.0.0)
+**Location:** `governor/`
+**Responsibility:** Project tenets management - discover, validate, and maintain guiding tenets in AGENTS.md
+**Interacts with:** Reads/writes AGENTS.md files
 
 ## Data Flow
 

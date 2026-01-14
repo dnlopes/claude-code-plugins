@@ -18,7 +18,7 @@
     },
     {
       "name": "docs-manager",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "source": "./docs-manager",
       "description": "Repository documentation for AI agents, with git-based staleness tracking"
     },
@@ -33,6 +33,12 @@
       "version": "1.2.0",
       "source": "./ui-dev",
       "description": "UI development toolkit with shadcn/ui component documentation"
+    },
+    {
+      "name": "governor",
+      "version": "1.0.0",
+      "source": "./governor",
+      "description": "Project tenets management - discover, validate, and maintain guiding principles"
     }
   ]
 }

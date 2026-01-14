@@ -48,16 +48,13 @@ Explore this repository comprehensively:
 3. Architecture and components
 4. Domain concepts
 5. Code patterns with file:line examples
-6. Suggested principles (actionable developer guidance)
-7. Development workflow using BUILD SYSTEM interfaces
-8. README information (user-facing)
-9. Complex modules warranting dedicated docs
-10. Suggested scope paths for each document
+6. Development workflow using BUILD SYSTEM interfaces
+7. README information (user-facing)
+8. Complex modules warranting dedicated docs
+9. Suggested scope paths for each document
 
 Remember:
-- Principles are "do X" not "X exists"
 - Use build system (make test) not raw commands (go test)
-- README is for USERS, principles are for DEVELOPERS
 ```
 
 Wait for structured findings.
@@ -73,10 +70,6 @@ Present summary to user:
 **Type:** <web app / CLI / library>
 **Tech Stack:** <language> + <framework>
 
-### Suggested Principles
-1. **<Name>** - <guidance>
-   Evidence: <observation>
-
 ### Complex Modules
 <List modules that will get dedicated AGENTS.md, or "None identified">
 
@@ -85,7 +78,6 @@ Present summary to user:
 
 ### Would you like to:
 - **Proceed** with these findings
-- **Adjust** principles before generating
 - **Re-explore** with different focus
 ```
 
@@ -110,7 +102,6 @@ Create AGENTS.md at repository root using template from `documentation-standards
 **Checklist:**
 - [ ] Brief description (1-2 sentences)
 - [ ] Quick start with BUILD SYSTEM commands
-- [ ] Actionable principles only
 - [ ] Dual-format doc references (`@docs/file.md` for Claude Code imports, `[text](docs/file.md)` for human readers)
 
 ### Generate CLAUDE.md
@@ -175,7 +166,6 @@ Verify:
 - [ ] Cross-references work
 - [ ] File:line references are accurate
 - [ ] Build commands use build system
-- [ ] Principles are actionable
 
 ## Summary
 
@@ -197,8 +187,7 @@ Verify:
 ### Next Steps
 1. Review generated documentation
 2. Test README examples
-3. Adjust principles if needed
-4. Run `/docs-manager:update-docs` periodically
+3. Run `/docs-manager:update-docs` periodically
 ```
 
 ## Edge Cases
@@ -213,8 +202,7 @@ Verify:
 1. **Purpose first** - Understand repository purpose before documenting
 2. **Don't invent** - Only document what was found
 3. **Right abstraction** - If it needs frequent updates, too detailed
-4. **Actionable principles** - "Do X" not "X exists"
-5. **Build system interfaces** - `make test` not `go test`
-6. **One example per pattern** - Not every instance
-7. **Ask when uncertain** - Don't guess
-8. **Skip empty sections** - No filler content
+4. **Build system interfaces** - `make test` not `go test`
+5. **One example per pattern** - Not every instance
+6. **Ask when uncertain** - Don't guess
+7. **Skip empty sections** - No filler content

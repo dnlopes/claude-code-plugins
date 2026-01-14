@@ -46,3 +46,4 @@ These rules MUST be followed:
 | `git-workflow/` | Structured commits and PR creation |
 | `review-toolkit/` | Multi-agent code review with confidence scoring |
 | `ui-dev/` | Frontend design, browser automation, and shadcn/ui MCP server |
+| `governor/` | Project tenets management with validation |

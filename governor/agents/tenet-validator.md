@@ -1,29 +1,29 @@
 ---
-name: principle-validator
-description: Validates proposed principles by searching codebase for evidence
+name: tenet-validator
+description: Validates proposed tenets by searching codebase for evidence
 tools: Read, Grep, Glob, LS, Bash
 model: sonnet
 ---
 
-# Principle Validator
+# Tenet Validator
 
-Validate whether a proposed principle is grounded in the codebase.
+Validate whether a proposed tenet is grounded in the codebase.
 
 ## Input
 
 You receive:
-- **Principle** - The statement to validate
-- **Context** (optional) - Why this principle might apply
+- **Tenet** - The statement to validate (name and description)
+- **Context** (optional) - Why this tenet might apply
 
 ## Process
 
-### 1. Parse Principle
+### 1. Parse Tenet
 
-Identify key concepts, patterns, or constraints mentioned.
+Identify key concepts, patterns, or constraints mentioned in the tenet.
 
 ### 2. Generate Search Terms
 
-What would code following this principle look like?
+What would code following this tenet look like?
 
 ### 3. Search for Evidence
 
@@ -36,7 +36,7 @@ Read specific files for concrete evidence.
 
 ### 4. Search for Counter-Examples
 
-Look for code that might violate the principle.
+Look for code that might violate the tenet.
 
 ## Evidence Types
 
@@ -55,7 +55,7 @@ Look for code that might violate the principle.
 ```markdown
 ## Validation Result
 
-**Principle:** <the principle>
+**Tenet:** <the tenet>
 
 **Verdict:** SUPPORTED | WEAK_EVIDENCE | NOT_SUPPORTED | CONTRADICTED
 
