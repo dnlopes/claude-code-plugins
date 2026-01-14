@@ -31,7 +31,7 @@ grep -n "^## Tenets" AGENTS.md 2>/dev/null && echo "Tenets section exists" || ec
 
 ## Explore
 
-Use the Task tool with subagent_type='tenet-validator' to analyze the codebase:
+Use the Task tool with subagent_type='governor:tenet-validator' to analyze the codebase:
 
 ```
 Explore this codebase to discover architectural tenets (guiding principles).

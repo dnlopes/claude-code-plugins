@@ -135,7 +135,7 @@ Go to **Summary**.
 
 ## Validate
 
-For new or substantively edited tenets, use the Task tool with subagent_type='tenet-validator':
+For new or substantively edited tenets, use the Task tool with subagent_type='governor:tenet-validator':
 
 ```
 Validate this tenet:

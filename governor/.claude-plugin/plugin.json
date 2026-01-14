@@ -1,7 +1,7 @@
 {
     "name": "governor",
     "description": "Project tenets management - discover, validate, and maintain guiding principles",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": {
         "name": "David Lopes"
     }
