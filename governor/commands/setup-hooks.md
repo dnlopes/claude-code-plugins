@@ -55,7 +55,7 @@ $staged" \
   --json-schema '{"type":"object","properties":{"compliant":{"type":"boolean"},"violations":{"type":"array","items":{"type":"object","properties":{"tenet":{"type":"string"},"reason":{"type":"string"},"confidence":{"type":"integer","minimum":1,"maximum":100}},"required":["tenet","reason","confidence"]}}},"required":["compliant","violations"]}')
 
 # Filter violations by confidence
-violations=$(echo "$result" | jq --argjson threshold "$CONFIDENCE_THRESHOLD" \
+violations=$(echo "$result" | jq -r '.structured_output' | jq --argjson threshold "$CONFIDENCE_THRESHOLD" \
   '[.violations[] | select(.confidence >= $threshold)]')
 
 count=$(echo "$violations" | jq 'length')
