@@ -6,7 +6,7 @@ scope:
     - "*/commands/*.md"
     - "*/skills/*/SKILL.md"
   summary: "System architecture and component relationships"
-last_updated: 2026-01-13T23:12:02Z
+last_updated: 2026-01-15T10:02:21Z
 ---
 
 # Architecture
@@ -42,10 +42,10 @@ A monorepo of Claude Code plugins where each plugin provides specialized agents,
 **Responsibility:** Frontend design generation, headless browser automation, and shadcn/ui component documentation via MCP
 **Interacts with:** External shadcn/ui API via MCP protocol
 
-### governor (v1.0.0)
+### governor (v1.1.1)
 **Location:** `governor/`
-**Responsibility:** Project tenets management - discover, validate, and maintain guiding tenets in AGENTS.md
-**Interacts with:** Reads/writes AGENTS.md files
+**Responsibility:** Project tenets management - discover, validate, and enforce guiding tenets via AGENTS.md and git pre-commit hooks
+**Interacts with:** Reads/writes AGENTS.md files; installs git hooks; validates staged changes via Claude CLI
 
 ## Data Flow
 

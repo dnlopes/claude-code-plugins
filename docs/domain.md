@@ -5,7 +5,7 @@ scope:
     - "*/commands/*.md"
     - "*/skills/*/SKILL.md"
   summary: "Plugin concepts and terminology"
-last_updated: 2026-01-13T23:12:02Z
+last_updated: 2026-01-15T10:02:21Z
 ---
 
 # Domain
@@ -25,6 +25,8 @@ last_updated: 2026-01-13T23:12:02Z
 | Scope paths | File patterns in frontmatter defining what changes should trigger doc review |
 | Confidence scoring | Review finding classification (high/medium/low) to filter noise |
 | Impact scoring | Review finding classification (critical/high/medium/low) for prioritization |
+| Tenet | Architectural constraint or guiding principle defined in AGENTS.md that must be followed in all work on the codebase |
+| Tenet validation | Process of verifying proposed tenets have codebase evidence or checking staged changes for violations using confidence-based scoring |
 
 ## Plugin Components
 

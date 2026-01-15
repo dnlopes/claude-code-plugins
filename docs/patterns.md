@@ -5,7 +5,7 @@ scope:
     - "*/commands/*.md"
     - "*/.claude-plugin/plugin.json"
   summary: "Code patterns and conventions"
-last_updated: 2026-01-13T23:12:02Z
+last_updated: 2026-01-15T10:02:21Z
 ---
 
 # Patterns
@@ -73,6 +73,8 @@ Commands orchestrate work by spawning specialized agents:
 ```markdown
 Use the Task tool with subagent_type='<agent-name>' to <purpose>
 ```
+
+**Fully qualified references:** When referencing agents from the same plugin, use `plugin-name:agent-name` format (e.g., `governor:tenet-validator`).
 
 Example: `review-pr` spawns 6 agents in parallel:
 - bug-hunter

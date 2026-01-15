@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-01-13T23:12:02Z
+last_updated: 2026-01-15T10:02:21Z
 ---
 
 # Claude Code Plugins
