@@ -3,7 +3,7 @@ name: onboard
 description: Create AGENTS.md, CLAUDE.md, and docs/ documentation for a repository
 ---
 
-# Repository Onboarding
+# Onboarding
 
 Create documentation for a repository.
 
@@ -17,6 +17,7 @@ find docs -name "*.md" -type f 2>/dev/null
 ```
 
 Build inventory:
+
 - **AGENTS.md**: exists / missing
 - **CLAUDE.md**: exists / missing
 - **README.md**: exists / missing
@@ -24,12 +25,14 @@ Build inventory:
 
 **If fully onboarded:**
 > This repository is fully onboarded. Would you like to:
+>
 > 1. **Regenerate** - Replace all documentation
 > 2. **Update** - Use `/docs-manager:update-docs` instead
 > 3. **Cancel**
 
 **If partially onboarded:**
 > Found partial documentation. Would you like to:
+>
 > 1. **Complete** - Generate missing docs only
 > 2. **Regenerate** - Replace all
 > 3. **Cancel**
@@ -40,7 +43,7 @@ Build inventory:
 
 Use the Task tool with subagent_type='codebase-explorer' to explore the repository:
 
-```
+```text
 Explore this repository comprehensively:
 
 1. Repository purpose and audiences
