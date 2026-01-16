@@ -6,19 +6,19 @@
   "plugins": [
     {
       "name": "git-workflow",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "source": "./git-workflow",
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
     {
       "name": "docs-manager",
-      "version": "3.1.0",
+      "version": "3.1.1",
       "source": "./docs-manager",
       "description": "Repository documentation for AI agents, with git-based staleness tracking"
     },
     {
       "name": "review-toolkit",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "source": "./review-toolkit",
       "description": "Code review assistance toolkit with PR analysis, suggestions, and improvement capabilities"
     },
