@@ -1,12 +1,12 @@
 ---
 name: update-docs
 description: Check and update stale documentation based on git changes
-argument-hint: "[doc-path]"
+argument-hint: "[doc-path] [--auto]"
 ---
 
 # Update Documentation
 
-Check and update stale documentation.
+Check documentation staleness and apply updates using specialized agents.
 
 ## Pre-flight
 
@@ -19,48 +19,41 @@ ls AGENTS.md docs/*.md 2>/dev/null
 **If no documentation:**
 > No documentation found. Run `/docs-manager:onboard` first.
 
-## Inventory
+## Phase 1: Inventory
 
-Find all documentation files:
+Find all documentation and extract front-matter:
 
 ```bash
 find . -name "AGENTS.md" -type f
-find docs -name "*.md" -type f
+find docs -name "*.md" -type f 2>/dev/null
 ls README.md 2>/dev/null
 ```
 
-For each document, extract front-matter:
+For each document, read front-matter to get:
 - `scope.paths` - Files to check for changes
-- `last_updated` - When last updated
+- `last_updated` - When last reviewed
 
 If specific document requested via argument, only process that one.
 
-**Special cases:**
-- AGENTS.md without scope: Check if any docs/ files were updated
-- README.md without front-matter: Ask if user wants to add tracking
-
-## Staleness
+## Phase 2: Staleness Check
 
 For each document with scope paths:
 
 ```bash
-git log --since="<last_updated>" --name-only --pretty=format: -- <scope_paths> | sort -u
+git log --since="<last_updated>" --name-only --pretty=format: -- <scope_paths> | sort -u | grep -v '^$'
 ```
 
-Categorize:
-- **Current**: No changes in scope
-- **Stale**: Changes detected
+Categorize as **Current** (no changes) or **Stale** (changes detected).
 
 Present summary:
 
 ```markdown
 ## Documentation Status
 
-| Document | Last Updated | Status |
-|----------|--------------|--------|
-| AGENTS.md | <date> | Current/Stale |
-| docs/architecture.md | <date> | Current/Stale |
-| ... | ... | ... |
+| Document | Last Updated | Status | Changes |
+|----------|--------------|--------|---------|
+| AGENTS.md | <date> | Current/Stale | <count> |
+| docs/architecture.md | <date> | Current/Stale | <count> |
 
 **Stale documents:** <N>
 ```
@@ -70,74 +63,55 @@ Present summary:
 
 Stop here.
 
-## Analyze
+## Phase 3: Analyze
 
-**IMPORTANT:** Load skill `documentation-standards` for templates and proper abstraction levels.
+For each stale document, launch `docs-manager:doc-analyzer` agent:
+- **Description**: "Analyze doc staleness"
+- **Prompt**: "Analyze whether <document_path> needs updating. Front-matter: <front-matter>. Check git changes since <last_updated> in scope paths: <scope_paths>. Categorize changes and determine if documentation update is needed."
 
-For each stale document, use the Task tool with subagent_type='doc-analyzer' to analyze the document:
+**Capture**: Analysis with verdict (NEEDS_UPDATE or CURRENT) and recommended changes.
 
-```
-Analyze this document for needed updates:
+## Phase 4: Review
 
-Document: <path>
-Content: <current content>
-Scope paths: <paths>
-Last updated: <date>
-Document type: <technical (architecture, domain, patterns) or user-facing (README, development)>
-
-Determine:
-1. What changed in scope paths
-2. Whether changes warrant updates
-3. Which sections need updating
-4. Specific recommendations
-```
-
-Run agents in parallel for efficiency.
-
-## Review
-
-Compile findings:
+Compile analysis results:
 
 ```markdown
 ## Update Recommendations
 
 ### <document_path>
-**Changes:** <summary>
-**Needs update:** Yes/No
+**Verdict:** <NEEDS_UPDATE / CURRENT>
+**Reason:** <explanation>
 
-<If Yes:>
+<If NEEDS_UPDATE:>
 **Sections to update:**
-- <section>: <what needs to change>
+- <section>: <what to change>
+
+**Priority:** <HIGH / MEDIUM / LOW>
 
 ---
 ```
 
-For "No update needed":
-> Changes are implementation details that don't affect documentation.
+**If --auto flag**: Skip confirmation, proceed with updates.
 
-Ask user:
+Otherwise:
 > Proceed with recommended updates?
 
-## Update
+## Phase 5: Apply Updates
 
 For each document needing updates:
 
-1. Read current content
+1. Read current document
 2. Apply recommended changes
-3. Update front-matter timestamp:
-   ```yaml
-   last_updated: <current timestamp>
+3. Update `last_updated` timestamp:
+   ```bash
+   date -u +"%Y-%m-%dT%H:%M:%SZ"
    ```
-
-```bash
-date -u +"%Y-%m-%dT%H:%M:%SZ"
-```
+4. Write updated document
 
 **Guidelines:**
+- Minimal changes - only what was recommended
 - Preserve structure
-- Minimal changes
 - Maintain abstraction level
-- Update examples if locations changed
 - Don't expand scope
 
 ## Summary
@@ -161,15 +135,9 @@ date -u +"%Y-%m-%dT%H:%M:%SZ"
 
 ## Edge Cases
 
-- **Missing front-matter**: Offer to add it
-- **Invalid timestamp**: Treat as fully stale
-- **Scope paths match nothing**: Suggest fixing scope paths
-- **Too many changes**: Suggest narrowing scope if doc needs frequent updates
-
-## Guidelines
-
-1. **Conservative updates** - Only update what clearly needs it
-2. **Preserve abstraction** - Don't add detail
-3. **Don't expand scope** - Refresh existing, don't add new
-4. **Watch for scope creep** - Frequent updates = too detailed
-5. **User confirmation** - Show recommendations before applying
+| Issue | Action |
+|-------|--------|
+| Missing front-matter | Offer to add it |
+| Invalid timestamp | Treat as fully stale |
+| Scope paths match nothing | Suggest fixing scope |
+| Frequent updates needed | Suggest narrowing scope |

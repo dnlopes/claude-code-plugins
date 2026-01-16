@@ -2,6 +2,18 @@
 
 Every document in `docs/` and tracked README.md files must have YAML front-matter for staleness tracking.
 
+## Contents
+
+- [Formats](#formats)
+  - [Standard Format](#standard-format-docs)
+  - [HTML Comment Format](#html-comment-format-readmemd)
+  - [AGENTS.md Format](#agentsmd-format)
+- [Field Definitions](#field-definitions)
+  - [scope.paths](#scopepaths)
+  - [scope.summary](#scopesummary)
+  - [last_updated](#last_updated)
+- [Validation Rules](#validation-rules)
+
 ## Formats
 
 ### Standard Format (docs/)

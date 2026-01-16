@@ -2,6 +2,17 @@
 
 Templates for all document types. Each uses **Core + Optional** structure.
 
+## Contents
+
+- [AGENTS.md (Root)](#agentsmd-root)
+- [AGENTS.md (Module)](#agentsmd-module)
+- [CLAUDE.md](#claudemd)
+- [docs/architecture.md](#docsarchitecturemd)
+- [docs/domain.md](#docsdomainmd)
+- [docs/patterns.md](#docspatternsmd)
+- [docs/development.md](#docsdevelopmentmd)
+- [README.md](#readmemd)
+
 ## AGENTS.md (Root)
 
 ```markdown

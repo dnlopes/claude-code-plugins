@@ -12,7 +12,7 @@
     },
     {
       "name": "docs-manager",
-      "version": "2.2.1",
+      "version": "3.1.0",
       "source": "./docs-manager",
       "description": "Repository documentation for AI agents, with git-based staleness tracking"
     },

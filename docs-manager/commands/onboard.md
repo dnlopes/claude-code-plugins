@@ -1,174 +1,100 @@
 ---
 name: onboard
 description: Create AGENTS.md, CLAUDE.md, and docs/ documentation for a repository
+argument-hint: "[--auto]"
 ---
 
-# Onboarding
+# Onboard Repository
 
-Create documentation for a repository.
+Create documentation for a repository using specialized agents.
 
 ## Pre-flight
 
-Check what documentation exists:
+Check existing documentation:
 
 ```bash
 ls AGENTS.md CLAUDE.md README.md 2>/dev/null
 find docs -name "*.md" -type f 2>/dev/null
 ```
 
-Build inventory:
-
-- **AGENTS.md**: exists / missing
-- **CLAUDE.md**: exists / missing
-- **README.md**: exists / missing
-- **docs/**: exists / partial / missing
-
 **If fully onboarded:**
-> This repository is fully onboarded. Would you like to:
->
+> Repository already has documentation. Options:
 > 1. **Regenerate** - Replace all documentation
 > 2. **Update** - Use `/docs-manager:update-docs` instead
 > 3. **Cancel**
 
 **If partially onboarded:**
-> Found partial documentation. Would you like to:
->
+> Found partial documentation. Options:
 > 1. **Complete** - Generate missing docs only
 > 2. **Regenerate** - Replace all
 > 3. **Cancel**
 
-## Explore
+## Phase 1: Explore
 
-**IMPORTANT:** Load skill `documentation-standards` for templates and format.
+Launch `docs-manager:codebase-explorer` agent:
+- **Description**: "Explore codebase for documentation"
+- **Prompt**: "Explore this repository and extract documentation-relevant information. Return structured findings covering: project overview, tech stack, architecture, patterns with file:line references, actionable principles, complex modules, and scope paths for each document type."
 
-Use the Task tool with subagent_type='codebase-explorer' to explore the repository:
+**Capture**: Structured findings for review.
 
-```text
-Explore this repository comprehensively:
+## Phase 2: Review
 
-1. Repository purpose and audiences
-2. Tech stack with versions
-3. Architecture and components
-4. Domain concepts
-5. Code patterns with file:line examples
-6. Development workflow using BUILD SYSTEM interfaces
-7. README information (user-facing)
-8. Complex modules warranting dedicated docs
-9. Suggested scope paths for each document
+**If --auto flag**: Skip to Phase 3.
 
-Remember:
-- Use build system (make test) not raw commands (go test)
-```
-
-Wait for structured findings.
-
-## Review
-
-Present summary to user:
+Present findings summary to user:
 
 ```markdown
 ## Repository Analysis
 
-**Project:** <name>
-**Type:** <web app / CLI / library>
-**Tech Stack:** <language> + <framework>
+**Project:** <name from findings>
+**Type:** <type from findings>
+**Tech Stack:** <stack from findings>
+
+### Identified Principles
+<List from findings>
 
 ### Complex Modules
-<List modules that will get dedicated AGENTS.md, or "None identified">
+<List or "None identified">
 
-### README Status
-<Existing / Will create new / Will enhance existing>
+### Documentation Plan
+Will generate:
+- AGENTS.md, CLAUDE.md
+- docs/architecture.md, domain.md, patterns.md, development.md
+<Module docs if any>
 
-### Would you like to:
-- **Proceed** with these findings
-- **Re-explore** with different focus
+**Options:**
+1. **Proceed** - Generate with these findings
+2. **Re-explore** - Gather more information
+3. **Cancel**
 ```
 
 Wait for user confirmation.
 
-## Generate
+## Phase 3: Generate
 
-Get timestamp:
-```bash
-date -u +"%Y-%m-%dT%H:%M:%SZ"
-```
+Launch `docs-manager:doc-generator` agent:
+- **Description**: "Generate documentation files"
+- **Prompt**: "Generate documentation files from these findings: <findings from Phase 1>. Create AGENTS.md, CLAUDE.md, docs/architecture.md, docs/patterns.md, docs/development.md, and docs/domain.md (if applicable). Also create module AGENTS.md/CLAUDE.md pairs for any complex modules identified."
 
-Create structure:
-```bash
-mkdir -p docs
-```
+**Capture**: List of created files.
 
-### Generate AGENTS.md
+## Phase 4: Validate
 
-Create AGENTS.md at repository root using template from `documentation-standards` skill.
-
-**Checklist:**
-- [ ] Brief description (1-2 sentences)
-- [ ] Quick start with BUILD SYSTEM commands
-- [ ] Dual-format doc references (`@docs/file.md` for Claude Code imports, `[text](docs/file.md)` for human readers)
-
-### Generate CLAUDE.md
-
-Claude Code reads `CLAUDE.md` by convention. Create it as a single-line redirect to keep all documentation in `AGENTS.md` (which other tools and humans can also use):
-
-```markdown
-@AGENTS.md
-```
-
-### Generate docs/
-
-Create each document using templates:
-- `docs/architecture.md` - Components with Location/Responsibility/Interacts
-- `docs/domain.md` - Glossary (skip if purely technical project)
-- `docs/patterns.md` - Structure and naming conventions
-- `docs/development.md` - Build/test/run using build system
-
-Include front-matter with scope paths and timestamp.
-
-### Generate Module Docs
-
-For each complex module identified:
-
-1. Create `<module-path>/AGENTS.md` with:
-   - Module purpose
-   - Key abstractions
-   - Internal architecture
-   - Gotchas
-   - Dependencies
-
-2. Create `<module-path>/CLAUDE.md` with:
-   ```markdown
-   @AGENTS.md
-   ```
-
-### Enhance README.md
-
-**If README exists:**
-- Add front-matter in HTML comment format
-- Add Documentation section linking to docs/
-- Update outdated information
-- Preserve custom sections
-
-**If no README:**
-- Create using template
-- Focus on user-facing content
-- Include Documentation section
-
-## Validate
+Verify outputs:
 
 ```bash
-# List created files
-find . -name "AGENTS.md" -o -name "CLAUDE.md" | head -20
-find docs -name "*.md"
-head -30 AGENTS.md
-head -20 README.md
+# Check files exist
+ls AGENTS.md CLAUDE.md docs/*.md 2>/dev/null
+
+# Verify front-matter
+head -10 AGENTS.md
+head -10 docs/architecture.md
 ```
 
-Verify:
-- [ ] All docs have proper front-matter
-- [ ] Cross-references work
-- [ ] File:line references are accurate
-- [ ] Build commands use build system
+Check:
+- [ ] All docs have valid front-matter
+- [ ] CLAUDE.md contains only `@AGENTS.md`
+- [ ] Build commands use build system (make/npm)
 
 ## Summary
 
@@ -176,36 +102,25 @@ Verify:
 ## Onboarding Complete
 
 **Generated:**
-- `AGENTS.md` - Created
-- `CLAUDE.md` - Created
-- `docs/architecture.md` - Created
-- `docs/domain.md` - Created / Skipped (not applicable)
-- `docs/patterns.md` - Created
-- `docs/development.md` - Created
-- `README.md` - Created / Enhanced
-<For each module:>
-- `<path>/AGENTS.md` - Created
-- `<path>/CLAUDE.md` - Created
+- `AGENTS.md` - Main agent documentation
+- `CLAUDE.md` - Redirect
+- `docs/architecture.md` - System design
+- `docs/domain.md` - Business concepts (or skipped)
+- `docs/patterns.md` - Code conventions
+- `docs/development.md` - Build/test/run
+<Module docs if any>
 
 ### Next Steps
 1. Review generated documentation
-2. Test README examples
-3. Run `/docs-manager:update-docs` periodically
+2. Run `/docs-manager:validate-docs` to verify
+3. Commit the documentation
 ```
 
 ## Edge Cases
 
-- **Monorepo**: Focus on root-level docs; modules get their own AGENTS.md
-- **No build system**: Document raw commands but note this
-- **Empty/new repo**: Generate minimal docs, note limited findings
-- **Existing CLAUDE.md**: Migrate content to AGENTS.md, replace CLAUDE.md
-
-## Guidelines
-
-1. **Purpose first** - Understand repository purpose before documenting
-2. **Don't invent** - Only document what was found
-3. **Right abstraction** - If it needs frequent updates, too detailed
-4. **Build system interfaces** - `make test` not `go test`
-5. **One example per pattern** - Not every instance
-6. **Ask when uncertain** - Don't guess
-7. **Skip empty sections** - No filler content
+| Scenario | Approach |
+|----------|----------|
+| Monorepo | Root-level docs; modules get own AGENTS.md |
+| No build system | Document raw commands, note limitation |
+| Empty/new repo | Minimal docs, note limited findings |
+| Existing CLAUDE.md | Migrate content to AGENTS.md, replace |

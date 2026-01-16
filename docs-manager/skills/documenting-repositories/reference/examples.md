@@ -2,6 +2,19 @@
 
 Good/bad examples for each document type.
 
+## Contents
+
+- [Principles](#principles)
+  - [Good Principles](#good-principles)
+  - [Bad Principles](#bad-principles)
+  - [The Three-Question Test](#the-three-question-test)
+- [Architecture](#architecture)
+- [Domain](#domain)
+- [Patterns](#patterns)
+- [Development](#development)
+- [README](#readme)
+- [Common Mistakes](#common-mistakes)
+
 ## Principles
 
 ### Good Principles
