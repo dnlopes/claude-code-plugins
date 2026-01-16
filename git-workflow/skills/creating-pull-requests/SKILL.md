@@ -28,7 +28,7 @@ gh pr create --draft
 
 Same as commit messages: `<type>(<scope>): <description>`
 
-- **Breaking changes**: Add `!` after type/scope (e.g., `feat!: remove deprecated API`)
+- **Breaking changes**: Add `!` after type/scope (for example: `feat!: remove deprecated API`)
 - **Language**: Always English
 - **Length**: Under 72 characters
 
