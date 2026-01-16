@@ -30,9 +30,9 @@
     },
     {
       "name": "governor",
-      "version": "1.2.0",
+      "version": "2.1.0",
       "source": "./governor",
-      "description": "Project tenets management - discover, validate, and maintain guiding principles"
+      "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration"
     }
   ]
 }

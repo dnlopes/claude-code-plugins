@@ -1,132 +1,141 @@
 ---
-name: setup
-description: Discover and create initial tenets for a project by analyzing the codebase
+description: Discover architectural constraints and create tenets in AGENTS.md with evidence and severity levels
+allowed-tools:
+  - Bash
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+  - AskUserQuestion
+argument-hint: "[project-path]"
 ---
 
 # Setup Tenets
 
-Discover and create initial tenets for a project.
+Discover architectural constraints in a codebase and create tenets in AGENTS.md.
 
-## Pre-flight
+**Load skill `tenet-governance`** for tenet format, severity levels, and good tenet characteristics.
+
+## Workflow
+
+```
+Setup Progress:
+- [ ] Step 1: Pre-flight
+- [ ] Step 2: Detect project type
+- [ ] Step 3: Explore codebase
+- [ ] Step 4: Review with user
+- [ ] Step 5: Generate AGENTS.md
+- [ ] Step 6: Summary
+```
+
+## Step 1: Pre-flight
 
 Check current state:
 
 ```bash
-test -f AGENTS.md && echo "AGENTS.md exists" || echo "AGENTS.md not found"
+test -f AGENTS.md && echo "AGENTS.md: Found" || echo "AGENTS.md: Not found"
+grep -n "^## Tenets" AGENTS.md 2>/dev/null && echo "Tenets: Found" || echo "Tenets: Not found"
 ```
 
-If AGENTS.md exists, check for Tenets section:
+**If tenets exist**, ask user:
+1. **Replace** - Remove existing tenets, discover new ones
+2. **Add** - Keep existing, discover additional tenets
+3. **Cancel** - Abort setup
+
+**If no tenets**, proceed to Step 2.
+
+## Step 2: Detect Project Type
+
+Identify primary language and framework:
 
 ```bash
-grep -n "^## Tenets" AGENTS.md 2>/dev/null && echo "Tenets section exists" || echo "No Tenets section"
+ls -la *.go go.mod 2>/dev/null && echo "Go project"
+ls -la package.json 2>/dev/null && echo "Node/TypeScript project"
+ls -la requirements.txt pyproject.toml setup.py 2>/dev/null && echo "Python project"
+ls -la *.csproj *.sln 2>/dev/null && echo "C#/.NET project"
+ls -la Cargo.toml 2>/dev/null && echo "Rust project"
 ```
 
-**If tenets exist:**
-> Tenets section already exists. Would you like to:
-> 1. **Replace** - Remove existing and create new
-> 2. **Add** - Keep existing and add more
-> 3. **Cancel**
+Record detected type for language-specific exploration in Step 3.
 
-**If no AGENTS.md or no tenets:** Proceed to Explore.
+## Step 3: Explore Codebase
 
-## Explore
+Focus on **ARCHITECTURAL CONSTRAINTS**, not tooling or style.
 
-Use the Task tool with subagent_type='governor:tenet-validator' to analyze the codebase:
+### 3.1 Map Directory Structure
 
-```
-Explore this codebase to discover architectural tenets (guiding principles).
+Use Glob and LS to understand the layout:
+- Top-level directories
+- Source code organization (`src/`, `pkg/`, `internal/`, `lib/`, `app/`)
+- Potential architectural boundaries (`domain/`, `infrastructure/`, `api/`, `handlers/`)
 
-Focus on ARCHITECTURAL CONSTRAINTS and DESIGN DECISIONS, not tooling or linters.
+### 3.2 Analyze Import Patterns
 
-Look for patterns like:
+Use Grep with language-specific patterns to find:
+- Import statements across files
+- Internal vs external dependencies
+- Cross-boundary imports
 
-1. **Layer dependencies** - Which layers/packages can import which others?
-   - Does domain/core avoid importing infrastructure?
-   - Are there clear boundaries between layers?
+Look for **consistent patterns** that suggest intentional constraints.
 
-2. **Data access patterns** - How is the database accessed?
-   - Is there a repository pattern or data access layer?
-   - Do handlers/controllers access DB directly or through services?
+### 3.3 Identify Architectural Patterns
 
-3. **Separation of concerns** - Where does business logic live?
-   - Is HTTP/API layer thin (just routing and serialization)?
-   - Is business logic concentrated in specific packages?
+Read 5-10 representative files to understand patterns:
 
-4. **Component boundaries** - What are the major components and their responsibilities?
-   - Are there clear interfaces between components?
-   - What must NOT depend on what?
+| Pattern | Evidence to Look For |
+|---------|---------------------|
+| Layer separation | Domain code doesn't import infrastructure |
+| Repository pattern | Data access through interfaces |
+| Dependency injection | Constructors receive dependencies |
+| Handler isolation | HTTP handlers delegate to services |
+| Module boundaries | Clear separation between features |
 
-5. **Error handling patterns** - How are errors propagated and handled?
+For each pattern found, record:
+- 2-3 file:line references as evidence
+- The constraint implied by the pattern
 
-6. **Testing boundaries** - What gets mocked vs integrated?
+### 3.4 Check Existing Documentation
 
-Analyze import statements, package structure, and code organization to find these patterns.
-
-Return 3-5 suggested tenets in this format:
-
-### T1. <Short Name>
-
-<Description: 2-4 sentences explaining the architectural constraint, why it matters, and examples if helpful>
-
-**Evidence:**
-- `<file:line>` - <what was observed>
-- `<file:line>` - <what was observed>
-
-Examples of good tenets:
-- "Domain layer must not import infrastructure packages"
-- "Database access must go through repository interfaces"
-- "HTTP handlers must not contain business logic"
-- "All external service calls must go through dedicated client packages"
-
-Guidelines:
-- Focus on ARCHITECTURE, not tooling
-- Tenets should be actionable constraints: "X must/must not Y"
-- Only suggest tenets with actual codebase evidence
-- Include rationale (why this matters)
-- Be specific about which components/layers are involved
+```bash
+ls -la ARCHITECTURE.md DESIGN.md docs/architecture* docs/design* 2>/dev/null
 ```
 
-Wait for the agent to return findings.
+If architecture docs exist, read them for stated constraints.
 
-## Review
+## Step 4: Review with User
 
-Present discovered tenets:
+Present 3-5 discovered tenets for approval:
 
 ```markdown
-## Suggested Tenets
-
-Based on codebase analysis:
+## Discovered Tenets
 
 ### T1. <Name>
 
-<Description with rationale>
+<Description: 2-4 sentences explaining constraint and rationale>
 
-**Evidence:** <what was found>
+**Severity:** <critical | high | medium | low>
+**Evidence:**
+- `<file>:<line>` - <observation>
+- `<file>:<line>` - <observation>
 
 ### T2. <Name>
+...
+```
 
-<Description with rationale>
-
-**Evidence:** <what was found>
-
----
-
-For each tenet, would you like to:
+For each tenet, ask user:
 - **Accept** - Add as-is
 - **Edit** - Modify before adding
 - **Remove** - Don't include
-- **Add custom** - Add your own tenet
-```
+- **Change severity** - Adjust importance
 
-Wait for user decisions on each tenet.
+Ask if user wants to add custom tenets not discovered.
 
-## Generate
+## Step 5: Generate AGENTS.md
 
-Create or update AGENTS.md:
+Create or update AGENTS.md with approved tenets.
 
-**If AGENTS.md doesn't exist:**
-
-Create new file with only Tenets section:
+**Format** (from tenet-governance skill):
 
 ```markdown
 ## Tenets
@@ -137,46 +146,46 @@ CRITICAL: These tenets are MANDATORY and MUST be followed in all work on this co
 
 <Description>
 
+**Severity:** high
+
+**Evidence:**
+- `src/domain/user.go:1` - Domain package has no infrastructure imports
+
 ### T2. <Name>
+...
 
-<Description>
+## Tenet Exceptions
+
+Approved exceptions to tenets. Each must have justification.
+
+| File | Tenet | Reason | Approved |
+|------|-------|--------|----------|
+| (none) | | | |
 ```
 
-**If AGENTS.md exists without Tenets:**
+**Placement rules:**
+- New file: Create with Tenets section
+- Existing without Tenets: Insert after first `## ` heading
+- Replacing: Replace from `## Tenets` to next `## ` heading (preserve other content)
 
-Insert Tenets section after first heading/paragraph, before other sections.
+Show diff: `git diff AGENTS.md`
 
-**If replacing existing Tenets:**
-
-Replace the entire Tenets section (from `## Tenets` to next `## ` heading).
-
-Show the changes:
-
-```bash
-git diff AGENTS.md
-```
-
-## Summary
+## Step 6: Summary
 
 ```markdown
 ## Setup Complete
 
 **Tenets created:**
-- T1. <Name>
-- T2. <Name>
-- T3. <Name>
+- T1. <Name> (severity: high)
+- T2. <Name> (severity: medium)
+- T3. <Name> (severity: high)
 
-**AGENTS.md:** <Created / Updated>
+**AGENTS.md:** Created / Updated
 
-### Next Steps
-- Review the tenets in AGENTS.md
-- Use `/governor:manage` to add, edit, or remove tenets
+**Evidence preserved:** Yes - each tenet includes file references
+
+**Next steps:**
+- Review tenets in AGENTS.md
+- Use `/governor:manage` to modify tenets
+- Use `/governor:verify` to check compliance
 ```
-
-## Guidelines
-
-1. **Evidence-based** - Only suggest tenets with codebase evidence
-2. **Actionable** - Tenets should be "do X" not "X exists"
-3. **Concise but complete** - Include rationale, not just rules
-4. **User decides** - Present suggestions, let user choose
-5. **Preserve content** - When updating, only modify Tenets section

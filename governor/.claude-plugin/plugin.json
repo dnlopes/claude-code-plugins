@@ -1,7 +1,7 @@
 {
     "name": "governor",
-    "description": "Project tenets management - discover, validate, and maintain guiding principles",
-    "version": "1.2.0",
+    "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration",
+    "version": "2.1.0",
     "author": {
         "name": "David Lopes"
     }

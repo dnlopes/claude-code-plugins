@@ -1,220 +1,189 @@
 ---
-name: manage
-description: Add, remove, edit, or reorder tenets in AGENTS.md
+description: Add, remove, edit, or reorder tenets in AGENTS.md with validation and evidence tracking
+allowed-tools:
+  - Bash
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+  - AskUserQuestion
 ---
 
 # Manage Tenets
 
-Manage tenets in AGENTS.md.
+Modify tenets in AGENTS.md with validation to ensure changes are grounded in codebase reality.
 
-## Pre-flight
+**Load skill `tenet-governance`** for tenet format, validation criteria, and good tenet characteristics.
 
-Check AGENTS.md exists:
+## Workflow
+
+```
+Manage Progress:
+- [ ] Step 1: Pre-flight
+- [ ] Step 2: Show current tenets
+- [ ] Step 3: Get user action
+- [ ] Step 4: Validate changes
+- [ ] Step 5: Apply changes
+- [ ] Step 6: Summary
+```
+
+## Step 1: Pre-flight
 
 ```bash
-test -f AGENTS.md && echo "Found" || echo "Not found"
+test -f AGENTS.md && echo "AGENTS.md: Found" || echo "AGENTS.md: Not found"
+grep -n "^## Tenets" AGENTS.md 2>/dev/null && echo "Tenets: Found" || echo "Tenets: Not found"
 ```
 
-**If not found:**
-> No AGENTS.md found. Run `/governor:setup` first.
+**If not found:** `No tenets found. Run /governor:setup first.`
 
-Check for Tenets section:
+Parse AGENTS.md to extract current tenets.
 
-```bash
-grep -n "^## Tenets" AGENTS.md 2>/dev/null
-```
+## Step 2: Show Current Tenets
 
-**If no Tenets section:**
-> No Tenets section found. Run `/governor:setup` first.
-
-## Parse
-
-Read AGENTS.md and extract current tenets:
-
-```bash
-cat AGENTS.md
-```
-
-Tenets are in the `## Tenets` section with format:
-
-```markdown
-## Tenets
-
-CRITICAL: These tenets are MANDATORY and MUST be followed in all work on this codebase.
-
-### T1. <Name>
-
-<Description>
-
-### T2. <Name>
-
-<Description>
-```
-
-Present current state:
+Display existing tenets with key info:
 
 ```markdown
 ## Current Tenets
 
-### T1. <Name>
-<First line of description>
+| ID | Name | Severity | Evidence |
+|----|------|----------|----------|
+| T1 | Domain Isolation | critical | 3 refs |
+| T2 | Handler Delegation | high | 2 refs |
+| T3 | Error Wrapping | medium | 2 refs |
 
-### T2. <Name>
-<First line of description>
-
-<Or: "No tenets defined">
+**Exceptions:** 2 approved
 ```
 
-## Choose
+## Step 3: Get User Action
 
-Ask user:
+Present menu:
 
-> **What would you like to do?**
-> 1. **Add** - Add a new tenet
-> 2. **Remove** - Remove a tenet
-> 3. **Edit** - Modify a tenet
-> 4. **Reorder** - Change order
-> 5. **Done** - Exit
+1. **Add** - Create new tenet
+2. **Edit** - Modify existing tenet
+3. **Remove** - Delete tenet
+4. **Reorder** - Change tenet sequence
+5. **Exception** - Add/remove exception
+6. **Done** - Exit manage mode
 
-## Execute
+Repeat until user selects Done.
 
-### If Add:
+### Add Action
 
-> Provide the new tenet:
->
-> **Name:** <short name>
->
-> **Description:** <description with rationale, examples if needed>
+1. Ask for tenet name and description
+2. Ask for severity level
+3. Proceed to Step 4 (Validate)
+4. If validated, search for evidence
+5. Add to AGENTS.md with evidence
 
-Proceed to **Validate**.
+### Edit Action
 
-### If Remove:
+1. Ask which tenet to edit (by ID)
+2. Show current values
+3. Ask what to change (name, description, severity, evidence)
+4. If description changed significantly, proceed to Step 4 (Validate)
+5. Update in AGENTS.md
 
-> Which tenet to remove? (Enter T-number, e.g., T2)
+**Important:** Preserve existing evidence unless explicitly changed.
 
-Confirm:
-> Remove **T2. <Name>**?
->
-> This will renumber remaining tenets.
+### Remove Action
 
-Skip validation, proceed to **Apply**.
+1. Ask which tenet to remove (by ID)
+2. Confirm removal
+3. Remove from AGENTS.md
+4. Renumber remaining tenets (T1, T2, T3...)
+5. Update any references in Tenet Exceptions table
 
-### If Edit:
+### Reorder Action
 
-> Which tenet to edit? (Enter T-number, e.g., T1)
+1. Show current order
+2. Ask for new order (e.g., "T3, T1, T2")
+3. Renumber to maintain sequence (T1, T2, T3...)
+4. Update AGENTS.md
 
-Show current:
-> **Current T1. <Name>**
->
-> <Full description>
->
-> What would you like to change?
-> 1. **Name only**
-> 2. **Description only**
-> 3. **Both**
+### Exception Action
 
-Collect new values.
+**Add exception:**
+1. Ask for file path
+2. Ask which tenet (by ID)
+3. Ask for justification
+4. Add to Tenet Exceptions table with current date
 
-If substantive edit (not just typos), proceed to **Validate**.
-If minor edit (typos, formatting), proceed to **Apply**.
+**Remove exception:**
+1. Show current exceptions
+2. Ask which to remove
+3. Remove from table
 
-### If Reorder:
+## Step 4: Validate Changes
 
-> Current order:
-> - T1. <Name>
-> - T2. <Name>
-> - T3. <Name>
->
-> Enter new order (e.g., "T2, T1, T3"):
+For new or significantly edited tenets, validate against codebase.
 
-Proceed to **Apply**.
+**Validation process:**
+1. Search codebase for evidence supporting the tenet
+2. Search for counter-evidence (violations)
+3. Determine verdict
 
-### If Done:
+**Verdicts:**
 
-Go to **Summary**.
+| Verdict | Meaning | Action |
+|---------|---------|--------|
+| SUPPORTED | Consistent patterns across files | Proceed |
+| WEAK_EVIDENCE | Only 1-2 instances | Warn, ask to proceed |
+| NOT_SUPPORTED | No pattern found | Warn strongly, suggest alternatives |
+| CONTRADICTED | Found violations | Block, require resolution |
 
-## Validate
-
-For new or substantively edited tenets, use the Task tool with subagent_type='governor:tenet-validator':
-
-```
-Validate this tenet:
-
-Name: <name>
-Description: <description>
-
-Search for evidence this is followed in the codebase.
-Look for counter-examples.
-Return verdict with file references.
-```
-
-**If SUPPORTED:**
-> ✓ Evidence found: <summary>
-> Proceeding.
-
-**If WEAK_EVIDENCE:**
-> ⚠ Limited evidence: <summary>
->
-> 1. **Add anyway**
-> 2. **Modify** based on findings
-> 3. **Cancel**
-
-**If NOT_SUPPORTED:**
-> ✗ No evidence found.
->
-> 1. **Add anyway** (aspirational tenet)
-> 2. **Modify** to match code
-> 3. **Cancel**
-
-**If CONTRADICTED:**
-> ✗ Evidence contradicts: <examples>
->
-> 1. **Add anyway** (want to change codebase)
-> 2. **Modify**: "<suggestion>"
-> 3. **Cancel**
-
-If **Modify**, collect new text and re-validate.
-
-## Apply
-
-Update AGENTS.md:
-1. Apply tenet changes to Tenets section only
-2. Renumber all tenets sequentially (T1, T2, T3...)
-3. Preserve all other content in AGENTS.md
-
-Show diff:
-```bash
-git diff AGENTS.md
-```
-
-## Loop
-
-> Changes applied. Would you like to:
-> 1. **Continue** - More changes
-> 2. **Done** - Finish
-
-If Continue, return to **Choose**.
-
-## Summary
+**Validation output:**
 
 ```markdown
-## Summary
+### Validating: T4. <Name>
 
-**Changes made:**
-- <Added/Removed/Edited/Reordered>: <details>
+**Searching for evidence...**
+- Found: <N> files following pattern
+- Counter-evidence: <N> files violating pattern
 
-**Current tenets:**
-- T1. <Name>
-- T2. <Name>
+**Verdict:** SUPPORTED / WEAK_EVIDENCE / NOT_SUPPORTED / CONTRADICTED
+**Evidence strength:** Strong / Moderate / Weak / None
 
-**AGENTS.md updated**
+**Recommendation:** <guidance based on verdict>
 ```
 
-## Guidelines
+For WEAK_EVIDENCE or NOT_SUPPORTED, ask user:
+- **Proceed anyway** - Add as aspirational (suggest severity: low)
+- **Edit tenet** - Adjust to match reality
+- **Cancel** - Don't add
 
-1. **Preserve formatting** - Keep exact structure of Tenets section
-2. **Don't modify other sections** - Only touch Tenets section
-3. **Validate meaningfully** - Real searches, not rubber stamps
-4. **Respect user decisions** - Aspirational tenets are valid
-5. **Keep tenets well-documented** - Name, description, rationale, examples
-6. **Renumber consistently** - Always maintain T1, T2, T3... sequence
+For CONTRADICTED, user must either:
+- **Fix violations first** - Then retry
+- **Adjust tenet** - Narrow scope to avoid contradictions
+- **Cancel** - Don't add
+
+## Step 5: Apply Changes
+
+After validation passes:
+
+1. Update AGENTS.md with changes
+2. Ensure sequential numbering (T1, T2, T3...)
+3. Update Tenet Exceptions if tenets were renumbered
+4. Show diff: `git diff AGENTS.md`
+
+## Step 6: Summary
+
+```markdown
+## Changes Applied
+
+**Actions performed:**
+- Added: T4. <Name>
+- Edited: T2. <Name> (description updated)
+- Removed: T5. <Name>
+
+**Validation results:**
+- T4: SUPPORTED (strong evidence)
+
+**Renumbering:** T5 → T4 (after removal)
+
+**AGENTS.md:** Updated
+
+**Next steps:**
+- Review changes in AGENTS.md
+- Use `/governor:verify` to check compliance
+```

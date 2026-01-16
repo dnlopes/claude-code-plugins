@@ -42,10 +42,10 @@ A monorepo of Claude Code plugins where each plugin provides specialized agents,
 **Responsibility:** Frontend design generation, headless browser automation, and shadcn/ui component documentation via MCP
 **Interacts with:** External shadcn/ui API via MCP protocol
 
-### governor (v1.2.0)
+### governor (v2.0.0)
 **Location:** `governor/`
-**Responsibility:** Project tenets management - discover, validate, and verify guiding tenets via AGENTS.md with flexible scope modes
-**Interacts with:** Reads/writes AGENTS.md files; provides verification skill for CI/scripts integration
+**Responsibility:** Project tenets management with evidence tracking, severity levels, exception handling, and CI/CD integration via JSON output
+**Interacts with:** Reads/writes AGENTS.md files; provides setup, manage, and verify skills
 
 ## Data Flow
 
