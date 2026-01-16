@@ -4,148 +4,95 @@ allowed-tools: ["Bash", "Glob", "Grep", "Read", "Task", "Bash(gh pr comment:*)",
 argument-hint: "[review-aspects]"
 ---
 
-# Pull Request Review Instructions
+# Pull Request Review
 
-You are an expert code reviewer conducting a thorough evaluation of code changes. Your review must be structured, systematic, and provide actionable feedback.
+Orchestrates a multi-agent code review workflow for pull requests or local branch changes.
 
 **Review Aspects (optional):** "$ARGUMENTS"
 
-## Critical Rule: Only Review Changed Lines
+## Prerequisites
 
-**THIS IS THE MOST IMPORTANT RULE - VIOLATIONS ARE UNACCEPTABLE**
+Load the `code-review-guidelines` skill for review rules, output standards, and confidence thresholds.
 
-You MUST ONLY report issues on lines that were ADDED or MODIFIED in the PR/branch diff. You MUST NOT report issues on:
-- Pre-existing code that was not changed
-- Code in unchanged files
-- Code in unchanged sections of modified files
-- Issues that existed before this PR
+## Workflow
 
-Before reporting ANY issue, verify the line appears in the diff as an addition (+) or modification. If the issue is on unchanged code, DO NOT REPORT IT.
+### Phase 1: Gather Context
 
-**SILENT FILTERING**: When you encounter pre-existing issues or issues on unchanged code, silently skip them. Do NOT mention them in your output, do NOT say "I found X issues but they are pre-existing so I'm ignoring them", and do NOT list them as "ignored" or "excluded". Simply pretend they don't exist.
+1. **Detect Review Target**
+   ```bash
+   gh pr view  # Check if PR exists
+   ```
+   - PR exists → Use `gh pr diff`
+   - No PR → Use `git diff main...HEAD`
 
-**IMPORTANT**: Skip reviewing changes in `spec/` and `reports/` folders unless specifically asked.
+2. **Identify Changed Files**
+   ```bash
+   gh pr diff --name-only  # or git diff main...HEAD --name-only
+   ```
+   Categorize by type (source, test, config, docs).
 
-## Review Workflow
+3. **Collect Project Guidelines** (Haiku agent)
+   List paths to: CLAUDE.md, AGENTS.md, README.md, constitution.md (if they exist).
 
-Run a comprehensive code review using multiple specialized agents, each focusing on a different aspect of code quality. Follow these steps precisely:
+4. **Summarize Changes** (Haiku agent)
+   Brief summary of what changed and why.
 
-### Phase 1: Determine Review Context
+### Phase 2: Run Review Agents
 
-1. **Check if PR exists**: Run `gh pr view` to see if current branch has an open PR
-   - If PR exists: Use the PR diff for review
-   - If no PR exists: Review current branch against `main` using `git diff main...HEAD`
+Launch applicable agents **in parallel** (up to 6 Sonnet agents):
 
-2. **Identify Changed Files**:
-   - If PR exists: Run `gh pr diff --name-only`
-   - If no PR: Run `git diff main...HEAD --name-only`
-   - Identify file types and categorize changes
+| Agent | When to Use |
+|-------|-------------|
+| `bug-hunter` | Always |
+| `code-quality-reviewer` | Always |
+| `security-auditor` | Always |
+| `historical-context-reviewer` | Always |
+| `test-coverage-reviewer` | Test files changed |
+| `contracts-reviewer` | Types, APIs, or data models changed |
 
-3. **Gather Project Context**: Use a Haiku agent to list file paths (not contents) of any relevant instruction files if they exist: CLAUDE.md, AGENTS.md, **/constitution.md, the root README.md file, and any README.md files in directories whose files were modified
+**For each agent, provide:**
+- List of changed files
+- Change summary
+- Project guideline file paths
+- Reminder: Only report issues on changed lines
 
-4. **Summarize Changes**: Use a Haiku agent to provide a detailed summary of the changes, including the full list of changed files and their types
+### Phase 3: Score and Filter
 
-### Phase 2: Searching for Issues
+1. **Score Each Issue** (parallel Haiku agents)
 
-Determine applicable reviews, then launch up to 6 parallel Sonnet agents to independently review all changes. The agents should return a list of issues and the reason each issue was flagged (eg. CLAUDE.md adherence, bug, historical git context, etc.).
+   For each issue from Phase 2, evaluate:
 
-**Available Review Agents**:
+   **Confidence (0-100)**: How certain is this a real issue?
+   - 0: False positive or pre-existing
+   - 25: Might be real, might be false positive
+   - 50: Verified real, but might be nitpick
+   - 75: Double-checked, likely hit in practice
+   - 100: Absolutely certain, will happen frequently
 
-- **security-auditor** - Analyze code for security vulnerabilities
-- **bug-hunter** - Scan for bugs and issues, including silent failures
-- **code-quality-reviewer** - General code review for project guidelines, maintainability and quality
-- **contracts-reviewer** - Analyze type design, API changes, and data modeling
-- **test-coverage-reviewer** - Review test coverage quality and completeness
-- **historical-context-reviewer** - Review historical context including git blame and previous changes
+   **Impact (0-100)**: How severe if unfixed?
+   - 0-20: Minor style issue
+   - 21-40: Maintainability, no functional impact
+   - 41-60: Edge case errors or performance
+   - 61-80: Core feature broken, data corruption
+   - 81-100: Runtime errors, data loss, security breach
 
-Note: Default is to run **all** applicable review agents.
+2. **Apply Filter Thresholds**
 
-#### Determine Applicable Reviews
+   | Impact | Min Confidence | Rationale |
+   |--------|---------------|-----------|
+   | 81-100 (Critical) | 50 | Investigate even with moderate confidence |
+   | 61-80 (High) | 65 | Avoid false alarms on important issues |
+   | 41-60 (Medium) | 75 | Need high confidence to justify effort |
+   | 21-40 (Low) | 85 | Only if very confident |
+   | 0-20 (Minor) | 95 | Only if nearly certain |
 
-Based on the changes summary, determine which review agents are applicable:
+   **Remove issues below threshold.**
 
-- **Always applicable**: bug-hunter, code-quality-reviewer, security-auditor, historical-context-reviewer
-- **If test files changed**: test-coverage-reviewer
-- **If types, API, data modeling changed**: contracts-reviewer
+3. **Post Results**
+   - PR exists → `gh pr comment`
+   - No PR → Print to console
 
-#### Launch Review Agents
-
-**Parallel approach**:
-
-- Launch all agents simultaneously
-- Provide full list of modified files and summary as context
-- Highlight which PR/branch they are reviewing
-- Provide list of files with project guidelines (README.md, CLAUDE.md, constitution.md)
-- **CRITICAL**: Explicitly instruct each agent that they MUST ONLY report issues on CHANGED LINES from the diff - never on pre-existing code
-- Results should come back together
-
-### Phase 3: Confidence & Impact Scoring
-
-1. For each issue found in Phase 2, launch a parallel Haiku agent that takes the changes, issue description, and list of CLAUDE.md files, and returns TWO scores:
-
-   **Confidence Score (0-100)** - Level of confidence that the issue is real:
-
-   a. 0: Not confident at all. False positive that doesn't stand up to scrutiny, or is a pre-existing issue.
-   b. 25: Somewhat confident. Might be real, but may also be false positive. If stylistic, not explicitly called out in CLAUDE.md.
-   c. 50: Moderately confident. Verified as real issue, but might be a nitpick or not important relative to the rest of the changes.
-   d. 75: Highly confident. Double-checked and verified as very likely real issue that will be hit in practice. Directly mentioned in CLAUDE.md.
-   e. 100: Absolutely certain. Confirmed real issue that will happen frequently in practice.
-
-   **Impact Score (0-100)** - Severity if left unfixed:
-
-   a. 0-20 (Low): Minor code smell or style inconsistency.
-   b. 21-40 (Medium-Low): Code quality issue hurting maintainability, no functional impact.
-   c. 41-60 (Medium): Will cause errors under edge cases or degrade performance.
-   d. 61-80 (High): Will break core features or corrupt data under normal usage.
-   e. 81-100 (Critical): Runtime errors, data loss, security breaches, or complete feature failure.
-
-   For issues flagged due to CLAUDE.md instructions, double check that CLAUDE.md actually calls out that issue.
-
-2. **Filter issues using the progressive threshold table**:
-
-   | Impact Score | Minimum Confidence Required | Rationale |
-   |--------------|----------------------------|-----------|
-   | 81-100 (Critical) | 50 | Critical issues warrant investigation even with moderate confidence |
-   | 61-80 (High) | 65 | High impact issues need good confidence to avoid false alarms |
-   | 41-60 (Medium) | 75 | Medium issues need high confidence to justify addressing |
-   | 21-40 (Medium-Low) | 85 | Low-medium impact issues need very high confidence |
-   | 0-20 (Low) | 95 | Minor issues only included if nearly certain |
-
-   **Filter out any issues that don't meet the minimum confidence threshold for their impact level.**
-
-3. **Post Review Results**:
-
-   - **If PR exists**: Use `gh pr comment` to post the review report as a comment
-   - **If no PR exists**: Print the review report to the console
-
-   When writing the review:
-   - Keep output brief
-   - Use emojis
-   - Link and cite relevant code, files, and URLs
-
-#### Mandatory Filtering: What to NEVER Report
-
-**AUTOMATIC REJECTION - These are NOT valid issues:**
-
-1. **Pre-existing issues** - ANY issue on code that was not added or modified in this PR
-2. **Issues on unchanged lines** - Even in modified files, only report issues on the actual changed lines
-3. **Issues outside the diff** - Code context is for understanding, not for reporting issues
-4. **Linter/compiler issues** - Missing imports, type errors, formatting (CI handles these)
-5. **Pedantic nitpicks** - Minor style issues a senior engineer wouldn't mention
-6. **General quality issues** - Unless explicitly required in CLAUDE.md
-7. **Silenced issues** - Code with lint-ignore comments
-8. **Intentional changes** - Functionality changes that are clearly deliberate
-
-Notes:
-
-- Use build, lint and tests commands if available
-- Use `gh` to interact with Github rather than web fetch
-- Make a todo list first
-- Cite and link each bug (link to CLAUDE.md if referring to it)
-
-### Review Report Template
-
-**IMPORTANT**: You MUST use this EXACT format. Do not add extra sections, explanations, or variations.
+## Output Format
 
 ```markdown
 ## Code Review
@@ -156,27 +103,24 @@ Notes:
 
 | File | Line | Type | Issue | Fix |
 |------|------|------|-------|-----|
-| `path/file.ts` | 42 | 🔴 Bug | Description | Suggested fix |
-| `path/file.ts` | 58 | 🟡 Security | Description | Suggested fix |
-| `path/file.ts` | 73 | 🔵 Quality | Description | Suggested fix |
+| `path/file.ts` | 42 | 🔴 Bug | Description (10 words max) | Fix (10 words max) |
+
 ```
 
-**Type legend** (use these exact labels):
+**Type labels:**
 - 🔴 Bug - Logic errors, crashes, data issues
 - 🟡 Security - Vulnerabilities, auth issues
 - 🔵 Quality - Maintainability, patterns
-- 🟢 Test - Missing test coverage
+- 🟢 Test - Missing coverage
+- 🟣 Contract - API/type design
 
-**Rules for output**:
-1. One row per issue, max 5-7 issues
-2. File path without repository prefix
-3. Line number must be from the diff
-4. Issue description: 10 words max
-5. Fix suggestion: 10 words max
-6. No explanations outside the table
-7. No scores, checklists, or verbose sections
+**Rules:**
+- Max 5-7 issues
+- Line numbers from diff only
+- 10 words max per cell
+- No verbose explanations
 
-### If No Issues Found
+### If No Issues
 
 ```markdown
 ## Code Review
@@ -186,6 +130,13 @@ Notes:
 No issues found.
 ```
 
-## Remember
+## Filtering Rules
 
-Be concise. One table, clear issues, done. No verbose explanations or multiple sections.
+**Never report:**
+- Pre-existing issues (not in diff)
+- Linter/compiler issues (CI handles)
+- Pedantic nitpicks
+- Code with lint-ignore comments
+- Intentional deliberate changes
+
+**Skip folders:** `spec/`, `reports/` (unless specifically requested)
