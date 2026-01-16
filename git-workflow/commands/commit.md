@@ -1,39 +1,71 @@
 ---
 description: Create git commits with user approval and no Claude attribution
+allowed-tools: Bash, Read, AskUserQuestion
 ---
 
-# Committing Work
+# Commit Changes
 
-## Overview
+**Core principle:** Analyze → Plan → Approve → Execute
 
-**Core principle:** Analyze changes → Plan commits → Execute.
+## Step 1: Analyze Changes
 
-## The Process
+```bash
+git status
+git diff --stat
+git diff
+```
 
-### Step 1: Think about what changed
+Review conversation history to understand what was accomplished. Consider whether changes should be one commit or multiple logical commits.
 
-1. Review the conversation history and understand what was accomplished
-2. Run `git status` to see current changes
-3. Run `git diff` to understand the modifications
-4. Consider whether changes should be one commit or multiple logical commits
+## Step 2: Plan Commits
 
-### Step 2: Plan your commit(s)
+For each planned commit, determine:
+1. Which files belong together (by concern/purpose)
+2. The commit message following Angular convention: `<type>(<scope>): <description>`
 
-1. Identify which files belong together
-2. Draft clear, descriptive commit messages
-3. Use imperative mood in commit messages
-4. Focus on why the changes were made, not just what
+**REQUIRED:** Use skill `committing-work` for commit type reference and format guidelines.
 
-### Step 3: Present your plan to the user
+## Step 3: Request Approval
 
-> **IMPORTANT** this step can be skipped if the user explicitely allowed.
+> **Skip this step ONLY if user explicitly pre-approved commits.**
 
-1. List the files you plan to add for each commit
-2. Show the commit message(s) you'll use
-3. Ask: "I plan to create [N] commit(s) with these changes. Shall I proceed?"
+Present the plan to the user:
 
-### Step 4: Execute planned commits
+```
+I plan to create [N] commit(s):
 
-- Use `git add` with specific files (never use `-A` or `.`)
-- Create commits with your planned messages
-- Show the result with `git log --oneline -n [number]`
+1. `<type>(<scope>): <description>`
+   Files: file1.ts, file2.ts
+
+2. `<type>(<scope>): <description>`
+   Files: file3.ts
+
+Shall I proceed?
+```
+
+Wait for user approval before continuing.
+
+## Step 4: Execute Commits
+
+For each approved commit:
+
+```bash
+# Stage specific files (NEVER use -A or .)
+git add path/to/file1.ts path/to/file2.ts
+
+# Commit with message
+git commit -m "<type>(<scope>): <description>"
+```
+
+After all commits:
+
+```bash
+git log --oneline -n [number_of_commits]
+```
+
+## Rules
+
+- **NEVER** use `git add -A` or `git add .`
+- **NEVER** skip user approval unless explicitly authorized
+- **ALWAYS** stage files individually by path
+- **ALWAYS** show commit log after execution
