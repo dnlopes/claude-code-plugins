@@ -1,5 +1,4 @@
 ---
-name: validate-docs
 description: Validate documentation system integrity - check front-matter, scope paths, cross-references
 argument-hint: "[--fix]"
 ---

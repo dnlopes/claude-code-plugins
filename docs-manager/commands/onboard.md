@@ -1,5 +1,4 @@
 ---
-name: onboard
 description: Create AGENTS.md, CLAUDE.md, and docs/ documentation for a repository
 argument-hint: "[--auto]"
 ---

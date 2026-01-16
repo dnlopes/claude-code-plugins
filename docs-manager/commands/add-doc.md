@@ -1,5 +1,4 @@
 ---
-name: add-doc
 description: Generate ad-hoc documentation for specific code locations with staleness tracking
 argument-hint: "<path-or-topic> [--auto]"
 ---

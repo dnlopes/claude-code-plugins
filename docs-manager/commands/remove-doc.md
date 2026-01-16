@@ -1,5 +1,4 @@
 ---
-name: remove-doc
 description: Remove obsolete documentation and clean up references
 argument-hint: "<doc-path>"
 ---

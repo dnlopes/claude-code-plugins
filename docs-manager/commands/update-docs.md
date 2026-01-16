@@ -1,5 +1,4 @@
 ---
-name: update-docs
 description: Check and update stale documentation based on git changes
 argument-hint: "[doc-path] [--auto]"
 ---
