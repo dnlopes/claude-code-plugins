@@ -1,76 +1,39 @@
 # ui-dev
 
-UI development toolkit with shadcn/ui component documentation and browser automation.
+UI development toolkit with headless browser automation and shadcn/ui component documentation.
 
 **Version:** 1.3.0
 
+## What's Included
+
+| Component | Type | Purpose |
+|-----------|------|---------|
+| `agent-browser` | Skill | Headless browser CLI for UI testing and automation |
+| `shadcn` | MCP Server | Access shadcn/ui component documentation |
+
 ## Skills
 
-| Skill | Activated When |
-|-------|----------------|
-| `agent-browser` | Troubleshooting UI issues, testing UI changes, or writing bash-based e2e tests |
+### agent-browser
 
-## MCP Servers
+Headless browser automation optimized for AI agents. Uses accessibility snapshots with deterministic refs for reliable element selection.
 
-| Server | Purpose |
-|--------|---------|
-| `shadcn` | Access shadcn/ui component documentation |
+**Activated when:** Troubleshooting UI issues, testing UI changes, writing e2e tests, or automating browser interactions.
 
-## Agent Browser
-
-Headless browser automation CLI for AI agents.
-
-### Quick Start
-
+**Quick example:**
 ```bash
 agent-browser open example.com
-agent-browser snapshot                    # Get accessibility tree with refs
-agent-browser click @e2                   # Click by ref from snapshot
-agent-browser fill @e3 "test@example.com" # Fill by ref
-agent-browser screenshot page.png
+agent-browser snapshot -i        # Get interactive elements with refs
+agent-browser click @e2          # Click by ref
+agent-browser fill @e3 "text"    # Fill by ref
 agent-browser close
 ```
 
-### Core Commands
+See the full skill documentation for complete command reference.
 
-| Command | Description |
-|---------|-------------|
-| `open <url>` | Navigate to URL |
-| `snapshot` | Accessibility tree with refs (best for AI) |
-| `click <sel>` | Click element |
-| `fill <sel> <text>` | Clear and fill |
-| `screenshot [path]` | Take screenshot |
-| `get text/html/value <sel>` | Get element info |
-| `wait <selector/ms>` | Wait for element or time |
-| `close` | Close browser |
+## MCP Servers
 
-### Selectors
+### shadcn
 
-**Refs (recommended for AI):**
-```bash
-agent-browser snapshot      # Get refs
-agent-browser click @e2     # Use ref
-```
+Provides access to shadcn/ui component documentation via MCP.
 
-**CSS/Text/XPath:**
-```bash
-agent-browser click "#submit"
-agent-browser click "text=Submit"
-```
-
-**Semantic:**
-```bash
-agent-browser find role button click --name "Submit"
-agent-browser find label "Email" fill "test@test.com"
-```
-
-### Optimal AI Workflow
-
-```bash
-agent-browser open example.com
-agent-browser snapshot -i --json   # Interactive elements only
-# AI identifies target refs
-agent-browser click @e2
-agent-browser fill @e3 "input"
-agent-browser snapshot -i --json   # Get new state
-```
+**Usage:** Use the `mcp__plugin_ui-dev_shadcn__getComponents` and `mcp__plugin_ui-dev_shadcn__getComponent` tools to browse available components and get detailed documentation.

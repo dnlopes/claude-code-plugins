@@ -1,285 +1,77 @@
 ---
-name: Agent Browser
-description: Use this skill when troubleshooting UI issues, testing UI changes, or writing bash based end-to-end tests with UI.
+name: agent-browser
+description: Use when troubleshooting UI issues, testing UI changes, writing bash-based e2e tests, or automating browser interactions. Provides headless browser CLI with accessibility snapshots and deterministic refs for AI-friendly element selection.
 ---
 
 # Agent Browser
 
-Headless browser automation CLI for AI agents.
+Headless browser automation CLI optimized for AI agents.
 
-## Quick Start
+## Overview
 
-```bash
-agent-browser open example.com
-agent-browser snapshot                    # Get accessibility tree with refs
-agent-browser click @e2                   # Click by ref from snapshot
-agent-browser fill @e3 "test@example.com" # Fill by ref
-agent-browser get text @e1                # Get text by ref
-agent-browser screenshot page.png
-agent-browser close
-```
+Agent Browser provides deterministic browser control through accessibility snapshots and refs. Instead of fragile CSS selectors, agents take snapshots to get refs (e.g., `@e2`) that point to exact elements. This snapshot-then-act workflow is optimal for LLM-based automation.
 
-### Traditional Selectors
+## When to Use
 
-```bash
-agent-browser click "#submit"
-agent-browser fill "#email" "test@example.com"
-agent-browser find role button click --name "Submit"
-```
+**Use for:**
+- Troubleshooting UI issues (visual inspection, element state)
+- Testing UI changes before/after comparisons
+- Writing bash-based end-to-end tests
+- Automating form submissions or multi-step workflows
+- Debugging visibility, focus, or interaction problems
 
-## Commands
+**Do NOT use for:**
+- API testing (use curl or API tools)
+- Non-visual backend operations
+- Static file generation
+- Tasks that don't require browser rendering
 
-### Core Commands
+## Quick Reference
 
-```bash
-agent-browser open <url>              # Navigate to URL (aliases: goto, navigate)
-agent-browser click <sel>             # Click element
-agent-browser dblclick <sel>          # Double-click element
-agent-browser focus <sel>             # Focus element
-agent-browser type <sel> <text>       # Type into element
-agent-browser fill <sel> <text>       # Clear and fill
-agent-browser press <key>             # Press key (Enter, Tab, Control+a) (alias: key)
-agent-browser keydown <key>           # Hold key down
-agent-browser keyup <key>             # Release key
-agent-browser hover <sel>             # Hover element
-agent-browser select <sel> <val>      # Select dropdown option
-agent-browser check <sel>             # Check checkbox
-agent-browser uncheck <sel>           # Uncheck checkbox
-agent-browser scroll <dir> [px]       # Scroll (up/down/left/right)
-agent-browser scrollintoview <sel>    # Scroll element into view (alias: scrollinto)
-agent-browser drag <src> <tgt>        # Drag and drop
-agent-browser upload <sel> <files>    # Upload files
-agent-browser screenshot [path]       # Take screenshot (--full for full page)
-agent-browser pdf <path>              # Save as PDF
-agent-browser snapshot                # Accessibility tree with refs (best for AI)
-agent-browser eval <js>               # Run JavaScript
-agent-browser close                   # Close browser (aliases: quit, exit)
-```
+| Task | Command |
+|------|---------|
+| Open page | `agent-browser open <url>` |
+| Get elements | `agent-browser snapshot` |
+| Click element | `agent-browser click @e2` |
+| Fill input | `agent-browser fill @e3 "text"` |
+| Get text | `agent-browser get text @e1` |
+| Screenshot | `agent-browser screenshot [path]` |
+| Wait for element | `agent-browser wait <selector>` |
+| Close browser | `agent-browser close` |
 
-### Get Info
+## Snapshot-First Pattern
 
-```bash
-agent-browser get text <sel>          # Get text content
-agent-browser get html <sel>          # Get innerHTML
-agent-browser get value <sel>         # Get input value
-agent-browser get attr <sel> <attr>   # Get attribute
-agent-browser get title               # Get page title
-agent-browser get url                 # Get current URL
-agent-browser get count <sel>         # Count matching elements
-agent-browser get box <sel>           # Get bounding box
-```
+The recommended interaction pattern follows a snapshot-first approach:
 
-### Check State
+1. **Navigate** to the target URL
+2. **Snapshot** to get accessibility tree with refs
+3. **Identify** target elements from ref output
+4. **Interact** using refs (not CSS selectors)
+5. **Re-snapshot** after DOM changes
 
-```bash
-agent-browser is visible <sel>        # Check if visible
-agent-browser is enabled <sel>        # Check if enabled
-agent-browser is checked <sel>        # Check if checked
-```
-
-### Find Elements (Semantic Locators)
-
-```bash
-agent-browser find role <role> <action> [value]       # By ARIA role
-agent-browser find text <text> <action>               # By text content
-agent-browser find label <label> <action> [value]     # By label
-agent-browser find placeholder <ph> <action> [value]  # By placeholder
-agent-browser find alt <text> <action>                # By alt text
-agent-browser find title <text> <action>              # By title attr
-agent-browser find testid <id> <action> [value]       # By data-testid
-agent-browser find first <sel> <action> [value]       # First match
-agent-browser find last <sel> <action> [value]        # Last match
-agent-browser find nth <n> <sel> <action> [value]     # Nth match
-```
-
-**Actions:** `click`, `fill`, `check`, `hover`, `text`
-
-**Examples:**
-
-```bash
-agent-browser find role button click --name "Submit"
-agent-browser find text "Sign In" click
-agent-browser find label "Email" fill "test@test.com"
-agent-browser find first ".item" click
-agent-browser find nth 2 "a" text
-```
-
-### Wait
-
-```bash
-agent-browser wait <selector>         # Wait for element to be visible
-agent-browser wait <ms>               # Wait for time (milliseconds)
-agent-browser wait --text "Welcome"   # Wait for text to appear
-agent-browser wait --url "**/dash"    # Wait for URL pattern
-agent-browser wait --load networkidle # Wait for load state
-agent-browser wait --fn "window.ready === true"  # Wait for JS condition
-```
-
-**Load states:** `load`, `domcontentloaded`, `networkidle`
-
-### Mouse Control
-
-```bash
-agent-browser mouse move <x> <y>      # Move mouse
-agent-browser mouse down [button]     # Press button (left/right/middle)
-agent-browser mouse up [button]       # Release button
-agent-browser mouse wheel <dy> [dx]   # Scroll wheel
-```
-
-### Browser Settings
-
-```bash
-agent-browser set viewport <w> <h>    # Set viewport size
-agent-browser set device <name>       # Emulate device ("iPhone 14")
-agent-browser set geo <lat> <lng>     # Set geolocation
-agent-browser set offline [on|off]    # Toggle offline mode
-agent-browser set headers <json>      # Extra HTTP headers
-agent-browser set credentials <u> <p> # HTTP basic auth
-agent-browser set media [dark|light]  # Emulate color scheme
-```
-
-### Cookies & Storage
-
-```bash
-agent-browser cookies                 # Get all cookies
-agent-browser cookies set <name> <val> # Set cookie
-agent-browser cookies clear           # Clear cookies
-
-agent-browser storage local           # Get all localStorage
-agent-browser storage local <key>     # Get specific key
-agent-browser storage local set <k> <v>  # Set value
-agent-browser storage local clear     # Clear all
-
-agent-browser storage session         # Same for sessionStorage
-```
-
-### Network
-
-```bash
-agent-browser network route <url>              # Intercept requests
-agent-browser network route <url> --abort      # Block requests
-agent-browser network route <url> --body <json>  # Mock response
-agent-browser network unroute [url]            # Remove routes
-agent-browser network requests                 # View tracked requests
-agent-browser network requests --filter api    # Filter requests
-```
-
-### Tabs & Windows
-
-```bash
-agent-browser tab                     # List tabs
-agent-browser tab new [url]           # New tab (optionally with URL)
-agent-browser tab <n>                 # Switch to tab n
-agent-browser tab close [n]           # Close tab
-agent-browser window new              # New window
-```
-
-### Frames
-
-```bash
-agent-browser frame <sel>             # Switch to iframe
-agent-browser frame main              # Back to main frame
-```
-
-### Dialogs
-
-```bash
-agent-browser dialog accept [text]    # Accept (with optional prompt text)
-agent-browser dialog dismiss          # Dismiss
-```
-
-### Debug
-
-```bash
-agent-browser trace start [path]      # Start recording trace
-agent-browser trace stop [path]       # Stop and save trace
-agent-browser console                 # View console messages
-agent-browser console --clear         # Clear console
-agent-browser errors                  # View page errors
-agent-browser errors --clear          # Clear errors
-agent-browser highlight <sel>         # Highlight element
-agent-browser state save <path>       # Save auth state
-agent-browser state load <path>       # Load auth state
-```
-
-### Navigation
-
-```bash
-agent-browser back                    # Go back
-agent-browser forward                 # Go forward
-agent-browser reload                  # Reload page
-```
-
-### Setup
-
-```bash
-agent-browser install                 # Download Chromium browser
-agent-browser install --with-deps     # Also install system deps (Linux)
-```
-
-## Sessions
-
-Run multiple isolated browser instances:
-
-```bash
-# Different sessions
-agent-browser --session agent1 open site-a.com
-agent-browser --session agent2 open site-b.com
-agent-browser session list      # List active sessions
-agent-browser session           # Show current session
-```
-
-## Snapshot Options
-
-The `snapshot` command supports filtering to reduce output size:
-
-```bash
-agent-browser snapshot                    # Full accessibility tree
-agent-browser snapshot -i                 # Interactive elements only (buttons, inputs, links)
-agent-browser snapshot -c                 # Compact (remove empty structural elements)
-agent-browser snapshot -d 3               # Limit depth to 3 levels
-agent-browser snapshot -s "#main"         # Scope to CSS selector
-agent-browser snapshot -i -c -d 5         # Combine options
-```
+This pattern ensures deterministic element selection and avoids fragile selectors.
 
 ## Selectors
 
-### Refs (Recommended for AI)
+### Refs (Recommended)
 
-Refs provide deterministic element selection from snapshots:
+Refs from snapshots provide deterministic element targeting:
 
 ```bash
-agent-browser snapshot      # 1. Get snapshot with refs
-# Output:
-# - heading "Example Domain" [ref=e1] [level=1]
-# - button "Submit" [ref=e2]
-# - textbox "Email" [ref=e3]
-# - link "Learn more" [ref=e4]
+agent-browser snapshot
+# Output: - button "Submit" [ref=e2]
+#         - textbox "Email" [ref=e3]
 
-# 2. Use refs to interact
-agent-browser click @e2                   # Click the button
-agent-browser fill @e3 "test@example.com" # Fill the textbox
-agent-browser get text @e1                # Get heading text
-agent-browser hover @e4                   # Hover the link
+agent-browser click @e2       # Click button
+agent-browser fill @e3 "x"    # Fill textbox
 ```
 
-**Why use refs?**
+**Why refs?** Deterministic (exact element from snapshot), fast (no re-query), AI-friendly.
 
-- **Deterministic**: Ref points to exact element from snapshot
-- **Fast**: No DOM re-query needed
-- **AI-friendly**: Snapshot + ref workflow is optimal for LLMs
-
-### CSS Selectors
+### CSS, Text, XPath
 
 ```bash
-agent-browser click "#id"
-agent-browser click ".class"
-agent-browser click "div > button"
-```
-
-### Text & XPath
-
-```bash
+agent-browser click "#submit"
 agent-browser click "text=Submit"
 agent-browser click "xpath=//button"
 ```
@@ -289,32 +81,167 @@ agent-browser click "xpath=//button"
 ```bash
 agent-browser find role button click --name "Submit"
 agent-browser find label "Email" fill "test@test.com"
+agent-browser find text "Sign In" click
 ```
 
-## Agent Mode
+**Actions:** `click`, `fill`, `check`, `hover`, `text`
 
-Use `--json` for machine-readable output:
+## Command Reference
+
+### Navigation
 
 ```bash
-agent-browser snapshot --json
-# Returns: {"success":true,"data":{"snapshot":"...","refs":{"e1":{"role":"heading","name":"Title"},...}}}
-
-agent-browser get text @e1 --json
-agent-browser is visible @e2 --json
+agent-browser open <url>          # Navigate (aliases: goto, navigate)
+agent-browser back                # Go back
+agent-browser forward             # Go forward
+agent-browser reload              # Reload page
 ```
 
-### Optimal AI Workflow
+### Interaction
 
 ```bash
-# 1. Navigate and get snapshot
-agent-browser open example.com
-agent-browser snapshot -i --json   # AI parses tree and refs
-
-# 2. AI identifies target refs from snapshot
-# 3. Execute actions using refs
-agent-browser click @e2
-agent-browser fill @e3 "input text"
-
-# 4. Get new snapshot if page changed
-agent-browser snapshot -i --json
+agent-browser click <sel>         # Click
+agent-browser dblclick <sel>      # Double-click
+agent-browser fill <sel> <text>   # Clear and fill
+agent-browser type <sel> <text>   # Type into element
+agent-browser press <key>         # Press key (Enter, Tab, Control+a)
+agent-browser hover <sel>         # Hover
+agent-browser focus <sel>         # Focus
+agent-browser select <sel> <val>  # Select dropdown
+agent-browser check <sel>         # Check checkbox
+agent-browser uncheck <sel>       # Uncheck
+agent-browser scroll <dir> [px]   # Scroll (up/down/left/right)
+agent-browser drag <src> <tgt>    # Drag and drop
+agent-browser upload <sel> <files> # Upload files
 ```
+
+### Get Information
+
+```bash
+agent-browser get text <sel>      # Get text content
+agent-browser get html <sel>      # Get innerHTML
+agent-browser get value <sel>     # Get input value
+agent-browser get attr <sel> <attr> # Get attribute
+agent-browser get title           # Get page title
+agent-browser get url             # Get current URL
+agent-browser get count <sel>     # Count matching elements
+agent-browser get box <sel>       # Get bounding box
+```
+
+### State Checks
+
+```bash
+agent-browser is visible <sel>    # Check visibility
+agent-browser is enabled <sel>    # Check enabled state
+agent-browser is checked <sel>    # Check checkbox state
+```
+
+### Wait
+
+```bash
+agent-browser wait <selector>     # Wait for element visible
+agent-browser wait <ms>           # Wait milliseconds
+agent-browser wait --text "text"  # Wait for text
+agent-browser wait --url "**/path" # Wait for URL pattern
+agent-browser wait --load networkidle # Wait for load state
+agent-browser wait --fn "window.ready === true" # Wait for JS condition
+```
+
+### Snapshot Options
+
+```bash
+agent-browser snapshot            # Full accessibility tree
+agent-browser snapshot -i         # Interactive elements only
+agent-browser snapshot -c         # Compact (remove empty elements)
+agent-browser snapshot -d 3       # Limit depth
+agent-browser snapshot -s "#main" # Scope to selector
+agent-browser snapshot --json     # Machine-readable output
+```
+
+### Screenshot & PDF
+
+```bash
+agent-browser screenshot [path]   # Screenshot (--full for full page)
+agent-browser pdf <path>          # Save as PDF
+```
+
+### Browser Settings
+
+```bash
+agent-browser set viewport <w> <h> # Set viewport size
+agent-browser set device <name>   # Emulate device ("iPhone 14")
+agent-browser set geo <lat> <lng> # Set geolocation
+agent-browser set offline [on|off] # Toggle offline
+agent-browser set headers <json>  # Extra HTTP headers
+agent-browser set media [dark|light] # Emulate color scheme
+```
+
+### Cookies & Storage
+
+```bash
+agent-browser cookies             # Get all cookies
+agent-browser cookies set <n> <v> # Set cookie
+agent-browser cookies clear       # Clear cookies
+agent-browser storage local       # Get localStorage
+agent-browser storage local set <k> <v> # Set value
+agent-browser storage local clear # Clear all
+```
+
+### Network
+
+```bash
+agent-browser network route <url> # Intercept requests
+agent-browser network route <url> --abort # Block requests
+agent-browser network route <url> --body <json> # Mock response
+agent-browser network unroute [url] # Remove routes
+agent-browser network requests    # View tracked requests
+```
+
+### Tabs & Frames
+
+```bash
+agent-browser tab                 # List tabs
+agent-browser tab new [url]       # New tab
+agent-browser tab <n>             # Switch to tab
+agent-browser tab close [n]       # Close tab
+agent-browser frame <sel>         # Switch to iframe
+agent-browser frame main          # Back to main frame
+```
+
+### Debug
+
+```bash
+agent-browser trace start [path]  # Start recording
+agent-browser trace stop [path]   # Stop and save
+agent-browser console             # View console messages
+agent-browser errors              # View page errors
+agent-browser highlight <sel>     # Highlight element
+agent-browser state save <path>   # Save auth state
+agent-browser state load <path>   # Load auth state
+```
+
+### Sessions
+
+```bash
+agent-browser --session name open url # Named session
+agent-browser session list        # List active sessions
+agent-browser session             # Show current session
+```
+
+### Setup
+
+```bash
+agent-browser install             # Download Chromium
+agent-browser install --with-deps # With system deps (Linux)
+```
+
+## Common Mistakes
+
+| Mistake | Solution |
+|---------|----------|
+| Using CSS selectors instead of refs | Take `snapshot` first, use `@eN` refs |
+| Not waiting for page load | Add `wait --load networkidle` after navigation |
+| Stale refs after page change | Take new `snapshot` after interactions that change DOM |
+| Full snapshot on complex pages | Use `snapshot -i -c` for interactive/compact mode |
+| Forgetting to close browser | Always `close` when done to free resources |
+| Hard-coded waits | Use `wait <selector>` or `wait --text` instead of `wait <ms>` |

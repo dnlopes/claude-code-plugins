@@ -26,7 +26,7 @@
       "name": "ui-dev",
       "version": "1.3.0",
       "source": "./ui-dev",
-      "description": "UI development toolkit with shadcn/ui component documentation"
+      "description": "UI development toolkit with headless browser automation and shadcn/ui component documentation"
     },
     {
       "name": "governor",
