@@ -7,6 +7,10 @@ argument-hint: "<path-or-topic> [--auto]"
 
 Generate documentation for a specific path or topic with automatic staleness tracking.
 
+## Skills
+
+Load the `docs-manager:documenting-repositories` skill for frontmatter specification and documentation standards.
+
 ## Pre-flight
 
 Parse argument to determine target:
@@ -81,7 +85,17 @@ date -u +"%Y-%m-%dT%H:%M:%SZ"
 
 Launch `docs-manager:doc-generator` agent:
 - **Description**: "Generate focused documentation"
-- **Prompt**: "Generate documentation for <target> based on these findings: <findings>. Output to <location>. Include proper front-matter with scope paths: <scope_paths>. If creating module documentation, also create CLAUDE.md with content `@AGENTS.md`."
+- **Prompt**: "Generate ad-hoc documentation for <target> based on these findings: <findings>. Output to <location>. Use the Ad-hoc Document template with this frontmatter structure:
+  ```yaml
+  ---
+  scope:
+    paths:
+      - <scope_paths>
+    summary: \"<brief description of what this documents>\"
+  last_updated: <timestamp>
+  ---
+  ```
+  If creating module documentation, also create CLAUDE.md with content `@AGENTS.md`."
 
 **Capture**: Created file(s).
 
@@ -107,9 +121,12 @@ cat <output-path> | head -40
 ```
 
 Check:
-- [ ] Front-matter is valid YAML
+- [ ] Front-matter is valid YAML with `scope.paths`, `scope.summary`, and `last_updated`
+- [ ] Timestamp is ISO 8601 format (e.g., `2025-01-15T10:30:00Z`)
 - [ ] Scope paths match existing files
 - [ ] Content matches target scope
+
+**CRITICAL**: Documents without proper frontmatter will NOT be tracked by `/docs-manager:update-docs`.
 
 ## Summary
 

@@ -21,14 +21,30 @@ Check documentation system integrity and optionally fix issues.
 
 ## Inventory
 
-Find all documentation files:
+Find all tracked documentation files. A document is tracked if it has YAML frontmatter with `last_updated` field.
 
 ```bash
-find . -name "AGENTS.md" -type f
-find . -name "CLAUDE.md" -type f
-find docs -name "*.md" -type f 2>/dev/null
-ls README.md 2>/dev/null
+# Find all markdown files (excluding node_modules, .git, vendor)
+find . -name "*.md" -type f \
+  ! -path "*/node_modules/*" \
+  ! -path "*/.git/*" \
+  ! -path "*/vendor/*" \
+  ! -path "*/.claude/*" \
+  2>/dev/null
 ```
+
+For each markdown file found, check if it has valid frontmatter:
+1. Read first 20 lines
+2. Check for YAML frontmatter (starts with `---`, ends with `---`)
+3. Check for `last_updated` field (required for tracking)
+
+**Include document if:**
+- Has valid YAML frontmatter AND
+- Has `last_updated` field
+
+**Special cases:**
+- CLAUDE.md files: Validate content is `@AGENTS.md` (no frontmatter required)
+- README.md: Frontmatter may be wrapped in HTML comments
 
 ## Validation Checks
 
@@ -90,15 +106,18 @@ ls <path>/AGENTS.md
 
 ### 5. Orphan Detection
 
-Find docs not referenced from AGENTS.md:
+Find tracked documents not referenced from any AGENTS.md:
+
+For each tracked document (has frontmatter with `last_updated`):
+1. Skip if it IS an AGENTS.md file
+2. Check if referenced from nearest AGENTS.md (via `@path` or markdown link)
 
 ```bash
-# List all docs
-find docs -name "*.md" -type f
-
-# Check each against AGENTS.md references
-grep -l "<doc-name>" AGENTS.md
+# For each tracked doc, check if referenced
+grep -l "<doc-path>" */AGENTS.md AGENTS.md 2>/dev/null
 ```
+
+**Note:** Orphaned docs are warnings, not errors. Ad-hoc documents may intentionally exist without AGENTS.md references.
 
 ## Report
 

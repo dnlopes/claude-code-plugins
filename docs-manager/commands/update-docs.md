@@ -20,16 +20,30 @@ ls AGENTS.md docs/*.md 2>/dev/null
 
 ## Phase 1: Inventory
 
-Find all documentation and extract front-matter:
+Find all tracked documentation files. A document is tracked if it has YAML frontmatter with `last_updated` field.
 
 ```bash
-find . -name "AGENTS.md" -type f
-find docs -name "*.md" -type f 2>/dev/null
-ls README.md 2>/dev/null
+# Find all markdown files (excluding node_modules, .git, vendor)
+find . -name "*.md" -type f \
+  ! -path "*/node_modules/*" \
+  ! -path "*/.git/*" \
+  ! -path "*/vendor/*" \
+  ! -path "*/.claude/*" \
+  2>/dev/null
 ```
 
-For each document, read front-matter to get:
-- `scope.paths` - Files to check for changes
+For each markdown file found, check if it has valid frontmatter:
+1. Read first 20 lines
+2. Check for YAML frontmatter (starts with `---`, ends with `---`)
+3. Check for `last_updated` field (required for tracking)
+4. Optionally extract `scope.paths` for staleness detection
+
+**Include document if:**
+- Has valid YAML frontmatter AND
+- Has `last_updated` field
+
+For each tracked document, extract:
+- `scope.paths` - Files to check for changes (if present)
 - `last_updated` - When last reviewed
 
 If specific document requested via argument, only process that one.

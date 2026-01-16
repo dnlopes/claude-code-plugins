@@ -342,6 +342,43 @@ last_updated: <TIMESTAMP>
 - <Other module>: <how it's used>
 ```
 
+### Ad-hoc Document
+
+For documents created via `/docs-manager:add-doc` that don't fit standard categories:
+
+```markdown
+---
+scope:
+  paths:
+    - <paths this document covers>
+  summary: "<Brief description of what this documents>"
+last_updated: <TIMESTAMP>
+---
+
+# <Title>
+
+<What this document covers and why it exists>
+
+## Overview
+
+<High-level explanation>
+
+## Key Concepts
+
+### <Concept Name>
+<Explanation>
+
+## Usage
+
+<How to use/interact with what's documented>
+
+## Related
+
+- <Links to related docs or code>
+```
+
+**Note:** Ad-hoc documents MUST have the `scope.paths`, `scope.summary`, and `last_updated` frontmatter fields to be tracked by `/docs-manager:update-docs`.
+
 ## Abstraction Level Rules
 
 | DO Document | DON'T Document |
