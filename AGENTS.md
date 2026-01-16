@@ -1,49 +1,71 @@
----
-last_updated: 2026-01-15T10:02:21Z
----
+# Claude Code Plugins Marketplace
 
-# Claude Code Plugins
+This repository contains a collection of Claude Code plugins that extend Claude's capabilities with commands, skills, and agents.
 
-A collection of production-ready Claude Code plugins providing specialized agents for development workflows, code review, documentation management, and UI development.
+## Tenets
 
-## Quick Start
+CRITICAL: These tenets are MANDATORY and MUST be followed in all work on this codebase.
 
-```bash
-# No build required - plugins are markdown-based configuration
-# Clone to your Claude Code plugins directory and they auto-discover via marketplace.json
-```
+### T1. Plugin Isolation
 
-## Principles
+Each plugin must be self-contained within its own directory with no cross-plugin dependencies. Plugins must not reference commands, skills, or agents from other plugins. This ensures plugins can be versioned, distributed, and installed independently.
 
-These rules MUST be followed:
+**Severity:** critical
 
-1. **Document agent constraints in frontmatter**: Agent markdown files must declare name, description, allowed tools, and model in YAML frontmatter
+**Evidence:**
+- `marketplace.json:7-36` - Each plugin is defined as a separate source directory
+- `governor/.claude-plugin/plugin.json:1-8` - Plugin metadata is contained within plugin directory
+- `docs-manager/commands/onboard.md:35` - Commands reference only their own plugin's agents (`docs-manager:codebase-explorer`)
 
-2. **Separate agent-optimized from human-facing documentation**: AGENTS.md and docs/*.md for AI consumption; README.md for humans
+### T2. File Type Separation
 
-3. **Bump plugin version on every change**: Always increment the version when modifying a plugin
+Commands, skills, and agents must be organized into distinct directories (`commands/`, `skills/`, `agents/`) within each plugin. Commands orchestrate workflows, skills provide reusable knowledge, and agents are autonomous workers.
 
-4. **Version plugins independently**: Each plugin maintains its own version; update both `<plugin>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
+**Severity:** medium
 
-## Documentation
+**Evidence:**
+- `governor/commands/setup.md:1` - Command files in `commands/` directory
+- `governor/skills/tenet-governance/SKILL.md:1` - Skills in `skills/` directory with `SKILL.md` as entry point
+- `governor/agents/tenet-verifier.md:1` - Agents in `agents/` directory
 
-@docs/architecture.md
-@docs/domain.md
-@docs/patterns.md
-@docs/development.md
+### T3. Required Frontmatter
 
-- [Architecture](docs/architecture.md) - System design and components
-- [Domain](docs/domain.md) - Plugin concepts and terminology
-- [Patterns](docs/patterns.md) - Code conventions and examples
-- [Development](docs/development.md) - Build, test, and development
+All command, skill, and agent files must include YAML frontmatter. Commands must have a `description` field and must NOT have a `name` field. Skills must have `name` and `description` fields. Agents must have `name`, `description`, and `color` fields.
 
-## Key Directories
+**Severity:** high
 
-| Directory | Purpose |
-|-----------|---------|
-| `dev-toolkit/` | Codebase analysis, research, and development pattern agents |
-| `docs-manager/` | AI-optimized documentation with git-based staleness tracking |
-| `git-workflow/` | Structured commits and PR creation |
-| `review-toolkit/` | Multi-agent code review with confidence scoring |
-| `ui-dev/` | Frontend design, browser automation, and shadcn/ui MCP server |
-| `governor/` | Project tenets management with validation |
+**Evidence:**
+- `governor/commands/setup.md:1-12` - Command with `description` and `allowed-tools` in frontmatter (no `name` field)
+- `governor/skills/tenet-governance/SKILL.md:1-4` - Skill with `name` and `description`
+- `governor/agents/tenet-verifier.md:1-6` - Agent with `name`, `description`, `model`, and `color`
+
+### T4. Skills Provide Reference, Not Action
+
+Skills must contain declarative knowledge (guidelines, formats, patterns) that inform agent behavior, but must not contain imperative workflow steps. Commands orchestrate actions; skills provide context for those actions.
+
+**Severity:** medium
+
+**Evidence:**
+- `governor/skills/tenet-governance/SKILL.md:22-35` - Declarative format specification, not workflow
+- `docs-manager/skills/documenting-repositories/SKILL.md:8-77` - Standards and formats, no action steps
+- `governor/commands/setup.md:14-191` - Command contains workflow steps, references skill for format knowledge
+
+### T5. Version Consistency
+
+Plugin versions in `marketplace.json` must match versions in individual `plugin.json` files. This ensures the marketplace index accurately represents distributed plugin versions.
+
+**Severity:** critical
+
+**Evidence:**
+- `marketplace.json:33-35` - governor version 2.1.0
+- `governor/.claude-plugin/plugin.json:4` - governor version 2.1.0 (matches)
+- `marketplace.json:14-16` - docs-manager version 3.1.0
+- `docs-manager/.claude-plugin/plugin.json:4` - docs-manager version 3.1.0 (matches)
+
+## Tenet Exceptions
+
+Approved exceptions to tenets. Each must have justification.
+
+| File | Tenet | Reason | Approved |
+|------|-------|--------|----------|
+| (none) | | | |
