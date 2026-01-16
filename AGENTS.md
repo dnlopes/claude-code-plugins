@@ -62,6 +62,18 @@ Plugin versions in `marketplace.json` must match versions in individual `plugin.
 - `marketplace.json:14-16` - docs-manager version 3.1.0
 - `docs-manager/.claude-plugin/plugin.json:4` - docs-manager version 3.1.0 (matches)
 
+### T6. Version Bump on Change
+
+Any modification to functional plugin files (commands, skills, agents, or `plugin.json`) must be accompanied by a version bump in that plugin's `plugin.json`. Documentation files like README.md are excluded. This ensures all functional changes are versioned and trackable.
+
+**Severity:** high
+
+**Evidence:**
+- `452281a` - docs-manager command changes with version bump
+- `04d1866` - review-toolkit changes with version bump
+- `f4a5a91` - ui-dev changes with version bump
+- `4526a4a` - governor revamp with version bump
+
 ## Tenet Exceptions
 
 Approved exceptions to tenets. Each must have justification.
