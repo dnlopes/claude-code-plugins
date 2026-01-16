@@ -1,91 +1,87 @@
-# review-toolkit
+---
+scope:
+  paths:
+    - review-toolkit/**
+  summary: "Plugin overview and usage guide"
+last_updated: 2026-01-16T23:30:15Z
+---
 
-Multi-agent code review toolkit that orchestrates specialized reviewers for comprehensive pull request analysis.
+# Review-Toolkit Plugin
 
-**Version:** 3.0.0
+Multi-agent code review system for comprehensive pull request analysis.
 
-## Architecture
+## Goals
 
-```
-review-toolkit/
-├── commands/
-│   └── review-pr.md              # Orchestrator workflow
-├── skills/
-│   └── code-review-guidelines/   # Shared review knowledge
-│       ├── SKILL.md              # Core rules and principles
-│       └── references/           # Detailed checklists
-│           ├── code-quality-checklist.md
-│           ├── security-checklist.md
-│           ├── contracts-checklist.md
-│           └── test-coverage-checklist.md
-└── agents/
-    ├── bug-hunter.md             # Root cause analysis
-    ├── security-auditor.md       # Vulnerability detection
-    ├── code-quality-reviewer.md  # Maintainability review
-    ├── contracts-reviewer.md     # API/type design review
-    ├── test-coverage-reviewer.md # Test completeness review
-    └── historical-context-reviewer.md  # Git history analysis
-```
+The review-toolkit plugin orchestrates specialized review agents to conduct thorough code analysis:
+
+- **Bug detection** through systematic root cause analysis
+- **Security auditing** aligned with OWASP guidelines
+- **Code quality** assessment against project standards
+- **Contract review** for APIs, types, and data models
+- **Test coverage** analysis for behavioral completeness
+- **Historical context** from git history and past PRs
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/review-toolkit:review-pr` | Comprehensive pull request review using specialized agents |
-
-## Agents
-
-| Agent | Focus Area |
-|-------|------------|
-| `bug-hunter` | Bugs, logic errors, silent failures |
-| `security-auditor` | Security vulnerabilities and risks |
-| `code-quality-reviewer` | Project guidelines, maintainability, quality |
-| `contracts-reviewer` | Type design, API changes, data modeling |
-| `test-coverage-reviewer` | Test coverage quality and completeness |
-| `historical-context-reviewer` | Git blame, previous changes, patterns |
+| `/review-toolkit:review-pr` | Orchestrate multi-agent code review for PRs or local branch changes. Coordinates context gathering, agent execution, issue scoring, and output formatting |
 
 ## Skills
 
-| Skill | Purpose |
-|-------|---------|
-| `code-review-guidelines` | Shared rules, output formats, and confidence thresholds used by all agents |
+| Skill | Description |
+|-------|-------------|
+| `code-review-guidelines` | Foundational rules for all review agents: "Changed Lines Rule" (only review added/modified lines), output standards, severity classification, and confidence thresholds |
 
-## Workflow
+## Agents
 
-### Phase 1: Gather Context
+| Agent | Description |
+|-------|-------------|
+| `bug-hunter` | Identifies bugs through systematic root cause analysis. Prioritizes data loss, security breaches, silent failures, and race conditions |
+| `code-quality-reviewer` | Reviews code for adherence to project guidelines and clean code principles (DRY, KISS, YAGNI, SOLID) |
+| `security-auditor` | Identifies vulnerabilities using OWASP-aligned analysis. Focuses on exploitable issues, not theoretical risks |
+| `contracts-reviewer` | Analyzes API design, data models, and type definitions. Assesses breaking changes and migration paths |
+| `test-coverage-reviewer` | Reviews test coverage quality with focus on behavioral coverage, not line coverage |
+| `historical-context-reviewer` | Code archaeologist that examines git history and past PRs for relevant patterns and decisions |
 
-- Check for open PR with `gh pr view`
-- If no PR: review current branch vs `main`
-- Identify changed files and gather project guidelines
+## Workflows
 
-### Phase 2: Run Review Agents
+### PR Review Process
 
-Launch up to 6 parallel agents:
-- **Always run:** bug-hunter, code-quality-reviewer, security-auditor, historical-context-reviewer
-- **If test files changed:** test-coverage-reviewer
-- **If types/API changed:** contracts-reviewer
+1. **Gather Context**
+   - Detect review target (open PR or git diff)
+   - Identify changed files by type
+   - Collect project guidelines
 
-### Phase 3: Score and Filter
+2. **Run Review Agents** (parallel)
+   - Always: bug-hunter, code-quality-reviewer, security-auditor, historical-context-reviewer
+   - Conditional: test-coverage-reviewer (if tests changed), contracts-reviewer (if APIs/types changed)
 
-Each issue gets two scores:
-- **Confidence (0-100):** How certain the issue is real
-- **Impact (0-100):** Severity if left unfixed
+3. **Score and Filter**
+   - Each finding scored by confidence (0-100) and impact (0-100)
+   - Progressive thresholds filter low-confidence issues
+   - Critical issues require only 50% confidence; minor issues require 95%
 
-Issues are filtered using progressive thresholds:
+4. **Post Results**
+   - PR exists: post via `gh pr comment`
+   - No PR: print to console
 
-| Impact | Min Confidence |
-|--------|----------------|
-| Critical (81-100) | 50 |
-| High (61-80) | 65 |
-| Medium (41-60) | 75 |
-| Low (21-40) | 85 |
-| Minor (0-20) | 95 |
+### Changed Lines Rule
 
-### Output
+All agents must only report issues on lines marked as additions or modifications in the diff. Pre-existing issues are silently filtered without mention.
 
-- PR exists: posts comment via `gh pr comment`
-- No PR: prints to console
+### Output Format
 
-## Critical Rule
+```markdown
+## Code Review
 
-**Only review changed lines.** Never report issues on pre-existing code. This rule is enforced by the `code-review-guidelines` skill loaded by all agents.
+**Result**: PASS / FAIL
+
+| File | Line | Type | Issue | Fix |
+|------|------|------|-------|-----|
+| `file.ts` | 42 | Bug | Description | Solution |
+```
+
+## Version
+
+4.0.0

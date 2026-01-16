@@ -1,70 +1,72 @@
-# governor
+---
+scope:
+  paths:
+    - governor/**
+  summary: "Plugin overview and usage guide"
+last_updated: 2026-01-16T23:30:15Z
+---
+
+# Governor Plugin
 
 Project tenets management with evidence tracking, severity levels, and CI/CD integration.
 
-**Version:** 2.1.0
+## Goals
+
+The governor plugin provides a framework for managing **architectural tenets**—critical project constraints that embody architectural decisions. It enables teams to:
+
+- **Discover** architectural constraints in existing codebases
+- **Document** tenets with evidence and severity levels
+- **Manage** tenet lifecycle (add, edit, remove, reorder)
+- **Verify** code compliance against tenets with confidence scoring
+- **Integrate** with CI/CD pipelines via JSON output
+
+Tenets differ from linting rules by being architectural (not style-based), project-specific, and requiring human judgment to verify.
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/governor:setup` | Discover architectural constraints and create tenets in AGENTS.md |
-| `/governor:verify` | Check code compliance against tenets with confidence scoring |
-| `/governor:manage` | Add, remove, edit, or reorder tenets with validation |
+| `/governor:setup` | Discover architectural constraints and create tenets in AGENTS.md with evidence and severity levels |
+| `/governor:verify` | Check code against tenets in AGENTS.md with confidence scoring. Supports JSON output for CI/CD |
+| `/governor:manage` | Add, remove, edit, or reorder tenets in AGENTS.md with validation and evidence tracking |
 
 ## Skills
 
-| Skill | Activated When |
-|-------|----------------|
-| `tenet-governance` | Working with architectural tenets (format, severity, verification patterns) |
+| Skill | Description |
+|-------|-------------|
+| `tenet-governance` | Comprehensive reference for tenet format, severity levels, validation criteria, and verification patterns across multiple languages |
 
 ## Agents
 
 | Agent | Description |
 |-------|-------------|
-| `tenet-verifier` | Verify code compliance against tenets |
+| `tenet-verifier` | Analyzes code files against project tenets and reports violations with precise file:line references and confidence scores |
 
 ## Workflows
 
-### Setup Tenets
+### Initial Tenet Discovery
 
-1. Pre-flight check for existing AGENTS.md and tenets
-2. Detect project type (Go, Node/TypeScript, Python, C#, Rust)
-3. Explore codebase for architectural patterns
-4. Review discovered tenets with user
-5. Generate AGENTS.md with approved tenets
+1. Run `/governor:setup` in project directory
+2. Command detects project type and explores codebase for patterns
+3. Review discovered tenets (3-5 recommended)
+4. Approve/edit/reject each tenet
+5. AGENTS.md is created with evidenced tenets
 
-### Verify Compliance
+### CI/CD Compliance Verification
 
-Modes: `files`, `changed`, `paths`, `all`
+1. Developer opens PR with code changes
+2. CI pipeline runs: `/governor:verify mode:changed base:main output:json`
+3. Verify command spawns tenet-verifier agent on changed files
+4. JSON output feeds into CI report
+5. PR blocks if critical violations found (exit code 2)
 
-```bash
-/governor:verify mode:changed              # Check changed files vs main
-/governor:verify mode:all output:json      # Full codebase, JSON for CI
-/governor:verify mode:changed severity:critical  # Only critical tenets
-```
+### Tenet Maintenance
 
-Output includes confidence scores (0-100%) and respects approved exceptions.
+1. Run `/governor:manage` to review current tenets
+2. Select action (Add/Edit/Remove/Reorder/Exception)
+3. System validates changes against codebase
+4. Changes applied with renumbering and exception updates
 
-### Manage Tenets
+## Version
 
-Actions: Add, Edit, Remove, Reorder, Exception
-
-Changes are validated against the codebase before applying:
-- **SUPPORTED** - Consistent patterns found
-- **WEAK_EVIDENCE** - Only 1-2 instances
-- **NOT_SUPPORTED** - No pattern found
-- **CONTRADICTED** - Found violations (blocks change)
-
-## Tenet Format
-
-```markdown
-### T1. Name
-
-Description of the constraint and rationale.
-
-**Severity:** critical | high | medium | low
-
-**Evidence:**
-- `file:line` - observation
-```
+3.0.0

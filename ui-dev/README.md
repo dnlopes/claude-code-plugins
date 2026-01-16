@@ -1,39 +1,80 @@
-# ui-dev
+---
+scope:
+  paths:
+    - ui-dev/**
+  summary: "Plugin overview and usage guide"
+last_updated: 2026-01-16T23:30:15Z
+---
+
+# UI-Dev Plugin
 
 UI development toolkit with headless browser automation and shadcn/ui component documentation.
 
-**Version:** 1.3.0
+## Goals
 
-## What's Included
+The ui-dev plugin provides specialized tools for UI development workflows:
 
-| Component | Type | Purpose |
-|-----------|------|---------|
-| `agent-browser` | Skill | Headless browser CLI for UI testing and automation |
-| `shadcn` | MCP Server | Access shadcn/ui component documentation |
+- **Headless browser automation** optimized for AI agents
+- **Accessibility-first element selection** using deterministic refs
+- **shadcn/ui integration** via MCP server for component documentation
+- **Bash-based e2e testing** patterns
+
+## Commands
+
+None. This plugin provides knowledge resources rather than workflow commands.
 
 ## Skills
 
-### agent-browser
+| Skill | Description |
+|-------|-------------|
+| `agent-browser` | Comprehensive headless browser CLI reference for troubleshooting UI issues, testing UI changes, writing e2e tests, and automating browser interactions |
 
-Headless browser automation optimized for AI agents. Uses accessibility snapshots with deterministic refs for reliable element selection.
+## Agents
 
-**Activated when:** Troubleshooting UI issues, testing UI changes, writing e2e tests, or automating browser interactions.
+None. The skill is intended for use by agents from other plugins or user-created agents.
 
-**Quick example:**
-```bash
-agent-browser open example.com
-agent-browser snapshot -i        # Get interactive elements with refs
-agent-browser click @e2          # Click by ref
-agent-browser fill @e3 "text"    # Fill by ref
-agent-browser close
+## MCP Integration
+
+Connects to the shadcn/ui MCP server for component documentation access:
+
+```json
+{
+  "mcpServers": {
+    "shadcn": {
+      "type": "http",
+      "url": "https://www.shadcn.io/api/mcp"
+    }
+  }
+}
 ```
 
-See the full skill documentation for complete command reference.
+## Workflows
 
-## MCP Servers
+### Snapshot-First Browser Automation
 
-### shadcn
+1. Navigate to target URL with `open <url>`
+2. Take snapshot to get accessibility tree with refs
+3. Identify target elements from ref output
+4. Interact using refs (`@e1`, `@e2`) instead of CSS selectors
+5. Re-snapshot after DOM changes
 
-Provides access to shadcn/ui component documentation via MCP.
+### Use Cases
 
-**Usage:** Use the `mcp__plugin_ui-dev_shadcn__getComponents` and `mcp__plugin_ui-dev_shadcn__getComponent` tools to browse available components and get detailed documentation.
+- **Troubleshooting UI issues**: Visual inspection, element state
+- **Testing UI changes**: Before/after comparisons
+- **Writing e2e tests**: Bash-based automation scripts
+- **Automating workflows**: Form submissions, multi-step processes
+- **Debugging**: Visibility, focus, or interaction problems
+
+### Element Selection
+
+| Method | Example | Use Case |
+|--------|---------|----------|
+| Refs | `@e1` | AI-friendly, deterministic |
+| CSS | `#submit` | Standard selectors |
+| Text | `text=Submit` | Visible text matching |
+| Role | `role button` | Accessibility queries |
+
+## Version
+
+2.0.0

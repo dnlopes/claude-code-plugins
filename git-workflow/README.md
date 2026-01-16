@@ -1,55 +1,70 @@
-# git-workflow
+---
+scope:
+  paths:
+    - git-workflow/**
+  summary: "Plugin overview and usage guide"
+last_updated: 2026-01-16T23:30:15Z
+---
+
+# Git-Workflow Plugin
 
 Git and GitHub workflow commands for commits and pull requests.
 
-**Version:** 2.1.0
+## Goals
+
+The git-workflow plugin provides structured, user-centric commands for managing Git commits and GitHub pull requests. It emphasizes:
+
+- **User approval workflows** before any destructive actions
+- **Angular conventional commit** format for consistency
+- **Atomic commits** with individual file staging
+- **Clear PR documentation** with structured templates
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/git-workflow:commit` | Create git commits with user approval and no Claude attribution |
-| `/git-workflow:create-pr` | Create a pull request with proper title, description, and user approval |
+| `/git-workflow:commit` | Create git commits with user approval and no Claude attribution. Stages files individually (never `-A` or `.`) |
+| `/git-workflow:create-pr` | Create a pull request with proper title, description, and user approval using GitHub CLI |
 
 ## Skills
 
-| Skill | Triggered When |
-|-------|----------------|
-| `committing-work` | Creating git commits, staging changes, or writing commit messages |
-| `creating-pull-requests` | Creating pull requests, writing PR titles, or preparing branches for review |
+| Skill | Description |
+|-------|-------------|
+| `committing-work` | Angular conventional commit format guidelines, atomic commit principles, and strategies for splitting multi-concern changes |
+| `creating-pull-requests` | PR title format (Angular convention), GitHub CLI commands, and PR body templates |
 
-## Commit Format
+## Agents
 
-Angular conventional commit: `<type>(<scope>): <description>`
-
-| Type | Purpose |
-|------|---------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation |
-| `style` | Formatting (not CSS) |
-| `refactor` | Code change without feature/fix |
-| `perf` | Performance |
-| `test` | Tests |
-| `build` | Build/dependencies |
-| `ci` | CI configuration |
-| `chore` | Other |
-| `revert` | Revert commit |
-
-**Breaking changes:** Add `!` after type/scope (e.g., `feat!: remove deprecated API`)
+None. All workflow logic is orchestrated through commands, with skills providing declarative knowledge.
 
 ## Workflows
 
-### Committing Changes
+### Creating Commits
 
-1. Analyze changes with `git status` and `git diff`
-2. Plan commit(s) - split if changes touch multiple concerns
-3. Present plan to user for approval
-4. Execute with `git add` (specific files, never `-A`) and commit
+1. Run `/commit` or request a commit
+2. Command analyzes staged and unstaged changes
+3. Drafts one or more commits based on logical grouping
+4. Presents plan for user approval
+5. Stages files individually and creates commits
+6. Shows final commit log
 
 ### Creating Pull Requests
 
-1. Ensure all changes are committed
-2. Draft PR title and body following Angular convention
-3. Present draft to user for approval
-4. Create PR with `gh pr create`
+1. Run `/create-pr` or request a PR
+2. Command analyzes current branch and commits
+3. Drafts PR with Angular-formatted title and structured body
+4. Presents draft for user approval
+5. Pushes branch if needed and creates PR
+6. Returns PR URL
+
+### Commit Message Format
+
+```
+<type>(<scope>): <description>
+```
+
+**Types:** feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+
+## Version
+
+3.0.0
