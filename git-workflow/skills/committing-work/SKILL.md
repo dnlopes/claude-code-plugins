@@ -37,7 +37,7 @@ Commits follow the Angular conventional commit format: `<type>(<scope>): <descri
 
 - **scope**: Optional, indicates affected module/component
 - **description**: Imperative mood, under 72 characters
-- **Breaking changes**: Add `!` after type/scope (for example: `feat!: remove deprecated API`) or include `BREAKING CHANGE:` in footer
+- **Breaking changes**: Add **!** after type/scope (e.g., **feat!: remove deprecated API**) or include **BREAKING CHANGE:** in footer
 
 ## Key Principles
 
