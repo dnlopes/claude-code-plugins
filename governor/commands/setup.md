@@ -3,10 +3,9 @@ description: Discover architectural constraints and create tenets in AGENTS.md w
 allowed-tools:
   - Bash
   - Read
-  - Grep
-  - Glob
   - Write
   - Edit
+  - Task(governor:constraint-explorer)
   - AskUserQuestion
 argument-hint: "[project-path]"
 ---
@@ -22,11 +21,10 @@ Discover architectural constraints in a codebase and create tenets in AGENTS.md.
 ```
 Setup Progress:
 - [ ] Step 1: Pre-flight
-- [ ] Step 2: Detect project type
-- [ ] Step 3: Explore codebase
-- [ ] Step 4: Review with user
-- [ ] Step 5: Generate AGENTS.md
-- [ ] Step 6: Summary
+- [ ] Step 2: Explore codebase (agent)
+- [ ] Step 3: Review with user
+- [ ] Step 4: Generate AGENTS.md
+- [ ] Step 5: Summary
 ```
 
 ## Step 1: Pre-flight
@@ -45,65 +43,35 @@ grep -n "^## Tenets" AGENTS.md 2>/dev/null && echo "Tenets: Found" || echo "Tene
 
 **If no tenets**, proceed to Step 2.
 
-## Step 2: Detect Project Type
+## Step 2: Explore Codebase
 
-Identify primary language and framework:
+Spawn `governor:constraint-explorer` agent to analyze the codebase:
 
-```bash
-ls -la *.go go.mod 2>/dev/null && echo "Go project"
-ls -la package.json 2>/dev/null && echo "Node/TypeScript project"
-ls -la requirements.txt pyproject.toml setup.py 2>/dev/null && echo "Python project"
-ls -la *.csproj *.sln 2>/dev/null && echo "C#/.NET project"
-ls -la Cargo.toml 2>/dev/null && echo "Rust project"
+```
+Task:
+  description: "Explore codebase for constraints"
+  subagent_type: governor:constraint-explorer
+  prompt: |
+    Explore the codebase at: <project-path>
+
+    Focus on discovering architectural constraints that could become tenets.
+    Return structured findings with evidence.
 ```
 
-Record detected type for language-specific exploration in Step 3.
+The agent will:
+- Detect project type (Go, TypeScript, Python, etc.)
+- Map directory structure and boundaries
+- Analyze import/dependency patterns
+- Identify consistent architectural patterns
+- Check existing architecture documentation
+- Return structured constraint findings with file:line evidence
 
-## Step 3: Explore Codebase
+**Extract from agent results:**
+- Discovered constraints with evidence
+- Confidence levels for each
+- Project profile information
 
-Focus on **ARCHITECTURAL CONSTRAINTS**, not tooling or style.
-
-### 3.1 Map Directory Structure
-
-Use Glob and LS to understand the layout:
-- Top-level directories
-- Source code organization (`src/`, `pkg/`, `internal/`, `lib/`, `app/`)
-- Potential architectural boundaries (`domain/`, `infrastructure/`, `api/`, `handlers/`)
-
-### 3.2 Analyze Import Patterns
-
-Use Grep with language-specific patterns to find:
-- Import statements across files
-- Internal vs external dependencies
-- Cross-boundary imports
-
-Look for **consistent patterns** that suggest intentional constraints.
-
-### 3.3 Identify Architectural Patterns
-
-Read 5-10 representative files to understand patterns:
-
-| Pattern | Evidence to Look For |
-|---------|---------------------|
-| Layer separation | Domain code doesn't import infrastructure |
-| Repository pattern | Data access through interfaces |
-| Dependency injection | Constructors receive dependencies |
-| Handler isolation | HTTP handlers delegate to services |
-| Module boundaries | Clear separation between features |
-
-For each pattern found, record:
-- 2-3 file:line references as evidence
-- The constraint implied by the pattern
-
-### 3.4 Check Existing Documentation
-
-```bash
-ls -la ARCHITECTURE.md DESIGN.md docs/architecture* docs/design* 2>/dev/null
-```
-
-If architecture docs exist, read them for stated constraints.
-
-## Step 4: Review with User
+## Step 3: Review with User
 
 Present 3-5 discovered tenets for approval:
 
@@ -131,7 +99,7 @@ For each tenet, ask user:
 
 Ask if user wants to add custom tenets not discovered.
 
-## Step 5: Generate AGENTS.md
+## Step 4: Generate AGENTS.md
 
 Create or update AGENTS.md with approved tenets.
 
@@ -170,7 +138,7 @@ Approved exceptions to tenets. Each must have justification.
 
 Show diff: `git diff AGENTS.md`
 
-## Step 6: Summary
+## Step 5: Summary
 
 ```markdown
 ## Setup Complete

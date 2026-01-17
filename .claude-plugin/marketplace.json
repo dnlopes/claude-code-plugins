@@ -30,7 +30,7 @@
     },
     {
       "name": "governor",
-      "version": "3.0.0",
+      "version": "3.1.0",
       "source": "./governor",
       "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration"
     }
