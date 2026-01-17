@@ -9,7 +9,6 @@ You receive structured findings from codebase-explorer containing:
 - Tech stack
 - Architecture
 - Patterns
-- Principles
 - Complex modules
 - Scope paths
 
@@ -26,10 +25,6 @@ Present this summary:
 
 ### Architecture
 <Brief component overview>
-
-### Identified Principles
-1. <Principle 1>
-2. <Principle 2>
 
 ### Complex Modules
 <List modules that will get dedicated AGENTS.md, or "None identified">

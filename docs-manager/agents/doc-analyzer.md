@@ -110,7 +110,7 @@ git log --since="<last_updated>" -p -- <file> | head -150
 | domain.md | New entities, changed business rules, new terminology | Code structure |
 | patterns.md | New conventions, changed patterns, deprecated approaches | One-off implementations |
 | development.md | New commands, changed setup, new prerequisites | Internal refactoring |
-| AGENTS.md | Principle violations, new quick start needs, structural changes | Everything else |
+| AGENTS.md | New quick start needs, structural changes | Everything else |
 
 ### Step 5: Produce Recommendation
 
@@ -121,7 +121,6 @@ For each document analyzed, determine:
 - Documented component removed or renamed
 - Pattern changed from what's documented
 - Build commands changed
-- New principle should be added
 
 **No Update Needed** if:
 - Changes are implementation details

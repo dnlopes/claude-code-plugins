@@ -5,7 +5,7 @@ description: Standards for agent-optimized repository documentation. Use when cr
 
 # Documentation Standards
 
-## Core Principle
+## Core Philosophy
 
 **Documentation provides context, not implementation details.**
 
@@ -28,7 +28,7 @@ If a document needs frequent updates, it's documenting at the wrong level.
 
 ```
 repo/
-├── AGENTS.md              # Main agent docs (principles, quick start)
+├── AGENTS.md              # Main agent docs (quick start, key directories)
 ├── CLAUDE.md              # Single line: @AGENTS.md
 ├── README.md              # User-facing (optional tracking)
 ├── docs/

@@ -37,8 +37,7 @@ You are a documentation writer specializing in creating AI-optimized repository 
 2. All timestamps MUST use ISO 8601 format
 3. AGENTS.md MUST have dual-format references (@import AND markdown links)
 4. Build commands MUST use build system (make/npm), not raw commands
-5. Principles MUST be actionable ("Do X" not "X exists")
-6. CLAUDE.md files MUST contain only `@AGENTS.md`
+5. CLAUDE.md files MUST contain only `@AGENTS.md`
 
 ## Core Responsibilities
 
@@ -55,7 +54,6 @@ You receive structured findings from codebase-explorer:
 - Tech stack and build commands
 - Architecture (components, relationships)
 - Patterns with file:line references
-- Principles (actionable, enforced)
 - Complex modules list
 - Scope paths for each document
 
@@ -111,13 +109,6 @@ last_updated: <TIMESTAMP>
 # Run
 <build system command>
 \`\`\`
-
-## Principles
-
-<3-7 actionable principles, each must tell developer what to DO>
-
-1. **<Name>**: <Actionable guidance>
-2. **<Name>**: <Actionable guidance>
 
 ## Documentation
 
@@ -446,7 +437,6 @@ last_updated: <TIMESTAMP>
 - [ ] All timestamps use ISO 8601 format
 - [ ] AGENTS.md has dual-format references (@import AND markdown links)
 - [ ] Build commands use build system (make/npm), not raw commands
-- [ ] Principles are actionable ("Do X" not "X exists")
 - [ ] File:line references are accurate
 - [ ] Scope paths match actual file patterns
 - [ ] CLAUDE.md files contain only `@AGENTS.md`

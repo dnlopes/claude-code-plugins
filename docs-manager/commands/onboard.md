@@ -41,7 +41,7 @@ With `--auto` flag and existing README.md, default to **Skip** (non-destructive)
 
 Launch `docs-manager:codebase-explorer` agent:
 - **Description**: "Explore codebase for documentation"
-- **Prompt**: "Explore this repository and extract documentation-relevant information. Return structured findings covering: project overview, tech stack, architecture, patterns with file:line references, actionable principles, complex modules, and scope paths for each document type."
+- **Prompt**: "Explore this repository and extract documentation-relevant information. Return structured findings covering: project overview, tech stack, architecture, patterns with file:line references, complex modules, and scope paths for each document type."
 
 **Capture**: Structured findings for review.
 
@@ -57,9 +57,6 @@ Present findings summary to user:
 **Project:** <name from findings>
 **Type:** <type from findings>
 **Tech Stack:** <stack from findings>
-
-### Identified Principles
-<List from findings>
 
 ### Complex Modules
 <List or "None identified">

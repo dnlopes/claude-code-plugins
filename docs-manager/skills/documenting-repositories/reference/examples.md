@@ -4,54 +4,12 @@ Good/bad examples for each document type.
 
 ## Contents
 
-- [Principles](#principles)
-  - [Good Principles](#good-principles)
-  - [Bad Principles](#bad-principles)
-  - [The Three-Question Test](#the-three-question-test)
 - [Architecture](#architecture)
 - [Domain](#domain)
 - [Patterns](#patterns)
 - [Development](#development)
 - [README](#readme)
 - [Common Mistakes](#common-mistakes)
-
-## Principles
-
-### Good Principles
-
-```markdown
-**Test-First Development**: Write tests before implementation. All new features must have failing tests first.
-```
-- Actionable: tells developers what to DO
-- Invariant: must be maintained
-- Consequential: violating causes problems
-
-```markdown
-**Repository Pattern**: All database access must go through repository interfaces. No direct queries in business logic.
-```
-
-### Bad Principles
-
-```markdown
-**Releases are automated**: release.yaml handles semantic versioning.
-```
-- Not actionable: describes infrastructure, not developer action
-- Not guidance: developers don't do anything
-
-```markdown
-**TypeScript**: The codebase uses TypeScript.
-```
-- Not actionable: just states a fact
-- Not guidance: obvious from the code
-
-### The Three-Question Test
-
-For each principle, ask:
-1. Does this tell a developer what to DO?
-2. Is this an invariant that must be maintained?
-3. Would violating this cause problems?
-
-All yes = principle. Otherwise = observation.
 
 ## Architecture
 

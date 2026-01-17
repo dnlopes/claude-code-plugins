@@ -37,13 +37,6 @@ last_updated: <ISO_TIMESTAMP>
 <run command>
 \`\`\`
 
-## Principles
-
-These rules MUST be followed:
-
-1. **<Principle Name>**: <Actionable guidance>
-2. **<Principle Name>**: <Actionable guidance>
-
 ## Documentation
 
 @docs/architecture.md
@@ -64,8 +57,6 @@ These rules MUST be followed:
 ```
 
 ### Guidelines
-- Principles must be actionable ("do X" not "X exists")
-- 3-7 principles maximum
 - Quick Start uses build system interfaces
 - Dual-format doc references (@ and markdown links)
 
