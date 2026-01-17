@@ -1,6 +1,24 @@
-# Claude Code Plugins Marketplace
+---
+last_updated: 2026-01-16T23:58:07Z
+scope:
+  paths:
+    - marketplace.json
+    - "*/.claude-plugin/plugin.json"
+    - "*/commands/*.md"
+    - "*/skills/*/SKILL.md"
+    - "*/agents/*.md"
+---
 
-This repository contains a collection of Claude Code plugins that extend Claude's capabilities with commands, skills, and agents.
+# Claude Code Plugins
+
+A collection of production-ready Claude Code plugins providing specialized agents for development workflows, code review, documentation management, and UI development.
+
+## Quick Start
+
+```bash
+# No build required - plugins are markdown-based configuration
+# Clone to your Claude Code plugins directory and they auto-discover via marketplace.json
+```
 
 ## Tenets
 
@@ -81,3 +99,23 @@ Approved exceptions to tenets. Each must have justification.
 | File | Tenet | Reason | Approved |
 |------|-------|--------|----------|
 | (none) | | | |
+
+## Documentation
+
+@docs/architecture.md
+@docs/patterns.md
+@docs/development.md
+
+- [Architecture](docs/architecture.md) - System design and components
+- [Patterns](docs/patterns.md) - Code conventions and examples
+- [Development](docs/development.md) - Build, test, and development
+
+## Key Directories
+
+| Directory | Purpose |
+|-----------|---------|
+| `docs-manager/` | AI-optimized documentation with git-based staleness tracking |
+| `git-workflow/` | Structured commits and PR creation |
+| `governor/` | Project tenets management with validation |
+| `review-toolkit/` | Multi-agent code review with confidence scoring |
+| `ui-dev/` | Frontend design, browser automation, and shadcn/ui MCP server |
