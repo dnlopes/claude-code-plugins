@@ -1,6 +1,6 @@
 ---
 name: doc-generator
-description: Use this agent when generating documentation files from exploration findings. Transforms structured findings into properly formatted AGENTS.md, CLAUDE.md, and docs/*.md files with staleness tracking.
+description: Use this agent when generating documentation files from exploration findings. Transforms structured findings into properly formatted README.md, AGENTS.md, CLAUDE.md, and docs/*.md files with staleness tracking.
 
 <example>
 Context: codebase-explorer has completed analysis
@@ -77,13 +77,14 @@ mkdir -p docs
 
 ### Step 3: Generate Files in Order
 
-1. `AGENTS.md` - Main agent documentation
-2. `CLAUDE.md` - Single-line redirect
-3. `docs/architecture.md` - System design
-4. `docs/domain.md` - Business concepts (skip if not applicable)
-5. `docs/patterns.md` - Code conventions
-6. `docs/development.md` - Build/test/run
-7. Module AGENTS.md/CLAUDE.md pairs (if any)
+1. `README.md` - Project overview (based on README action: replace/merge/skip)
+2. `AGENTS.md` - Main agent documentation
+3. `CLAUDE.md` - Single-line redirect
+4. `docs/architecture.md` - System design
+5. `docs/domain.md` - Business concepts (skip if not applicable)
+6. `docs/patterns.md` - Code conventions
+7. `docs/development.md` - Build/test/run
+8. Module AGENTS.md/CLAUDE.md pairs (if any)
 
 ## Document Templates
 
@@ -143,6 +144,55 @@ Single line only:
 ```markdown
 @AGENTS.md
 ```
+
+### README.md (Human-Optimized)
+
+Generated when README action is `replace` or `merge`. This is human-focused documentation for repository visitors, not AI agents.
+
+**Actions:**
+- **replace**: Generate complete README using template below
+- **merge**: Parse existing README, preserve all content, append missing standard sections at end
+- **skip**: Do not modify README.md
+
+```markdown
+# <Project Name>
+
+<One-paragraph description focusing on what users can do with it>
+
+## Features
+
+- <Key feature 1>
+- <Key feature 2>
+- <Key feature 3>
+
+## Installation
+
+<Installation steps from package.json/Makefile, or "See [Development](docs/development.md)">
+
+## Usage
+
+<Basic usage examples>
+
+## Documentation
+
+For detailed documentation, see:
+- [Architecture](docs/architecture.md) - System design and components
+- [Development](docs/development.md) - Build, test, and contribution workflow
+- [Patterns](docs/patterns.md) - Code conventions and examples
+
+## Contributing
+
+<Contributing guidelines, or "See [CONTRIBUTING.md](CONTRIBUTING.md)" if exists>
+
+## License
+
+<License name, or omit section entirely if no LICENSE file>
+```
+
+**Edge cases:**
+- No LICENSE file → Omit License section entirely
+- No package.json/Makefile → Installation says "See [Development](docs/development.md)"
+- Merge with malformed README → Best-effort parsing, append missing sections at end
 
 ### docs/architecture.md
 

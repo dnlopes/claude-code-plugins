@@ -1,5 +1,5 @@
 ---
-description: Create AGENTS.md, CLAUDE.md, and docs/ documentation for a repository
+description: Create README.md, AGENTS.md, CLAUDE.md, and docs/ documentation for a repository
 argument-hint: "[--auto]"
 ---
 
@@ -27,6 +27,15 @@ find docs -name "*.md" -type f 2>/dev/null
 > 1. **Complete** - Generate missing docs only
 > 2. **Regenerate** - Replace all
 > 3. **Cancel**
+
+**If README.md exists (ask separately):**
+> Found existing README.md. Options:
+> 1. **Replace** - Generate new README from analysis
+> 2. **Merge** - Keep existing content, add missing standard sections
+> 3. **Skip** - Leave README.md unchanged
+
+Store the README choice as `$README_ACTION` (replace/merge/skip) for Phase 3.
+With `--auto` flag and existing README.md, default to **Skip** (non-destructive).
 
 ## Phase 1: Explore
 
@@ -57,6 +66,7 @@ Present findings summary to user:
 
 ### Documentation Plan
 Will generate:
+- README.md ($README_ACTION: replace/merge/skip)
 - AGENTS.md, CLAUDE.md
 - docs/architecture.md, domain.md, patterns.md, development.md
 <Module docs if any>
@@ -73,7 +83,12 @@ Wait for user confirmation.
 
 Launch `docs-manager:doc-generator` agent:
 - **Description**: "Generate documentation files"
-- **Prompt**: "Generate documentation files from these findings: <findings from Phase 1>. Create AGENTS.md, CLAUDE.md, docs/architecture.md, docs/patterns.md, docs/development.md, and docs/domain.md (if applicable). Also create module AGENTS.md/CLAUDE.md pairs for any complex modules identified."
+- **Prompt**: "Generate documentation files from these findings: <findings from Phase 1>. Create AGENTS.md, CLAUDE.md, docs/architecture.md, docs/patterns.md, docs/development.md, and docs/domain.md (if applicable). Also create module AGENTS.md/CLAUDE.md pairs for any complex modules identified. README action: $README_ACTION."
+
+**README.md action:**
+- **replace**: Generate new README.md using template from doc-generator
+- **merge**: Parse existing README, preserve content, append missing standard sections
+- **skip**: Do not touch README.md
 
 **Capture**: List of created files.
 
@@ -83,17 +98,21 @@ Verify outputs:
 
 ```bash
 # Check files exist
-ls AGENTS.md CLAUDE.md docs/*.md 2>/dev/null
+ls README.md AGENTS.md CLAUDE.md docs/*.md 2>/dev/null
 
 # Verify front-matter
 head -10 AGENTS.md
 head -10 docs/architecture.md
+
+# Verify README links (if generated)
+grep -o '\[.*\](docs/.*\.md)' README.md 2>/dev/null
 ```
 
 Check:
 - [ ] All docs have valid front-matter
 - [ ] CLAUDE.md contains only `@AGENTS.md`
 - [ ] Build commands use build system (make/npm)
+- [ ] README.md links to docs/ are valid (if README was generated/merged)
 
 ## Summary
 
@@ -101,6 +120,7 @@ Check:
 ## Onboarding Complete
 
 **Generated:**
+- `README.md` - Project overview (or skipped/merged)
 - `AGENTS.md` - Main agent documentation
 - `CLAUDE.md` - Redirect
 - `docs/architecture.md` - System design
@@ -123,3 +143,7 @@ Check:
 | No build system | Document raw commands, note limitation |
 | Empty/new repo | Minimal docs, note limited findings |
 | Existing CLAUDE.md | Migrate content to AGENTS.md, replace |
+| No LICENSE file | Omit License section from README |
+| No package.json/Makefile | README Installation says "See docs/development.md" |
+| Merge with malformed README | Best-effort parsing, append missing sections at end |
+| --auto with existing README | Default to Skip (non-destructive) |
