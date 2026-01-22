@@ -1,0 +1,8 @@
+{
+    "name": "dev-toolkit",
+    "description": "Development tools and build system skills for modern workflows",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}

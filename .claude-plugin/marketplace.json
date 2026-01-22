@@ -5,6 +5,12 @@
   },
   "plugins": [
     {
+      "name": "dev-toolkit",
+      "version": "1.0.0",
+      "source": "./dev-toolkit",
+      "description": "Development tools and build system skills for modern workflows"
+    },
+    {
       "name": "git-workflow",
       "version": "3.0.2",
       "source": "./git-workflow",
