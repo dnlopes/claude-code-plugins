@@ -55,7 +55,7 @@ All command, skill, and agent files must include YAML frontmatter. Commands must
 **Evidence:**
 - `governor/commands/setup.md:1-12` - Command with `description` and `allowed-tools` in frontmatter (no `name` field)
 - `governor/skills/tenet-governance/SKILL.md:1-4` - Skill with `name` and `description`
-- `governor/agents/tenet-verifier.md:1-6` - Agent with `name`, `description`, `model`, and `color`
+- `governor/agents/tenet-verifier.md:1-6` - Agent with `name`, `description`, and `color`
 
 ### T4. Skills Provide Reference, Not Action
 
