@@ -3,7 +3,7 @@ scope:
   paths:
     - ui-dev/**
   summary: "Plugin overview and usage guide"
-last_updated: 2026-01-16T23:30:15Z
+last_updated: 2026-01-26T01:19:17Z
 ---
 
 # UI-Dev Plugin
@@ -28,6 +28,8 @@ None. This plugin provides knowledge resources rather than workflow commands.
 | Skill | Description |
 |-------|-------------|
 | `agent-browser` | Comprehensive headless browser CLI reference for troubleshooting UI issues, testing UI changes, writing e2e tests, and automating browser interactions |
+| `react-best-practices` | React and Next.js performance optimization guidelines from Vercel Engineering covering rendering, re-renders, async patterns, bundle optimization, and client/server strategies |
+| `web-design-guidelines` | Web Interface Guidelines for reviewing UI code compliance including accessibility, design principles, and UX best practices |
 
 ## Agents
 
@@ -77,4 +79,4 @@ Connects to the shadcn/ui MCP server for component documentation access:
 
 ## Version
 
-2.0.0
+2.1.0

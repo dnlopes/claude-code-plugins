@@ -3,7 +3,7 @@ scope:
   paths:
     - git-workflow/**
   summary: "Plugin overview and usage guide"
-last_updated: 2026-01-16T23:30:15Z
+last_updated: 2026-01-26T01:19:17Z
 ---
 
 # Git-Workflow Plugin
@@ -67,4 +67,4 @@ None. All workflow logic is orchestrated through commands, with skills providing
 
 ## Version
 
-3.0.0
+3.0.2

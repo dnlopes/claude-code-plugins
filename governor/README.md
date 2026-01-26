@@ -3,7 +3,7 @@ scope:
   paths:
     - governor/**
   summary: "Plugin overview and usage guide"
-last_updated: 2026-01-16T23:30:15Z
+last_updated: 2026-01-26T01:19:17Z
 ---
 
 # Governor Plugin
@@ -40,6 +40,7 @@ Tenets differ from linting rules by being architectural (not style-based), proje
 
 | Agent | Description |
 |-------|-------------|
+| `constraint-explorer` | Performs exhaustive codebase exploration to discover architectural constraints with comprehensive evidence for tenet creation |
 | `tenet-verifier` | Analyzes code files against project tenets and reports violations with precise file:line references and confidence scores |
 
 ## Workflows
@@ -69,4 +70,4 @@ Tenets differ from linting rules by being architectural (not style-based), proje
 
 ## Version
 
-3.0.0
+3.1.0

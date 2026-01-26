@@ -3,7 +3,7 @@ scope:
   paths:
     - docs-manager/**
   summary: "Plugin overview and usage guide"
-last_updated: 2026-01-16T23:30:15Z
+last_updated: 2026-01-26T01:19:17Z
 ---
 
 # Docs-Manager Plugin
@@ -26,7 +26,7 @@ Documentation is tracked at the abstraction level—implementation changes don't
 
 | Command | Description |
 |---------|-------------|
-| `/docs-manager:onboard` | Create AGENTS.md, CLAUDE.md, and docs/ directory structure for a repository |
+| `/docs-manager:onboard` | Create README.md, AGENTS.md, CLAUDE.md, and docs/ directory structure for a repository |
 | `/docs-manager:add-doc` | Generate ad-hoc documentation for specific paths or topics with staleness tracking |
 | `/docs-manager:update-docs` | Check and update stale documentation based on git changes |
 | `/docs-manager:validate-docs` | Validate documentation system integrity—check front-matter, scope paths, and cross-references |
@@ -53,7 +53,7 @@ Documentation is tracked at the abstraction level—implementation changes don't
 1. Run `/onboard` (or `/onboard --auto`)
 2. codebase-explorer analyzes repository structure
 3. Review findings (skip with --auto)
-4. doc-generator creates AGENTS.md, CLAUDE.md, and docs/
+4. doc-generator creates README.md, AGENTS.md, CLAUDE.md, and docs/
 5. Validation confirms proper front-matter
 
 ### Add Module Documentation
@@ -90,4 +90,4 @@ This enables automatic staleness detection via git history.
 
 ## Version
 
-4.1.0
+4.4.1
