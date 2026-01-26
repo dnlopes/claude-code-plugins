@@ -17,7 +17,16 @@ find . -name "*.md" -type f \
   ! -path "*/.git/*" \
   ! -path "*/vendor/*" \
   ! -path "*/.claude/*" \
-  2>/dev/null | head -50 | xargs -I {} sh -c 'head -20 "{}" 2>/dev/null | grep -q "last_updated" && echo "{}"' | head -1
+  2>/dev/null | while read -r f; do
+    first_line=$(head -1 "$f" 2>/dev/null)
+    # Standard frontmatter: starts with ---
+    if [ "$first_line" = "---" ]; then
+      awk '/^---$/ { if (++count == 2) exit } count == 1 { print }' "$f" 2>/dev/null | grep -q "^last_updated:" && echo "$f"
+    # HTML-wrapped frontmatter: starts with <!--
+    elif [ "$first_line" = "<!--" ]; then
+      head -20 "$f" 2>/dev/null | grep -q "^last_updated:" && echo "$f"
+    fi
+  done | head -1
 ```
 
 **If no tracked documentation found:**
@@ -28,24 +37,32 @@ find . -name "*.md" -type f \
 Find all tracked documentation files. A document is tracked if it has YAML frontmatter with `last_updated` field.
 
 ```bash
-# Find all markdown files (excluding node_modules, .git, vendor)
 find . -name "*.md" -type f \
   ! -path "*/node_modules/*" \
   ! -path "*/.git/*" \
   ! -path "*/vendor/*" \
   ! -path "*/.claude/*" \
-  2>/dev/null
+  2>/dev/null | while read -r f; do
+    first_line=$(head -1 "$f" 2>/dev/null)
+    # Standard frontmatter: starts with ---
+    if [ "$first_line" = "---" ]; then
+      awk '/^---$/ { if (++count == 2) exit } count == 1 { print }' "$f" 2>/dev/null | grep -q "^last_updated:" && echo "$f"
+    # HTML-wrapped frontmatter: starts with <!--
+    elif [ "$first_line" = "<!--" ]; then
+      head -20 "$f" 2>/dev/null | grep -q "^last_updated:" && echo "$f"
+    fi
+  done
 ```
 
 For each markdown file found, check if it has valid frontmatter:
-1. Read first 20 lines
-2. Check for YAML frontmatter (starts with `---`, ends with `---`)
-3. Check for `last_updated` field (required for tracking)
+1. Verify file starts with `---` (standard) or `<!--` (HTML-wrapped)
+2. Extract frontmatter content between delimiters
+3. Check for `last_updated:` field within frontmatter (not in content)
 4. Optionally extract `scope.paths` for staleness detection
 
 **Include document if:**
-- Has valid YAML frontmatter AND
-- Has `last_updated` field
+- Starts with valid frontmatter delimiter (`---` or `<!--`) AND
+- Has `last_updated:` field within the frontmatter section
 
 For each tracked document, extract:
 - `scope.paths` - Files to check for changes (if present)
