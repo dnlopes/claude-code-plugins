@@ -9,7 +9,7 @@ scope:
     - "*/.claude-plugin/plugin.json"
     - .releaserc.yaml
   summary: "Code patterns and conventions"
-last_updated: 2026-01-16T11:43:29Z
+last_updated: 2026-01-26T00:50:34Z
 ---
 
 # Patterns
@@ -76,14 +76,13 @@ description: "Architectural tenet format and verification patterns"
 ```
 
 ### Agents
-Agents require `name`, `description`, `model`, and `color` fields.
+Agents require `name`, `description`, and `color` fields.
 **Example:** `governor/agents/tenet-verifier.md:1-6`
 
 ```yaml
 ---
 name: tenet-verifier
 description: "Verifies code against tenets with confidence scoring"
-model: sonnet
 color: red
 ---
 ```

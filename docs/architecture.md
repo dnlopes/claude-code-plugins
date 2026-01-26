@@ -7,7 +7,7 @@ scope:
     - "*/skills/**"
     - "*/agents/**"
   summary: "System architecture and component relationships"
-last_updated: 2026-01-16T11:43:29Z
+last_updated: 2026-01-26T00:50:34Z
 ---
 
 # Architecture
@@ -68,6 +68,7 @@ Plugin Container ─────────────────────
 
 | Plugin | Purpose |
 |--------|---------|
+| `dev-toolkit` | Development tools and build system skills |
 | `docs-manager` | Documentation generation and staleness tracking |
 | `git-workflow` | Git commit and PR workflows with conventions |
 | `governor` | Architectural tenet management and verification |

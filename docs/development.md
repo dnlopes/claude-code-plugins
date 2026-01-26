@@ -6,7 +6,7 @@ scope:
     - "*/.claude-plugin/plugin.json"
     - .github/PULL_REQUEST_TEMPLATE.md
   summary: "Build, test, and development workflow"
-last_updated: 2026-01-16T11:43:29Z
+last_updated: 2026-01-26T00:50:34Z
 ---
 
 # Development
@@ -80,7 +80,7 @@ feat!: ...   # → major version bump (breaking change)
 |-----------|-----------------|
 | Commands | `description` (NO `name` field) |
 | Skills | `name`, `description` |
-| Agents | `name`, `description`, `model`, `color` |
+| Agents | `name`, `description`, `color` |
 
 ## CI/CD Pipelines
 

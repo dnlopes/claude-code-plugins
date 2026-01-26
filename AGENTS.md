@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-01-16T23:58:07Z
+last_updated: 2026-01-26T00:50:34Z
 scope:
   paths:
     - marketplace.json
@@ -33,7 +33,7 @@ Each plugin must be self-contained within its own directory with no cross-plugin
 **Evidence:**
 - `marketplace.json:7-36` - Each plugin is defined as a separate source directory
 - `governor/.claude-plugin/plugin.json:1-8` - Plugin metadata is contained within plugin directory
-- `docs-manager/commands/onboard.md:35` - Commands reference only their own plugin's agents (`docs-manager:codebase-explorer`)
+- `docs-manager/commands/onboard.md:42` - Commands reference only their own plugin's agents (`docs-manager:codebase-explorer`)
 
 ### T2. File Type Separation
 
@@ -66,7 +66,7 @@ Skills must contain declarative knowledge (guidelines, formats, patterns) that i
 **Evidence:**
 - `governor/skills/tenet-governance/SKILL.md:22-35` - Declarative format specification, not workflow
 - `docs-manager/skills/documenting-repositories/SKILL.md:8-77` - Standards and formats, no action steps
-- `governor/commands/setup.md:14-191` - Command contains workflow steps, references skill for format knowledge
+- `governor/commands/setup.md:13-159` - Command contains workflow steps, references skill for format knowledge
 
 ### T5. Version Consistency
 
@@ -75,10 +75,10 @@ Plugin versions in `marketplace.json` must match versions in individual `plugin.
 **Severity:** critical
 
 **Evidence:**
-- `marketplace.json:33-35` - governor version 2.1.0
-- `governor/.claude-plugin/plugin.json:4` - governor version 2.1.0 (matches)
-- `marketplace.json:14-16` - docs-manager version 3.1.0
-- `docs-manager/.claude-plugin/plugin.json:4` - docs-manager version 3.1.0 (matches)
+- `marketplace.json:37-42` - governor version 3.1.0
+- `governor/.claude-plugin/plugin.json:4` - governor version 3.1.0 (matches)
+- `marketplace.json:19-24` - docs-manager version 4.3.0
+- `docs-manager/.claude-plugin/plugin.json:4` - docs-manager version 4.3.0 (matches)
 
 ### T6. Version Bump on Change
 
