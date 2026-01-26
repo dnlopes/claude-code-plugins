@@ -9,14 +9,19 @@ Check documentation staleness and apply updates using specialized agents.
 
 ## Pre-flight
 
-Verify documentation exists:
+Verify tracked documentation exists by checking for any markdown file with `last_updated` frontmatter:
 
 ```bash
-ls AGENTS.md docs/*.md 2>/dev/null
+find . -name "*.md" -type f \
+  ! -path "*/node_modules/*" \
+  ! -path "*/.git/*" \
+  ! -path "*/vendor/*" \
+  ! -path "*/.claude/*" \
+  2>/dev/null | head -50 | xargs -I {} sh -c 'head -20 "{}" 2>/dev/null | grep -q "last_updated" && echo "{}"' | head -1
 ```
 
-**If no documentation:**
-> No documentation found. Run `/docs-manager:onboard` first.
+**If no tracked documentation found:**
+> No tracked documentation found. Run `/docs-manager:onboard` or `/docs-manager:add-doc` first.
 
 ## Phase 1: Inventory
 
