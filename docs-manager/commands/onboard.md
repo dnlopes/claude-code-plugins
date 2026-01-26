@@ -9,11 +9,10 @@ Create documentation for a repository using specialized agents.
 
 ## Pre-flight
 
-Check existing documentation:
+Check existing standard documentation:
 
 ```bash
-ls AGENTS.md CLAUDE.md README.md 2>/dev/null
-find docs -name "*.md" -type f 2>/dev/null
+ls AGENTS.md CLAUDE.md README.md docs/architecture.md docs/domain.md docs/patterns.md docs/development.md 2>/dev/null
 ```
 
 **If fully onboarded:**
