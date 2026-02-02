@@ -1,6 +1,7 @@
 ---
 name: creating-pull-requests
 description: Use when creating pull requests, writing PR titles, or preparing branches for review. Provides Angular conventional commit format for PR titles, GitHub CLI commands, and guidelines for breaking change notation.
+user-invocable: false
 ---
 
 # Creating Pull Requests

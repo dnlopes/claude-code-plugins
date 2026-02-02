@@ -1,6 +1,7 @@
 ---
 name: tenet-governance
 description: Use when working with architectural tenets - project constraints that require human judgment to verify. This skill provides guidance on tenet format, severity levels, validation criteria, and verification patterns. Load when setting up, managing, or verifying tenets in AGENTS.md.
+user-invocable: false
 ---
 
 # Tenet Governance

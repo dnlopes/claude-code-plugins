@@ -6,37 +6,37 @@
   "plugins": [
     {
       "name": "dev-toolkit",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": "./dev-toolkit",
       "description": "Development tools and build system skills for modern workflows"
     },
     {
       "name": "git-workflow",
-      "version": "3.0.2",
+      "version": "3.0.3",
       "source": "./git-workflow",
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
     {
       "name": "docs-manager",
-      "version": "4.4.2",
+      "version": "4.4.3",
       "source": "./docs-manager",
       "description": "Repository documentation for AI agents, with git-based staleness tracking"
     },
     {
       "name": "review-toolkit",
-      "version": "4.0.0",
+      "version": "4.0.1",
       "source": "./review-toolkit",
       "description": "Multi-agent code review toolkit with specialized reviewers for bugs, security, quality, contracts, tests, and historical context."
     },
     {
       "name": "ui-dev",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "source": "./ui-dev",
       "description": "UI development toolkit with headless browser automation and shadcn/ui component documentation"
     },
     {
       "name": "governor",
-      "version": "3.1.0",
+      "version": "3.1.1",
       "source": "./governor",
       "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration"
     }

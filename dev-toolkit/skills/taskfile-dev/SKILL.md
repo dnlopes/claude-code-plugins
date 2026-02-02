@@ -1,6 +1,7 @@
 ---
 name: taskfile-dev
 description: Use when creating, modifying, reviewing, or improving Taskfiles (task runner YAML files), or when translating Makefiles to Taskfiles. Provides primitives, patterns, style conventions, and best practices for writing idiomatic Taskfiles.
+user-invocable: false
 ---
 
 # Taskfile Development

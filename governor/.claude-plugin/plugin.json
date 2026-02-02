@@ -1,7 +1,7 @@
 {
     "name": "governor",
     "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration",
-    "version": "3.1.0",
+    "version": "3.1.1",
     "author": {
         "name": "David Lopes"
     }

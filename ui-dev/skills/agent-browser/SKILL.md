@@ -1,6 +1,7 @@
 ---
 name: agent-browser
 description: Use when troubleshooting UI issues, testing UI changes, writing bash-based e2e tests, or automating browser interactions. Provides headless browser CLI with accessibility snapshots and deterministic refs for AI-friendly element selection.
+user-invocable: false
 ---
 
 # Agent Browser

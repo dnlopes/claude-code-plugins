@@ -1,7 +1,7 @@
 {
     "name": "review-toolkit",
     "description": "Multi-agent code review toolkit with specialized reviewers for bugs, security, quality, contracts, tests, and historical context.",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "author": {
         "name": "David Lopes"
     }
