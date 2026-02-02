@@ -1,6 +1,7 @@
 ---
 name: committing-work
 description: Use when creating git commits, staging changes, or writing commit messages. Provides Angular conventional commit format guidelines, atomic commit principles, and strategies for splitting multi-concern changes into logical commits.
+user-invocable: false
 ---
 
 # Committing Work

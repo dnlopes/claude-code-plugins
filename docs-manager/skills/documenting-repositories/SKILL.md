@@ -1,6 +1,7 @@
 ---
 name: documenting-repositories
 description: Standards for agent-optimized repository documentation. Use when creating or updating documentation to ensure correct format, abstraction level, and front-matter. Covers AGENTS.md, CLAUDE.md, docs/*.md structure with staleness tracking. Also use when documentation seems too detailed or needs frequent updates.
+user-invocable: false
 ---
 
 # Documentation Standards

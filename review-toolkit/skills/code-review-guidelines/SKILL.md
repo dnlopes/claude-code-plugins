@@ -1,6 +1,7 @@
 ---
 name: code-review-guidelines
 description: Use when reviewing code changes or pull requests. Provides the foundational rules, principles, and checklists for all code review agents.
+user-invocable: false
 ---
 
 # Code Review Guidelines
