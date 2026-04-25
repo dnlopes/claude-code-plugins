@@ -1,6 +1,6 @@
 ---
 name: terraform-project
-description: Canonical Terraform project reference for scaffolding-project — provides file structure, Makefile targets, and Renovate rules for AWS infrastructure with S3 backend.
+description: Canonical Terraform project reference for scaffolding-project — provides file structure, Makefile targets, and Renovate rules for AWS infrastructure.
 ---
 
 # Terraform Project
@@ -19,6 +19,8 @@ A scaffolded Terraform project creates the following in the target subdirectory:
 └── configs/
     └── dev.tfvars    # Empty tfvars file (user fills in values)
 ```
+
+The `configs/dev.tfvars` file is created empty. The user populates it with environment-specific variable values.
 
 ## User-Provided Variables
 
@@ -62,6 +64,8 @@ The Makefile targets are inserted as a new section in the root Makefile. The sec
 - `.tf-create-workspace` — create workspace if it doesn't exist
 
 **ready target:** If a `ready` target exists in the Makefile, add `tf-lint` as a dependency.
+
+**local-dev target:** Terraform projects do not have a local-dev integration. No action needed.
 
 ## Renovate Integration
 
