@@ -20,6 +20,8 @@ A scaffolded Go project creates the following in the target subdirectory:
 └── .mockery.yaml      # Mockery configuration for mock generation
 ```
 
+After the initial `go mod tidy`, a `go.sum` file will be generated in the subdirectory. This is expected and should be committed to version control.
+
 ## User-Provided Variables
 
 scaffolding-project asks the user for these values during the interactive flow:
