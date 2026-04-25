@@ -19,7 +19,7 @@ Interactive skill for adding a project type to a repository or upgrading an exis
 
 | Type | Skill to Load | Description |
 |------|--------------|-------------|
-| Terraform | `terraform-project` | AWS infrastructure with S3 backend |
+| Terraform | `terraform-project` | AWS infrastructure with assume_role pattern |
 | Go | `golang-project` | Go program with cmd/pkg layout and mockery |
 | Python | `python-project` | Python project with uv, pytest, and quality tooling |
 
@@ -43,7 +43,7 @@ Copy this checklist and track your progress:
 Present the available project types and ask the user which one to scaffold:
 
 > What type of project would you like to scaffold?
-> 1. **Terraform** — AWS infrastructure with S3 backend
+> 1. **Terraform** — AWS infrastructure with assume_role pattern
 > 2. **Go** — Go program with cmd/pkg layout and mockery
 > 3. **Python** — Python project with uv, pytest, and quality tooling
 
