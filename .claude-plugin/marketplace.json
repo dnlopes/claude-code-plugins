@@ -42,7 +42,7 @@
     },
     {
       "name": "project-bootstrap",
-      "version": "1.1.0",
+      "version": "1.3.0",
       "source": "./project-bootstrap",
       "description": "Repository bootstrapping and project scaffolding with upgrade support"
     }

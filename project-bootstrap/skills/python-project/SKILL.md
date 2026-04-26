@@ -46,7 +46,7 @@ scaffolding-project asks the user for these values during the interactive flow:
 | `reference/main.py` | Entry point skeleton | No |
 | `reference/conftest.py` | Shared test fixtures | No |
 | `reference/main_test.py` | Example test | No |
-| `reference/pyproject.toml` | Project config with uv, black, isort, pycln, pyright, pytest | Yes: `{{PY_PROJECT_NAME}}`, `{{PY_PROJECT_DESCRIPTION}}` |
+| `reference/pyproject.toml` | Project config with uv, dev dependency group, and tool settings | Yes: `{{PY_PROJECT_NAME}}`, `{{PY_PROJECT_DESCRIPTION}}` |
 | `reference/python-version` | Python version pin | No |
 | `reference/makefile-targets.mk` | Makefile section with py-local-dev, py-unit-tests, py-local-clean, py-ready | Yes: `{{PY_DIR}}`, `{{PY_DIR_VAR}}` |
 | `reference/renovate-rules.json` | Renovate packageRules entry | Yes: `{{PY_DIR}}` |
@@ -59,10 +59,10 @@ The Makefile targets are inserted as a new section in the root Makefile. The sec
 - A variable for the Python directory path (name chosen by user, e.g., `PY_DIR`, `SRC_DIR`)
 
 **Public targets:**
-- `py-local-dev` — install pre-commit hooks and sync dependencies with uv
+- `py-local-dev` — sync dependencies with uv
 - `py-unit-tests` — run pytest with coverage
 - `py-local-clean` — remove .venv directory
-- `py-ready` — run all quality checks (pre-commit, pycln, isort, black, pyright)
+- `py-ready` — run all quality checks (pycln, isort, black, pyright)
 
 **ready target:** If a `ready` target exists in the Makefile, add `py-ready` as a dependency.
 
@@ -80,7 +80,7 @@ The Python project uses `uv` as the package manager (not pip, poetry, or pipenv)
 | pycln | Remove unused imports | `[tool.pycln]` in pyproject.toml |
 | pyright | Type checking | `[tool.pyright]` in pyproject.toml |
 | pytest | Testing with coverage | `pyproject.toml` dependencies |
-| pre-commit | Git hooks for quality checks | `.pre-commit-config.yaml` (user creates) |
+
 
 ## Renovate Integration
 

@@ -1,0 +1,6 @@
+with-expecter: true
+dir: "mocks"
+outpkg: "mocks"
+filename: "{{.PackageName}}_{{.InterfaceName}}.go"
+mockname: "Mock{{.InterfaceName}}"
+packages: {}

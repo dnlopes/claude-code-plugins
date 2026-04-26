@@ -38,9 +38,9 @@ scaffolding-project asks the user for these values during the interactive flow:
 | Reference | Purpose | Parameterized |
 |-----------|---------|---------------|
 | `reference/main.go` | Entry point skeleton | No |
-| `reference/go.mod` | Module definition with testify | Yes: `{{GO_MODULE}}` |
-| `reference/mockery.yaml` | Mockery config for mock generation | No |
-| `reference/makefile-targets.mk` | Makefile section with go-build, go-unit-tests, go-ready, go-mocks | Yes: `{{GO_DIR}}`, `{{GO_DIR_VAR}}`, `{{GO_BINARY_NAME}}` |
+| `reference/go.mod` | Module definition with testify | Yes: `{{GO_MODULE}}`. The `go` directive version should be updated to the latest stable Go release at scaffolding time. |
+| `reference/.mockery.yaml` | Mockery config for mock generation | No |
+| `reference/makefile-targets.mk` | Makefile section with go-build, go-unit-tests, go-ready, go-lint, go-mocks | Yes: `{{GO_DIR}}`, `{{GO_DIR_VAR}}`, `{{GO_BINARY_NAME}}` |
 | `reference/renovate-rules.json` | Renovate packageRules entry | Yes: `{{GO_DIR}}` |
 
 ## Makefile Integration
@@ -50,12 +50,14 @@ The Makefile targets are inserted as a new section in the root Makefile. The sec
 **Variables** (inserted in the Project Variables section):
 - A variable for the Go directory path (name chosen by user, e.g., `LAMBDA_DIR`, `API_DIR`)
 - `MOCKERY` — path to the mockery binary
+- `GOLANGCI_LINT` — path to the golangci-lint binary
 
 **Public targets:**
-- `go-ready` — format, vet, and tidy Go code
+- `go-ready` — format, vet, lint, and tidy Go code
 - `go-unit-tests` — run tests with coverage
 - `go-mocks` — generate mocks with mockery
 - `go-build` — build the Go binary
+- `go-lint` — run golangci-lint
 
 **Internal targets:**
 - `.go-fmt` — format Go code
@@ -63,7 +65,17 @@ The Makefile targets are inserted as a new section in the root Makefile. The sec
 
 **ready target:** If a `ready` target exists in the Makefile, add `go-ready` as a dependency.
 
-**local-dev target:** If a `local-dev` target exists, add mockery installation using the `go-get-tool` macro. If the macro doesn't exist, add it to the Utils section.
+**local-dev target:** If a `local-dev` target exists, add mockery and golangci-lint installation using the `go-get-tool` macro. If the macro doesn't exist, add it to the Utils section.
+
+## Tooling
+
+| Tool | Purpose | Config Location |
+|------|---------|----------------|
+| go fmt | Code formatting | Built-in |
+| go vet | Static analysis | Built-in |
+| golangci-lint | Comprehensive linting (aggregates multiple linters) | `.golangci.yml` in project subdirectory (user creates) |
+| mockery | Interface mock generation | `.mockery.yaml` in project subdirectory |
+| testify | Test assertions and suites | `go.mod` dependency |
 
 ## go-get-tool Macro
 

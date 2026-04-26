@@ -1,0 +1,7 @@
+{
+  "groupName": "python-dependencies",
+  "description": "Group Python dependency updates together",
+  "matchFileNames": ["{{PY_DIR}}/**"],
+  "matchUpdateTypes": ["minor", "patch"],
+  "automerge": true
+}

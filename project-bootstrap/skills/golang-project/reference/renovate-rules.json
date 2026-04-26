@@ -1,0 +1,7 @@
+{
+  "groupName": "golang-dependencies",
+  "description": "Group Go dependency updates together",
+  "matchFileNames": ["{{GO_DIR}}/**"],
+  "matchUpdateTypes": ["minor", "patch"],
+  "automerge": true
+}

@@ -61,7 +61,7 @@ Check if the target subdirectory exists and contains files.
 - **Subdirectory contains files:** Suggest the upgrade workflow:
   > I found an existing project at `./{{subdirectory}}`. Would you like to run the upgrade workflow to compare it against the current references?
 
-  If the user agrees, proceed to **Upgrade Workflow** (Step 5). If not, ask for a different subdirectory.
+  If the user agrees, proceed to **Upgrade Workflow** (Step 5). If the user declines and wants a different subdirectory, ask again. If the user explicitly wants to scaffold fresh into the non-empty directory, proceed to **Fresh Scaffold** (Step 4) — warn that existing files with the same names will be overwritten and get confirmation.
 
   To determine the project type of an existing project, check for signature files:
   - `*.tf` files present → Terraform
@@ -83,14 +83,14 @@ Check if the target subdirectory exists and contains files.
 
    **Subdirectory files:** Create each file listed in the type skill's project structure.
 
-   **Makefile targets:** Read the existing Makefile. Insert the type's Makefile targets section. Specifics:
+   **Makefile targets:** Read the existing Makefile. If no Makefile exists, create one using the `reference/makefile-skeleton.mk` from the `bootstrapping-repository` skill as the starting point, then insert the type's targets. If a Makefile exists, insert the type's Makefile targets section. Specifics:
    - Add variables to the Project Variables section (after the existing variables, before the first section banner).
    - Add the targets section before the `Others` section.
    - Add `.PHONY` entries to the existing `.PHONY` line, or create one if it doesn't exist.
    - If a `ready` target exists, add the type's ready target as a dependency.
    - If a `local-dev` target exists, check the type skill for a local-dev integration. Go and Python define one; Terraform does not. Add only what the type skill specifies.
 
-   **Renovate rules:** Read the existing `renovate.json`. Add the type's `packageRules` entry to the `packageRules` array.
+   **Renovate rules:** Read the existing `renovate.json`. If no `renovate.json` exists, create one using the `reference/renovate-base.json` from the `bootstrapping-repository` skill as the starting point. Add the type's `packageRules` entry to the `packageRules` array.
 
 4. **Present summary.** Show all files that will be created and all edits that will be made to existing files. Show the actual content/diffs.
 
@@ -144,6 +144,7 @@ Check if the target subdirectory exists and contains files.
 - Variables use `?=` for overridable defaults.
 - The `help` target and `Others` section are always last.
 - When adding a project type, the new section goes before the `Others` section.
+- If the existing Makefile does not follow the banner/section pattern (e.g., no `#### ... ####` banners, no `Others` section), ask the user where to insert the new targets. Show the current Makefile structure and let the user pick the insertion point.
 
 ## Handling Multiple Projects of the Same Type
 
