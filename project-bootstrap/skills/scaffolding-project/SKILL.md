@@ -40,12 +40,16 @@ Copy this checklist and track your progress:
 
 ### Step 1: Ask Project Type
 
-Present the available project types and ask the user which one to scaffold:
+Call the `AskUserQuestion` tool to present the available project types as selectable options:
 
-> What type of project would you like to scaffold?
-> 1. **Terraform** — AWS infrastructure with assume_role pattern
-> 2. **Go** — Go program with cmd/pkg layout and mockery
-> 3. **Python** — Python project with uv, pytest, and quality tooling
+- **question:** "What type of project would you like to scaffold?"
+- **header:** "Project type"
+- **options:**
+  - "Terraform" — AWS infrastructure with assume_role pattern
+  - "Go" — Go program with cmd/pkg layout and mockery
+  - "Python" — Python project with uv, pytest, and quality tooling
+
+The tool auto-adds an "Other" slot. If the user picks it (or dismisses), stop — only the three supported types are valid; do not infer or accept alternatives.
 
 ### Step 2: Ask Subdirectory
 
@@ -58,26 +62,52 @@ Ask where the project should live:
 Check if the target subdirectory exists and contains files.
 
 - **Subdirectory does not exist or is empty:** Proceed to **Fresh Scaffold** (Step 4).
-- **Subdirectory contains files:** Suggest the upgrade workflow:
-  > I found an existing project at `./{{subdirectory}}`. Would you like to run the upgrade workflow to compare it against the current references?
+- **Subdirectory contains files:** Call the `AskUserQuestion` tool:
 
-  If the user agrees, proceed to **Upgrade Workflow** (Step 5). If the user declines and wants a different subdirectory, ask again. If the user explicitly wants to scaffold fresh into the non-empty directory, proceed to **Fresh Scaffold** (Step 4) — warn that existing files with the same names will be overwritten and get confirmation.
+  - **question:** "I found an existing project at `./{{subdirectory}}`. How should I proceed?"
+  - **header:** "Existing project"
+  - **options:**
+    - "Run upgrade workflow (Recommended)" — compare it against the current references and propose updates
+    - "Pick a different subdirectory" — re-ask Step 2
+
+  On option 1, proceed to **Upgrade Workflow** (Step 5). On option 2, return to Step 2. If the user dismisses or picks "Other", stop. Do not offer to scaffold fresh on top of a non-empty directory — overwriting an existing project is not a supported path.
 
   To determine the project type of an existing project, check for signature files:
   - `*.tf` files present → Terraform
   - `go.mod` present → Go
   - `pyproject.toml` present → Python
 
-  If multiple signatures match or none match, ask the user to confirm the project type.
+  If multiple signatures match or none match, call the `AskUserQuestion` tool to confirm:
+
+  - **question:** "I couldn't determine the project type at `./{{subdirectory}}`. Which type is it?"
+  - **header:** "Project type"
+  - **options:**
+    - "Terraform"
+    - "Go"
+    - "Python"
+
+  If the user dismisses or picks "Other", stop.
 
 ### Step 4: Fresh Scaffold
 
 1. **Load the type-specific skill.** Read the SKILL.md for the selected project type from `skills/<type>-project/SKILL.md`. Read all reference files listed in that skill.
 
-2. **Ask user-provided variables.** Each type skill documents the variables the user needs to provide. Ask for each one. Example for Terraform:
+2. **Ask user-provided variables.** Each type skill documents the variables the user needs to provide. For each variable, check whether the type skill marks it as **Derived default** — if so, compute the default from prior answers (typically `{{<TYPE>_DIR}}`) and present it as a pre-filled value the user can accept or override. Only ask free-text for variables without a derivable default.
+
+   Example for Terraform (no derivable defaults — all must be asked):
    > I need a few configuration values:
    > - **Terraform workspace name** (e.g., `my-app-dev`):
    > - **AWS CLI profile** (e.g., `jumpbox-operator`):
+
+   Example for Go with `{{GO_DIR}}` = `lambda-checker` (defaults derived and shown for confirmation):
+   > I need a few configuration values:
+   > - **Go module name** (e.g., `github.com/dnlopes/my-project`):
+   > - **Makefile dir variable** [default: `LAMBDA_CHECKER_DIR`] — press enter to accept or type a different name:
+   > - **Binary name** [default: `lambda-checker`] — press enter to accept or type a different name:
+
+   Derivation rules:
+   - `{{GO_DIR_VAR}}` / `{{PY_DIR_VAR}}`: `upper(basename(<TYPE>_DIR))` with `-` replaced by `_`, suffix `_DIR`. (e.g., `lambda-checker` → `LAMBDA_CHECKER_DIR`, `src-python` → `SRC_PYTHON_DIR`)
+   - `{{GO_BINARY_NAME}}`: `basename(GO_DIR)`. (e.g., `lambda-checker` → `lambda-checker`)
 
 3. **Prepare changes.** For each deliverable, substitute placeholders in the reference content with user-provided values:
 
@@ -94,7 +124,15 @@ Check if the target subdirectory exists and contains files.
 
 4. **Present summary.** Show all files that will be created and all edits that will be made to existing files. Show the actual content/diffs.
 
-5. **Apply approved changes.** Wait for user approval. Apply only what the user accepts.
+5. **Apply approved changes.** Call the `AskUserQuestion` tool:
+
+   - **question:** "How should I proceed?"
+   - **header:** "Apply changes"
+   - **options:**
+     - "Apply all (Recommended)" — create all listed files and apply all Makefile / renovate.json edits
+     - "Project files only" — create the subdirectory files; skip the Makefile and renovate.json edits
+
+   The tool auto-adds an "Other" slot — if the user picks it (e.g., to specify a different subset), follow up with a free-text question to collect the items they want applied (file paths or edit identifiers from the summary). If the user dismisses the prompt, treat that as cancel and make no changes.
 
 ### Step 5: Upgrade Workflow
 
@@ -134,7 +172,15 @@ Check if the target subdirectory exists and contains files.
    - `backend.tf`, `s3.tf`, `cdn.tf`, `acm.tf`, `locals.tf`, `outputs.tf`, `google.tf` — project-specific resources. Not modified.
    ```
 
-5. **User reviews.** The user selects which proposed changes to apply. Apply only approved changes.
+5. **User reviews.** Call the `AskUserQuestion` tool:
+
+   - **question:** "How should I proceed with the upgrade?"
+   - **header:** "Apply upgrade"
+   - **options:**
+     - "Apply all (Recommended)" — apply every "New" and "Diverged" change in the report
+     - "New items only" — add only the missing items; leave "Diverged" files untouched
+
+   The tool auto-adds an "Other" slot — if the user picks it, follow up with a free-text question to collect specific items to apply from the report (file names, target names, or rule identifiers). If the user dismisses the prompt, treat that as cancel and make no changes. Never modify items in the **Extra** category.
 
 ## Makefile Editing Conventions
 
@@ -144,18 +190,30 @@ Check if the target subdirectory exists and contains files.
 - Variables use `?=` for overridable defaults.
 - The `help` target and `Others` section are always last.
 - When adding a project type, the new section goes before the `Others` section.
-- If the existing Makefile does not follow the banner/section pattern (e.g., no `#### ... ####` banners, no `Others` section), ask the user where to insert the new targets. Show the current Makefile structure and let the user pick the insertion point.
+- If the existing Makefile does not follow the banner/section pattern (e.g., no `#### ... ####` banners, no `Others` section), first show the current Makefile structure (list the existing top-level targets in order), then call the `AskUserQuestion` tool:
+
+  - **question:** "The existing Makefile doesn't follow the standard banner/section pattern. Where should I insert the new targets?"
+  - **header:** "Insertion point"
+  - **options:**
+    - "End of file (Recommended)" — append after the last target
+    - "Before the first target" — insert above the existing target list
+    - "After an existing target" — pick which target in a follow-up question
+
+  If the user picks "After an existing target", call `AskUserQuestion` again with up to 4 of the most likely targets (e.g., the last 4 in the file) as options. The auto-"Other" slot lets the user type a different target name if none of the offered ones fit. If the user dismisses either prompt, leave the Makefile alone.
 
 ## Handling Multiple Projects of the Same Type
 
 If the user scaffolds a second project of the same type (e.g., two Terraform projects), the Makefile targets will conflict. Detect this by checking if the type's targets already exist in the Makefile.
 
-When a conflict is detected, ask the user how to disambiguate:
-> Terraform targets already exist in the Makefile (for `./terraform`). How should I name the new targets?
-> - Option 1: Prefix with project name (e.g., `tf-plan-network`, `tf-apply-network`)
-> - Option 2: Use a different prefix entirely (e.g., `infra-plan`, `infra-apply`)
+When a conflict is detected, call the `AskUserQuestion` tool:
 
-Apply the user's naming choice when substituting the Makefile targets.
+- **question:** "Terraform targets already exist in the Makefile (for `./terraform`). How should I name the new targets?"
+- **header:** "Naming conflict"
+- **options:**
+  - "Prefix with project name (Recommended)" — append the new project's basename (e.g., `tf-plan-network`, `tf-apply-network`)
+  - "Use a different prefix" — specify a custom prefix in a follow-up question (e.g., `infra-` → `infra-plan`, `infra-apply`)
+
+If the user picks "Use a different prefix", follow up with a free-text question for the prefix. The auto-"Other" slot lets the user describe a different naming scheme entirely. If the user dismisses the prompt, abort scaffolding. Apply the user's naming choice when substituting the Makefile targets.
 
 ## Placeholder Substitution
 

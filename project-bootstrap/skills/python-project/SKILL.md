@@ -30,14 +30,14 @@ The `__init__.py` files are empty package markers. Create them as empty files �
 
 ## User-Provided Variables
 
-scaffolding-project asks the user for these values during the interactive flow:
+scaffolding-project asks the user for these values during the interactive flow. Variables marked **Derived default** are pre-filled from `{{PY_DIR}}`; the user can override but does not have to type a value.
 
-| Variable | Placeholder | Example | Purpose |
-|----------|------------|---------|---------|
-| Subdirectory path | `{{PY_DIR}}` | `src-python` | Where the Python project lives |
-| Makefile variable name | `{{PY_DIR_VAR}}` | `PY_DIR` | Makefile variable for the directory |
-| Project name | `{{PY_PROJECT_NAME}}` | `my-tool` | Name in pyproject.toml |
-| Project description | `{{PY_PROJECT_DESCRIPTION}}` | `A utility tool` | Description in pyproject.toml |
+| Variable | Placeholder | Example | Default | Purpose |
+|----------|------------|---------|---------|---------|
+| Subdirectory path | `{{PY_DIR}}` | `src-python` | — (asked) | Where the Python project lives |
+| Makefile variable name | `{{PY_DIR_VAR}}` | `SRC_PYTHON_DIR` | **Derived:** `upper(basename(PY_DIR))` with `-` replaced by `_`, suffix `_DIR` | Makefile variable for the directory |
+| Project name | `{{PY_PROJECT_NAME}}` | `my-tool` | — (asked) | Name in pyproject.toml |
+| Project description | `{{PY_PROJECT_DESCRIPTION}}` | `A utility tool` | — (asked) | Description in pyproject.toml |
 
 ## Reference Files
 

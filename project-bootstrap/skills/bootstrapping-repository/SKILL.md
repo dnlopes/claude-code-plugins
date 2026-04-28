@@ -78,7 +78,15 @@ Present a categorized summary to the user:
 
 ### Step 4: Apply Approved Changes
 
-Wait for the user to indicate which changes to apply. Apply only what the user approves. For diverged files, apply only the specific changes the user accepts.
+After presenting the summary, call the `AskUserQuestion` tool to capture the user's decision:
+
+- **question:** "How should I proceed?"
+- **header:** "Apply changes"
+- **options:**
+  - "Apply all (Recommended)" — create all "New" files and apply all proposed changes to "Diverged" files
+  - "Apply only New" — create missing files; leave diverged files untouched
+
+The tool auto-adds an "Other" slot — if the user picks it (e.g., to specify a subset of files), follow up with a free-text question to collect the file list. If the user dismisses the prompt, treat that as cancel and make no changes. For diverged files in the subset path, apply only the specific changes the user accepts.
 
 ## Troubleshooting
 

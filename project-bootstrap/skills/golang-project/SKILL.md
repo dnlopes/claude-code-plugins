@@ -24,14 +24,14 @@ After the initial `go mod tidy`, a `go.sum` file will be generated in the subdir
 
 ## User-Provided Variables
 
-scaffolding-project asks the user for these values during the interactive flow:
+scaffolding-project asks the user for these values during the interactive flow. Variables marked **Derived default** are pre-filled from `{{GO_DIR}}`; the user can override but does not have to type a value.
 
-| Variable | Placeholder | Example | Purpose |
-|----------|------------|---------|---------|
-| Subdirectory path | `{{GO_DIR}}` | `lambda-checker` | Where the Go project lives |
-| Makefile variable name | `{{GO_DIR_VAR}}` | `LAMBDA_DIR` | Makefile variable for the directory |
-| Go module name | `{{GO_MODULE}}` | `github.com/dnlopes/my-project` | Module path in go.mod |
-| Binary name | `{{GO_BINARY_NAME}}` | `my-app` | Output binary name for go build |
+| Variable | Placeholder | Example | Default | Purpose |
+|----------|------------|---------|---------|---------|
+| Subdirectory path | `{{GO_DIR}}` | `lambda-checker` | — (asked) | Where the Go project lives |
+| Makefile variable name | `{{GO_DIR_VAR}}` | `LAMBDA_CHECKER_DIR` | **Derived:** `upper(basename(GO_DIR))` with `-` replaced by `_`, suffix `_DIR` | Makefile variable for the directory |
+| Go module name | `{{GO_MODULE}}` | `github.com/dnlopes/my-project` | — (asked) | Module path in go.mod |
+| Binary name | `{{GO_BINARY_NAME}}` | `lambda-checker` | **Derived:** `basename(GO_DIR)` | Output binary name for go build |
 
 ## Reference Files
 
