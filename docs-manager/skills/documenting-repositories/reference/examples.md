@@ -83,9 +83,9 @@ Web application managing user subscriptions. Handles authentication, subscriptio
 We handle errors properly. See Go documentation for best practices.
 ```
 
-**Why it's wrong:** No project-specific guidance, no examples, defers to external docs. Provides zero signal about *this* codebase's conventions.
+**Why it's wrong:** No project-specific guidance and no signal about *this* codebase's conventions. Defers to external docs the agent could already find.
 
-### Correct
+### Also Incorrect
 
 ```markdown
 ## Error Handling
@@ -98,15 +98,29 @@ if err != nil {
     return nil, fmt.Errorf("get user %s: %w", id, err)
 }
 \`\`\`
-
-**Guidelines:**
-
-- Always wrap with `fmt.Errorf("operation: %w", err)`
-- Include identifying information (IDs, paths) in the context string
-- Never log + return; let the top of the stack decide
 ```
 
-**Why it's right:** Shows the actual pattern, anchors it with a `file:line` reference, and states the rules concisely. New code can be checked against this with no ambiguity.
+**Why it's wrong:** The line number rots on every edit. The code snippet duplicates what reading the file already shows. An agent gets no understanding it didn't already have — and the snippet will drift out of sync with the real code the moment someone touches the file.
+
+### Correct
+
+```markdown
+## Error Handling
+
+Every layer wraps errors with operation context before returning. The top of the
+call stack decides whether to log; intermediate layers never log-and-return
+(this produces duplicate log entries and obscures the originating context).
+
+Service-layer wrapping uses the standard library's error-wrapping idiom; do not
+introduce a custom error type for this. Canonical examples live under
+`internal/service/`.
+
+**Gotcha:** Errors crossing the API boundary are flattened to user-safe messages
+in `internal/api/errors`. Wrapped internal errors must never be returned to
+clients directly — they leak file paths and IDs.
+```
+
+**Why it's right:** Captures the rule, the rationale (so an agent can judge edge cases), and a non-obvious gotcha. Anchored only by directory paths that survive refactors. An agent reading this knows *what to do and why* — and can open the directory themselves to see *how*.
 
 ## Development
 
@@ -220,11 +234,13 @@ last_updated: 2025-01-15T10:30:00Z
 
 | Mistake | Problem | Fix |
 |---------|---------|-----|
-| Listing every file | Needs constant updates | Describe patterns and key directories |
-| Version numbers in architecture | Changes frequently | Put in `package.json` / `go.mod` |
-| Generic advice ("handle errors properly") | Not actionable | Show *your* patterns with `file:line` |
-| No file references | Reader can't find the code | Include `file:line` anchors |
-| Raw commands (`go test ./...`) | Breaks when build evolves | Use `make`/`npm` interfaces |
+| Listing every file / function / parameter | Trivially derivable; rots on every refactor | Describe intent, invariants, and concerns by directory |
+| Version numbers in architecture | Live authoritatively in `package.json` / `go.mod` | Drop them; manifests are the source of truth |
+| Generic advice ("handle errors properly") | Not actionable, no project-specific signal | State the rule, the rationale, and known gotchas |
+| Code snippets illustrating patterns | Duplicate the linked code; drift on every edit | Describe the pattern in prose; point at a directory or exported symbol |
+| Line-number references (`file.go:45`) | Rot on every edit, even unrelated ones | Reference by file path or exported symbol name |
+| Raw commands (`go test ./...`) | Breaks when build flags / coverage / race detection evolve | Use `make`/`npm`/`docker-compose` interfaces |
 | Plain YAML frontmatter | Renders on GitHub | Wrap in `<!-- ... -->` |
 | Local-time timestamps | Ambiguous, hard to compare | ISO 8601 UTC (`Z` suffix) |
 | `domain.md` for utility libs | Documents what doesn't exist | Skip the file entirely |
+| Historical narratives ("we used to use X") | Lives in `git log`; pure noise for agents | Drop them |

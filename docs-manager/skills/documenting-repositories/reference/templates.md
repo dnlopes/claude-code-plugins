@@ -84,26 +84,28 @@ last_updated: <ISO_TIMESTAMP>
 
 # <Module Name>
 
-<What this module does and why it exists>
+<Why this module exists and what problem it solves. Intent, not behavior.>
+
+## Responsibilities & Boundaries
+
+<What this module owns. What it explicitly does NOT own. Where it hands off to
+neighbours.>
 
 ## Key Abstractions
 
 ### <Abstraction Name>
-**Purpose:** <what it represents>
-**Location:** `<file path>`
-
-## Architecture
-
-<Internal structure if complex>
+**Represents:** <the concept, not the class signature>
+**Lives in:** `<file path or directory — no line numbers>`
+**Invariants:** <rules that must hold>
 
 ## Gotchas
 
-- <Non-obvious behavior>
-- <Common mistakes>
+- <Non-obvious behavior, surprising consequence, or known trap that an agent
+  reading the code would not discover>
 
-## Dependencies
+## Interactions
 
-- <Other module>: <how it's used>
+- <Module it depends on>: <the contract, not the call sites>
 ```
 
 **Create module AGENTS.md only when:**
@@ -112,6 +114,13 @@ last_updated: <ISO_TIMESTAMP>
 - Contains business-critical logic
 - Multiple interacting components
 - Takes significant time to understand from code
+
+**Do NOT include in a module AGENTS.md:**
+
+- Function / method / parameter listings (agents grep)
+- Line numbers
+- Code snippets that duplicate what reading the file would show
+- Step-by-step walkthroughs of the implementation
 
 ## CLAUDE.md
 
@@ -145,15 +154,21 @@ last_updated: <ISO_TIMESTAMP>
 ## Components
 
 ### <Component Name>
-**Location:** `<path>`
-**Responsibility:** <what it does>
-**Interacts with:** <other components>
+**Lives in:** `<directory or file path — no line numbers>`
+**Owns:** <the concern, the slice of behavior — not a function list>
+**Interacts with:** <other components and the nature of the relationship>
 ```
 
 **Optional sections** (include only when applicable):
 
-- **Data Flow** — when non-trivial flow exists
-- **External Dependencies** — when external integrations exist
+- **Data Flow** — when the flow is non-trivial AND not visible from reading any single file
+- **External Dependencies** — when external integrations carry semantics not obvious from the client library (e.g., "we treat 429s as success because…")
+- **Invariants** — system-wide rules that span multiple components
+
+**Do NOT include:**
+
+- Lists of files in each directory (an `ls` answers this)
+- Version numbers of frameworks or libraries
 
 ## docs/domain.md
 
@@ -203,8 +218,8 @@ last_updated: <ISO_TIMESTAMP>
 
 \`\`\`
 <project>/
-├── <dir>/          # <purpose>
-└── <dir>/          # <purpose>
+├── <dir>/          # <what concern lives here>
+└── <dir>/          # <what concern lives here>
 \`\`\`
 
 ## Naming Conventions
@@ -217,11 +232,16 @@ last_updated: <ISO_TIMESTAMP>
 
 **Optional sections:**
 
-- **Error Handling** — when a consistent pattern exists
-- **Testing Patterns** — when tests follow a consistent approach
-- **Common Patterns** — when repeating patterns exist
+- **Error Handling** — when a consistent pattern exists AND deviation would
+  cause real problems (logs lost, errors leaked, semantics broken)
+- **Testing Patterns** — when tests follow a project-specific approach that
+  isn't obvious from a typical test file
+- **Common Patterns** — repeating patterns that encode decisions, not boilerplate
 
-Always include `file:line` references for pattern examples.
+**Pattern entries describe the rule and the reason, not the implementation.**
+Reference the canonical example by file path or exported symbol — never by line
+number, and never reproduce the code inline. An agent reading the pattern
+should know *what to do and why*; they can open the file themselves to see *how*.
 
 ## docs/development.md
 
@@ -351,24 +371,34 @@ last_updated: <ISO_TIMESTAMP>
 
 # <Title>
 
-<What this document covers and why it exists>
+<Why this document exists. What an agent would otherwise have to discover the
+hard way.>
 
 ## Overview
 
-<High-level explanation>
+<High-level explanation of intent, boundaries, and the shape of the thing.>
 
 ## Key Concepts
 
 ### <Concept Name>
-<Explanation>
+<What it represents in this system. Invariants and gotchas. Not its
+implementation.>
 
-## Usage
+## Usage / Interaction
 
-<How to use/interact with what's documented>
+<The contract for working with this. When to use it, when not to. Decision
+criteria, not call-site walkthroughs.>
 
 ## Related
 
-- <Links to related docs or code>
+- <Links to related docs or code by path / symbol — no line numbers>
 ```
 
-Ad-hoc documents MUST include `scope.paths`, `scope.summary`, and `last_updated` to be tracked.
+**Ad-hoc documents MUST include `scope.paths`, `scope.summary`, and `last_updated`** to be tracked.
+
+**Ad-hoc documents MUST NOT include:**
+
+- Line numbers in any reference
+- Code snippets that duplicate the linked code
+- Function / parameter listings
+- Version numbers or dependency lists

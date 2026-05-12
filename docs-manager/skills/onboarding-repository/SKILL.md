@@ -64,8 +64,13 @@ Launch the `docs-manager:codebase-explorer` agent via the Task tool:
 Description: Explore codebase for documentation
 Prompt: Explore this repository and extract documentation-relevant information.
 Return structured findings: project overview, tech stack, architecture,
-patterns with file:line references, complex modules, and scope paths
-for each document type.
+patterns (as rules + rationale, anchored by file path or exported symbol —
+NEVER line numbers, NEVER code snippets), invariants and gotchas,
+complex modules, and scope paths for each document type.
+
+Capture durable, non-derivable knowledge only. Skip anything an agent could
+discover in seconds with `grep` or `ls` (function lists, parameter lists,
+file listings, dependency lists, version numbers).
 ```
 
 **Capture** the structured findings — needed in Steps 2 and 3.

@@ -39,17 +39,20 @@ Explore a codebase and return structured findings used by `doc-generator` to pro
 
 These rules are non-negotiable:
 
-1. **Every pattern claim MUST have a `file:line` reference.** No claims without evidence.
-2. **Build commands MUST use the project's build system** (`make`, `npm`, `docker-compose`) — never raw tool invocations.
-3. **Be CONSERVATIVE on complex modules.** When in doubt, do NOT flag a module as complex.
-4. **Scope paths MUST be specific** enough that staleness detection won't trigger on unrelated changes.
+1. **Every pattern claim MUST cite a stable anchor — file path or exported symbol name.** NEVER include line numbers (`file.go:45`) — they rot on every edit.
+2. **Findings MUST capture durable, non-derivable knowledge** — intent, invariants, boundaries, gotchas, decision criteria. Skip anything an agent could discover in seconds with `grep` or `ls` (function lists, parameter lists, file listings, dependency lists, version numbers).
+3. **NEVER include code snippets** in findings. If a pattern requires illustration, describe it in prose and cite the directory/file/symbol where the canonical example lives. The downstream doc-generator will not reproduce code either.
+4. **Build commands MUST use the project's build system** (`make`, `npm`, `docker-compose`) — never raw tool invocations.
+5. **Be CONSERVATIVE on complex modules.** When in doubt, do NOT flag a module as complex.
+6. **Scope paths MUST be specific** enough that staleness detection won't trigger on unrelated changes.
 
 ## Core Responsibilities
 
-1. Identify project purpose, tech stack, and architecture
-2. Find patterns and conventions with concrete `file:line` references
-3. Detect complex modules that warrant dedicated documentation
-4. Determine appropriate scope paths for staleness tracking
+1. Identify project purpose, tech stack, and high-level architecture
+2. Surface patterns and conventions as **rules with rationale**, anchored by file path or exported symbol (never line numbers, never with code snippets)
+3. Surface invariants, gotchas, and decision criteria — the highest-value findings
+4. Detect complex modules that warrant dedicated documentation
+5. Determine appropriate scope paths for staleness tracking
 
 ## Exploration Process
 
@@ -92,18 +95,18 @@ For each major directory, read 1-2 representative files to understand:
 - Component responsibility
 - How components interact
 
-### Step 4 — Patterns (with `file:line` references)
+### Step 4 — Patterns (as rules + rationale, anchored by path/symbol)
 
-Find ONE concrete example for each pattern type:
+For each pattern type, identify the rule the codebase follows, the reason it follows it (if discoverable), and a stable anchor — file path or exported symbol. **Never cite line numbers. Never reproduce the code.**
 
-| Pattern | How to find |
-|---------|-------------|
-| Error handling | Grep for `error`/`Error`/`err`, examine top match |
-| Testing | Read one test file in full |
-| Naming | Note conventions from files already read |
-| Logging | Grep for `log`/`Log`/`logger`, examine top match |
+| Pattern | How to find | What to capture |
+|---------|-------------|-----------------|
+| Error handling | Grep for `error`/`Error`/`err`, examine top matches | The wrapping rule; what crosses boundaries; logging discipline |
+| Testing | Read one test file in full | Project-specific conventions (table tests? builders? fixture layout?) — not generic testing advice |
+| Naming | Note conventions from files already read | Rules an agent should follow when adding new files |
+| Logging | Grep for `log`/`Log`/`logger`, examine top matches | Where logs go, what gets logged, what NEVER gets logged |
 
-**Each pattern claim MUST cite a specific `file:line`.** Findings without anchors are unusable downstream.
+**Skip patterns that are obvious from a single file read** — there is nothing for docs to add. Only surface conventions where a fresh agent would otherwise re-derive them or get them wrong.
 
 ### Step 5 — Complex Modules
 
@@ -161,18 +164,27 @@ Return findings as structured markdown:
 ## Patterns
 
 ### Error Handling
-**Pattern:** <description>
-**Example:** `<file>:<line>` — <brief snippet or description>
+**Rule:** <the convention the codebase follows>
+**Rationale:** <why — if discoverable; omit if not>
+**Canonical location:** `<file path or directory>` (or exported symbol name)
+**Gotchas:** <non-obvious consequences, boundary behaviors>
 
 ### Testing
-**Pattern:** <description>
-**Example:** `<file>:<line>`
+**Rule:** <project-specific convention — NOT generic testing advice>
+**Canonical location:** `<file path>`
 
 ### Naming Conventions
 | Type | Convention | Example |
 |------|------------|---------|
 | Files | <convention> | `<example>` |
 | Functions | <convention> | `<example>` |
+
+## Invariants & Gotchas
+
+<Non-obvious rules and traps that span the codebase. Highest-value findings —
+these are what agents cannot rediscover from code alone.>
+
+- **<invariant or gotcha>:** <description and why it matters>
 
 ## Complex Modules
 <List modules needing dedicated AGENTS.md, or "None identified">
@@ -206,7 +218,9 @@ For each:
 
 ## Key Reminders — Self-Check Before Returning
 
-- [ ] Every pattern claim has a `file:line` reference
+- [ ] Every pattern claim cites a file path or exported symbol — **never a line number**
+- [ ] No code snippets in findings (prose only; anchors point at where to read)
+- [ ] Captured rationale and gotchas, not just descriptions
 - [ ] Build commands use the build system (not raw commands)
 - [ ] Conservative on complex modules (when in doubt, omitted)
 - [ ] Scope paths are specific enough to avoid false-positive staleness signals
@@ -214,8 +228,11 @@ For each:
 
 ## What NOT to Do
 
-- Don't list every file or function
-- Don't include version numbers (they change)
-- Don't document implementation details
+- Don't include line numbers in any reference — paths and symbols only
+- Don't include code snippets — describe in prose and point at the location
+- Don't list every file, function, method, parameter, or field — agents grep
+- Don't list dependencies or include version numbers — manifests are authoritative
+- Don't document anything an agent would discover in seconds with `ls` or `grep`
 - Don't guess — if uncertain, state the uncertainty
 - Don't mark modules as complex unless clearly warranted
+- Don't include historical narratives — `git log` is authoritative

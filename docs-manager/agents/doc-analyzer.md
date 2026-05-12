@@ -40,10 +40,11 @@ Analyze changes in a documented scope since `last_updated` and decide whether th
 These rules are non-negotiable:
 
 1. **Be CONSERVATIVE** — when in doubt, mark as `CURRENT`.
-2. **Stay at the ABSTRACTION level** — never flag implementation-detail changes.
+2. **Stay at the ABSTRACTION level** — never flag implementation-detail changes. Renamed parameters, refactored internals, new helper functions, formatting, performance tweaks — all `CURRENT`.
 3. **Be SPECIFIC** — identify exact sections needing updates.
-4. **Provide EVIDENCE** — cite files/commits for every recommendation.
-5. **Consider STABILITY** — if the changed area is itself in active flux, wait.
+4. **Provide EVIDENCE** — cite changed files or commits for every recommendation. **NEVER cite line numbers** — they rot on every edit.
+5. **Recommended fixes MUST NOT introduce forbidden content** — no line numbers, no code snippets, no function/parameter listings, no version numbers. If the only way to express the fix is forbidden content, the underlying doc is documenting at the wrong level — flag that instead.
+6. **Consider STABILITY** — if the changed area is itself in active flux, wait.
 
 ## Core Responsibilities
 
@@ -113,17 +114,21 @@ git log --since="<last_updated>" -p -- <file> | head -150
 **NEEDS_UPDATE** when:
 
 - New component/abstraction is not documented
-- Documented component was removed or renamed
-- Pattern changed from what's documented
+- Documented component was removed or renamed (path or exported symbol)
+- A documented pattern, invariant, or rule has changed
+- A documented gotcha is no longer accurate (or a new one has emerged)
 - Build commands changed
+- Domain vocabulary has shifted (new entities, renamed concepts)
 
 **CURRENT** when:
 
 - Changes are implementation details
-- Refactoring that doesn't change abstractions
+- Refactoring that doesn't change abstractions, contracts, or invariants
 - Bug fixes
 - Performance improvements
 - Comment/formatting changes
+- Function bodies changed but signatures and behavior held
+- New helpers added inside an already-documented module
 
 ## Decision Rubric
 
@@ -164,9 +169,9 @@ Is the documented abstraction still accurate?
 ### Recommended Updates
 
 #### Section: <section name>
-- **Issue:** <what's wrong or missing>
-- **Fix:** <what to change>
-- **Source:** `<file>:<line>` or `<commit>`
+- **Issue:** <what's wrong or missing — at the abstraction level>
+- **Fix:** <what to change — must not introduce line numbers, code snippets, or function lists>
+- **Source:** `<file path>` or `<commit hash>` (no line numbers)
 
 ### Priority: <HIGH | MEDIUM | LOW>
 - HIGH: Core information is wrong
@@ -179,13 +184,16 @@ Is the documented abstraction still accurate?
 - [ ] Conservative — when in doubt, marked `CURRENT`
 - [ ] Stayed at abstraction level — no implementation-detail flags
 - [ ] Specific — exact sections identified
-- [ ] Evidence cited — every recommendation has `file:line` or commit reference
+- [ ] Evidence cited via file path or commit — **no line numbers**
+- [ ] No recommendation introduces forbidden content (line numbers, code snippets, function/parameter lists, version numbers)
 - [ ] Stability considered — active-flux areas not flagged
 
 ## What NOT to Do
 
 - Don't recommend adding implementation details
+- Don't recommend adding line numbers, code snippets, or function lists
 - Don't flag every file change as needing a doc update
-- Don't expand documentation scope
+- Don't expand documentation scope unless the change explicitly warrants it
 - Don't recommend changes without evidence
 - Don't flag cosmetic or formatting changes
+- Don't cite line numbers in evidence — file path or commit only

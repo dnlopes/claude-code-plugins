@@ -124,7 +124,9 @@ Last updated: <ISO timestamp>
 Check git changes since <last_updated> in the scope paths above. Categorize
 the changes (structural / pattern / implementation / cosmetic) and decide if
 the documentation needs updating. If yes, list the specific sections and the
-exact fixes with file:line evidence.
+exact fixes, with evidence cited by file path or commit hash only — NEVER line
+numbers. Recommendations must not introduce line numbers, code snippets, or
+function/parameter listings into the doc.
 
 Be conservative: when in doubt, return CURRENT.
 ```
@@ -147,8 +149,8 @@ Compile and present the recommendations to the user:
 **Reason:** <one or two sentences from the analyzer>
 
 **Sections to update:**
-- <section name>: <what to change> (source: <file:line>)
-- <section name>: <what to change> (source: <commit>)
+- <section name>: <what to change> (source: `<file path>`)
+- <section name>: <what to change> (source: `<commit hash>`)
 
 ---
 ### <next document_path>
@@ -188,10 +190,11 @@ For each document the user approved (or all `NEEDS_UPDATE` docs if `--auto`):
 - **Minimal changes** — only what the analyzer recommended
 - **Preserve structure** — keep section order, heading levels, formatting style
 - **Maintain abstraction** — do NOT add implementation details, even if a recommendation drifts there
-- **Update `file:line` references** when the underlying code has moved
+- **NEVER introduce forbidden content** — no line numbers, no illustrative code snippets, no function/parameter listings, no version numbers. If a recommendation would require any of these, reject it.
+- **Replace existing forbidden content opportunistically** — if you encounter line numbers, snippets, or function listings in a section you are already editing, strip them. Do not refactor untouched sections.
 - **Do NOT modify `scope.paths`** unless a recommendation explicitly says to
 
-If a recommendation would require expanding scope, adding implementation detail, or reorganizing — **reject it** and surface it in Step 6 as a follow-up rather than applying.
+If a recommendation would require expanding scope, adding implementation detail, introducing forbidden content, or reorganizing — **reject it** and surface it in Step 6 as a follow-up rather than applying.
 
 ### Step 6 — Summarize
 
@@ -238,6 +241,7 @@ If a recommendation would require expanding scope, adding implementation detail,
 - Don't add new sections that weren't recommended
 - Don't refactor or reorganize the document
 - Don't apply implementation-detail recommendations — reject and surface
+- Don't apply recommendations that require line numbers, code snippets, or function/parameter listings — reject and surface
 - Don't modify `scope.paths` without an explicit recommendation
 - Don't update `last_updated` on a document you didn't change
 - Don't process `CURRENT` documents — they're up to date by definition
