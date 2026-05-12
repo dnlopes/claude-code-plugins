@@ -146,7 +146,7 @@ jobs:
           git checkout -B "$BRANCH"
           git add -A
           git commit -m "$TITLE"
-          git push --force-with-lease origin "$BRANCH"
+          git push --force origin "$BRANCH"
 
           BODY=$(cat <<EOF
           Automated sync of \`${{ matrix.name }}\` from upstream.
