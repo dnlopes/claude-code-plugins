@@ -9,7 +9,7 @@ Generate a focused document for a specific target (path or topic) in a repo that
 
 ## Critical Guidelines
 
-- **You MUST load the `docs-manager:documenting-repositories` skill first** for format standards and the ad-hoc document template.
+- **You MUST load the `curator:documenting-repositories` skill first** for format standards and the ad-hoc document template.
 - **You MUST follow the steps in order** — identify, explore, propose, generate, link, validate, summary.
 - **You MUST create TodoWrite todos for each step in the Workflow section** — one todo per Step, marked `in_progress` on entry and `completed` on exit. Multi-step workflows silently skip steps without explicit tracking.
 - **You MUST get user confirmation** on the documentation plan unless the user invocation includes `--auto`.
@@ -24,7 +24,7 @@ Generate a focused document for a specific target (path or topic) in a repo that
 
 ## Invocation
 
-User invokes via `/docs-manager:adding-documentation <path-or-topic> [--auto]`.
+User invokes via `/curator:adding-documentation <path-or-topic> [--auto]`.
 
 - `<path-or-topic>` — either a filesystem path (`src/auth/`, `lib/utils.ts`) or a free-text topic (`"authentication flow"`)
 - `--auto` — skip the propose-and-confirm step (Step 2)
@@ -67,7 +67,7 @@ What would you like to document?
 
 ### Step 1 — Explore
 
-Launch the `docs-manager:codebase-explorer` agent via the Task tool with a focused scope:
+Launch the `curator:codebase-explorer` agent via the Task tool with a focused scope:
 
 ```
 Description: Explore target for focused documentation
@@ -138,7 +138,7 @@ Handle the response:
 
 ### Step 3 — Generate
 
-Launch the `docs-manager:doc-generator` agent via the Task tool:
+Launch the `curator:doc-generator` agent via the Task tool:
 
 ```
 Description: Generate focused documentation
@@ -216,7 +216,7 @@ Self-check:
 - [ ] At least one path in `scope.paths` resolves to an existing file
 - [ ] For module-docs: sibling `CLAUDE.md` contains only `@AGENTS.md`
 
-**Critical:** Documents missing the required frontmatter fields will NOT be tracked by `/docs-manager:updating-documentation`. If validation fails, surface the issue in Step 6 rather than silently retrying.
+**Critical:** Documents missing the required frontmatter fields will NOT be tracked by `/curator:updating-documentation`. If validation fails, surface the issue in Step 6 rather than silently retrying.
 
 ### Step 6 — Summary
 
@@ -245,7 +245,7 @@ Monitored paths:
 
 ### Next Steps
 1. Review the generated content
-2. Run `/docs-manager:validating-documentation` to verify system integrity
+2. Run `/curator:validating-documentation` to verify system integrity
 3. Commit
 ```
 
@@ -257,7 +257,7 @@ Monitored paths:
 | Target is already documented (tracked doc covers it) | Surface existing doc, ask: extend existing? create separate? cancel? |
 | Topic is too broad (matches dozens of unrelated files) | Suggest narrowing — propose two or three sub-topics |
 | No clear structural unit | Ask the user for guidance on scope boundaries |
-| Repo has no `AGENTS.md` | Suggest running `/docs-manager:onboarding-repository` first; offer to continue creating just the ad-hoc doc anyway |
+| Repo has no `AGENTS.md` | Suggest running `/curator:onboarding-repository` first; offer to continue creating just the ad-hoc doc anyway |
 | Generated doc's `scope.paths` matches nothing | Treat as Step 5 failure; report to user with the offending pattern |
 | Target is a single file in a large module | Default to ad-hoc-doc in `docs/`; offer module-docs as alternative |
 

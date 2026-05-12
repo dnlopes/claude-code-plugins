@@ -1,7 +1,7 @@
 {
-    "name": "docs-manager",
+    "name": "curator",
     "description": "Repository documentation for AI agents, with git-based staleness tracking",
-    "version": "4.4.3",
+    "version": "5.0.0",
     "author": {
         "name": "David Lopes"
     },

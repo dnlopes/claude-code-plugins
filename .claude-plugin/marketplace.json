@@ -11,9 +11,9 @@
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
     {
-      "name": "docs-manager",
-      "version": "4.4.3",
-      "source": "./docs-manager",
+      "name": "curator",
+      "version": "5.0.0",
+      "source": "./curator",
       "description": "Repository documentation for AI agents, with git-based staleness tracking"
     },
     {

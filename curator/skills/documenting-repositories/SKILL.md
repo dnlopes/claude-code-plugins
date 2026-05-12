@@ -1,6 +1,6 @@
 ---
 name: documenting-repositories
-description: Shared reference loaded by other docs-manager skills (onboarding-repository, adding-documentation, updating-documentation, validating-documentation) when generating or updating repository documentation — provides format standards, abstraction-level rules, HTML-wrapped frontmatter spec, and staleness-tracking conventions for AGENTS.md, CLAUDE.md, README.md, and docs/*.md.
+description: Shared reference loaded by other curator skills (onboarding-repository, adding-documentation, updating-documentation, validating-documentation) when generating or updating repository documentation — provides format standards, abstraction-level rules, HTML-wrapped frontmatter spec, and staleness-tracking conventions for AGENTS.md, CLAUDE.md, README.md, and docs/*.md.
 user-invocable: false
 ---
 

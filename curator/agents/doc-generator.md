@@ -140,7 +140,7 @@ mkdir -p docs
 
 ## Solve, Don't Punt
 
-- If findings don't include a needed value (e.g., no test command surfaced), insert a clearly marked TODO line in the doc rather than fabricating a value. Example: `<!-- TODO(docs-manager): test command not found in findings -->`.
+- If findings don't include a needed value (e.g., no test command surfaced), insert a clearly marked TODO line in the doc rather than fabricating a value. Example: `<!-- TODO(curator): test command not found in findings -->`.
 - If `domain.md` doesn't apply (no business domain), skip the file entirely — don't generate a stub.
 - If a complex module is listed in findings but the path doesn't exist, omit it and note in your output summary.
 

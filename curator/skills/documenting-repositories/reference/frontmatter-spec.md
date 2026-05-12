@@ -1,6 +1,6 @@
 # Frontmatter Specification
 
-Every tracked document uses **HTML-comment-wrapped YAML frontmatter**. This keeps the frontmatter hidden when the document is rendered on GitHub or any other markdown viewer while remaining parseable by `docs-manager` scripts and readable by Claude.
+Every tracked document uses **HTML-comment-wrapped YAML frontmatter**. This keeps the frontmatter hidden when the document is rendered on GitHub or any other markdown viewer while remaining parseable by `curator` scripts and readable by Claude.
 
 ## Contents
 

@@ -9,7 +9,7 @@ Refresh tracked documentation that has fallen behind the code: inventory → sta
 
 ## Critical Guidelines
 
-- **You MUST load the `docs-manager:documenting-repositories` skill first** for abstraction-level rules and frontmatter spec.
+- **You MUST load the `curator:documenting-repositories` skill first** for abstraction-level rules and frontmatter spec.
 - **You MUST follow the steps in order** — pre-flight, inventory, staleness check, analyze, review, apply, summarize.
 - **You MUST create TodoWrite todos for each step in the Workflow section** — one todo per Step, marked `in_progress` on entry and `completed` on exit. Multi-step workflows silently skip steps without explicit tracking.
 - **You MUST get user confirmation before applying updates** unless the user invocation includes `--auto`.
@@ -26,7 +26,7 @@ Refresh tracked documentation that has fallen behind the code: inventory → sta
 
 ## Invocation
 
-User invokes via `/docs-manager:updating-documentation [doc-path] [--auto]`.
+User invokes via `/curator:updating-documentation [doc-path] [--auto]`.
 
 - `[doc-path]` (optional) — limit the run to a single document
 - `--auto` — skip the confirmation step (Step 4)
@@ -44,8 +44,8 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/find-tracked-docs.sh" | head -1
 If no output, no tracked documents exist:
 
 ```markdown
-No tracked documentation found. Run `/docs-manager:onboarding-repository`
-or `/docs-manager:adding-documentation` first.
+No tracked documentation found. Run `/curator:onboarding-repository`
+or `/curator:adding-documentation` first.
 ```
 
 Stop here.
@@ -109,7 +109,7 @@ Stop here.
 
 ### Step 3 — Analyze
 
-For each **stale** document, launch the `docs-manager:doc-analyzer` agent via the Task tool:
+For each **stale** document, launch the `curator:doc-analyzer` agent via the Task tool:
 
 ```
 Description: Analyze doc staleness
@@ -229,7 +229,7 @@ If a recommendation would require expanding scope, adding implementation detail,
 |----------|----------|
 | Document has no `scope.paths` (root `AGENTS.md`) | Treat as "tracking the whole repo"; query `git log --since` without a path filter |
 | Document has `last_updated` but it's not ISO 8601 | Treat the document as fully stale; flag for manual frontmatter fix in summary |
-| `scope.paths` matches no existing files | Treat as **Current** for this run; flag for `/docs-manager:validating-documentation` |
+| `scope.paths` matches no existing files | Treat as **Current** for this run; flag for `/curator:validating-documentation` |
 | Recommendation drifts toward implementation detail | Reject during Step 5; surface in Step 6 — do NOT apply |
 | Recommendation says to expand `scope.paths` | Apply only if user confirms via Step 4 review (call it out explicitly there) |
 | Many docs are stale (>10) | Process anyway, but warn the user in Step 4 and offer "Apply selected" |

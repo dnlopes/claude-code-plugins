@@ -24,7 +24,7 @@ Safely delete obsolete documentation and clean up every reference to it.
 
 ## Invocation
 
-User invokes via `/docs-manager:removing-documentation <doc-path> [--auto]`.
+User invokes via `/curator:removing-documentation <doc-path> [--auto]`.
 
 - `<doc-path>` (required) — the document to remove. For module docs, pass either the `AGENTS.md` path or the module directory.
 - `--auto` — skip the confirmation step (Step 2)
@@ -55,7 +55,7 @@ If the target is refused, stop and report:
 Cannot remove `<doc-path>`.
 
 <For root docs:>
-Root documentation is regenerated via `/docs-manager:onboarding-repository`,
+Root documentation is regenerated via `/curator:onboarding-repository`,
 not removed.
 
 <For missing path:>
@@ -202,7 +202,7 @@ If any dangling structured reference remains, surface it as an error in Step 6 �
 
 ### Next Steps
 1. Review the plain-text mentions listed above
-2. Run `/docs-manager:validating-documentation` to confirm no broken cross-references
+2. Run `/curator:validating-documentation` to confirm no broken cross-references
 3. Commit the changes
 ```
 
@@ -210,7 +210,7 @@ If any dangling structured reference remains, surface it as an error in Step 6 �
 
 | Scenario | Approach |
 |----------|----------|
-| Target is root `AGENTS.md` | **Refuse** — direct user to `/docs-manager:onboarding-repository` |
+| Target is root `AGENTS.md` | **Refuse** — direct user to `/curator:onboarding-repository` |
 | Target is root `CLAUDE.md` | **Refuse** — same as above |
 | Target is root `README.md` | **Refuse** — same as above |
 | Target is a module `CLAUDE.md` directly | Treat as request to remove the module pair (also remove `AGENTS.md`); ask user to confirm |
