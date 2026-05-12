@@ -1,8 +1,0 @@
-{
-    "name": "project-bootstrap",
-    "description": "Repository bootstrapping and project scaffolding with upgrade support",
-    "version": "1.4.0",
-    "author": {
-        "name": "David Lopes"
-    }
-}

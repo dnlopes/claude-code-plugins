@@ -1,7 +1,0 @@
-{
-  "groupName": "terraform-dependencies",
-  "description": "Group Terraform-layer updates (providers, modules)",
-  "matchFileNames": ["{{TF_DIR}}/**"],
-  "matchUpdateTypes": ["minor", "patch"],
-  "automerge": true
-}

@@ -33,12 +33,6 @@
       "version": "3.1.1",
       "source": "./governor",
       "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration"
-    },
-    {
-      "name": "project-bootstrap",
-      "version": "1.4.0",
-      "source": "./project-bootstrap",
-      "description": "Repository bootstrapping and project scaffolding with upgrade support"
     }
   ]
 }
