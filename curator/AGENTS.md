@@ -4,7 +4,7 @@ scope:
   paths:
     - curator/**
   summary: "curator plugin technical documentation"
-last_updated: 2026-05-12T00:00:00Z
+last_updated: 2026-05-12T23:14:02Z
 ---
 -->
 
@@ -47,15 +47,22 @@ The curator plugin exists to keep repository documentation current for AI agent 
 **Lives in:** `curator/agents/doc-analyzer.md`
 **Invariants:** Operates on a single document at a time. Reads the doc's `scope.paths` to determine which code paths to analyze. Produces a recommendation (update / no-change / review-needed), not a rewritten file — the operator decides whether to apply changes.
 
+### Staleness-Reminder Hook
+**Represents:** A passive, session-level trigger that nudges the model to refresh documentation when in-scope files are edited. Distinct from the agents (explicitly invoked) and the script (called by skills): the hook fires on its own as a background invariant-enforcer.
+**Lives in:** `curator/hooks/` (registered via `hooks.json`; logic in `staleness-reminder.py`)
+**Invariants:** Runs as a PostToolUse hook after write/edit tool uses. Matches the edited path against the `scope.paths` of every tracked doc and emits a reminder if any match. Deduplicates reminders per session so a single editing session never produces repeated noise. Respects a per-project opt-out and exposes an environment-variable mode switch that toggles between "suggest the updating-documentation workflow" and a more direct "update the docs now" nudge.
+
 ## Gotchas
 
 - **Self-hosting risk:** Modifying curator skills changes how documentation will be generated on future runs. A broken skill may silently produce malformed docs. Test changes to curator against a non-critical repository before merging.
 - **Frontmatter is load-bearing:** The `last_updated` and `scope.paths` fields in HTML-wrapped frontmatter are not decorative. Removing or malforming them breaks staleness tracking without any error — the doc simply disappears from the tracked set.
 - **Template source is canonical:** The doc-generator agent must read templates from `curator/skills/documenting-repositories/reference/templates.md`. Using remembered or reconstructed templates will produce docs that drift from the spec, breaking future validation.
 - **Exploration quality bounds output quality:** The codebase-explorer agent's findings are the sole input to documentation generation. If the explorer misses a pattern or invariant, the generated doc will omit it silently. There is no post-generation validation that checks completeness.
+- **The hook installs itself into every session:** Once curator is installed, the staleness-reminder hook runs passively on every write/edit in matching scopes. Operators who find this intrusive need to know two knobs exist — a per-project opt-out, and an environment-variable mode switch that changes the hook from "suggest the workflow" to "nudge the model to update docs directly". Neither is discoverable from the skills themselves.
 
 ## Interactions
 
 - **codebase-explorer → doc-generator:** Structured findings (architecture, patterns, scope paths, module list) flow from explorer to generator. These agents are decoupled by a handoff in the skill workflow — they do not call each other directly.
 - **doc-analyzer → operator:** The analyzer produces a human-readable recommendation. The operator (or an orchestrating skill) decides whether to instruct doc-generator to rewrite the document.
 - **find-tracked-docs.sh → staleness workflow:** The script queries git and the filesystem to produce a list of tracked docs with their staleness status. Skills that update docs invoke this script to determine which docs need attention.
+- **Staleness-reminder hook → model:** The hook fires after the harness completes a write/edit, matches the edited path against tracked docs' `scope.paths`, and surfaces a reminder to the model in-session. Unlike the other interactions, this one is not driven by an operator-invoked skill — it operates passively at the session level, decoupled from the explicit workflows.

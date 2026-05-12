@@ -5,7 +5,7 @@ scope:
     - README.md
     - .claude-plugin/marketplace.json
   summary: "Project overview and installation"
-last_updated: 2026-05-12T00:00:00Z
+last_updated: 2026-05-12T23:14:02Z
 ---
 -->
 
@@ -40,7 +40,7 @@ claude plugins install governor
 |--------|-------------|
 | `curator` | Repository documentation for AI agents, with git-based staleness tracking |
 | `git-workflow` | Git and GitHub workflow commands for commits and pull requests |
-| `governor` | Project tenets management — bootstrap, manage, and verify architectural constraints |
+| `governor` | Project tenets management via user-invocable skills: bootstrap, manage, and verify architectural constraints in AGENTS.md |
 | `review-toolkit` | Multi-agent code review toolkit with specialized reviewers |
 | `ui-dev` | UI development toolkit with headless browser automation and shadcn/ui |
 | `backend-dev` | Backend development toolkit with database and API best practices |

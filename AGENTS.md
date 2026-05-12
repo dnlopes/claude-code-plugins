@@ -1,6 +1,6 @@
 <!--
 ---
-last_updated: 2026-05-12T00:00:00Z
+last_updated: 2026-05-12T23:14:02Z
 ---
 -->
 
@@ -27,7 +27,7 @@ No build step. To contribute a plugin, author the required files and bump versio
 | Directory | Purpose |
 |-----------|---------|
 | `.claude-plugin/` | Marketplace registry (`marketplace.json`) — authoritative plugin index |
-| `<plugin>/` | Each plugin's self-contained source (skills, agents, commands, scripts) |
+| `<plugin>/` | Each plugin's self-contained source (skills, agents, commands, hooks, scripts) |
 | `<plugin>/.claude-plugin/` | Per-plugin manifest (`plugin.json`) — name, description, version, author |
 | `.github/workflows/` | CI/CD: semantic-release, PR checks, security scans, vendored-skill sync |
 | `curator/` | Self-hosting documentation plugin — changes here affect doc generation |

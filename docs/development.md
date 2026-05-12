@@ -6,7 +6,7 @@ scope:
     - renovate.json
     - trivy.yaml
   summary: "Build, test, and development workflow"
-last_updated: 2026-05-12T00:00:00Z
+last_updated: 2026-05-12T23:14:02Z
 ---
 -->
 
@@ -38,6 +38,8 @@ Every change to a plugin's contents requires a version bump in two places:
 
 Both must carry the same version. Bump type: `patch` for fixes, `minor` for new capabilities, `major` for breaking changes.
 
+Exception: vendored-skill sync PRs opened by `sync-vendored-skills.yaml` apply the bump automatically — contributors do not need to bump manually on those PRs.
+
 ## Release Process
 
 Releases are fully automated. On merge to `main`, `semantic-release` reads the conventional commit messages to determine the bump type, creates a GitHub release and tag, and publishes a changelog. No manual version management is needed at the repository level — only the manifest files require manual bumping.
@@ -59,7 +61,7 @@ To vendor a skill from an external repository:
 2. Add an entry to `.github/vendored-skills.yaml` with `repo`, `ref`, `path`, `commit`, and `synced_at`.
 3. Create a `.upstream` provenance file alongside the vendored skill with the same fields.
 
-The `sync-vendored-skills.yaml` workflow fetches from upstream periodically and opens a PR when changes are detected. Do not edit vendored skill files directly — changes will be overwritten on the next sync.
+The `sync-vendored-skills.yaml` workflow fetches from upstream periodically and opens a PR when changes are detected. The PR includes the dual-manifest patch version bump (both `<plugin>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`) automatically — no manual bump is needed. Do not edit vendored skill files directly — changes will be overwritten on the next sync.
 
 ## Dependency Updates
 
