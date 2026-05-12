@@ -1,0 +1,12 @@
+# Declarative manifest of skills vendored from external repositories.
+# The sync-vendored-skills workflow uses this to fetch and update each entry.
+# Source is the source of truth — local changes in `dest` will be overwritten.
+
+skills:
+  - name: react-best-practices
+    dest: ui-dev/skills/react-best-practices
+    plugin: ui-dev
+    source:
+      repo: vercel-labs/agent-skills
+      ref: main
+      path: skills/react-best-practices

@@ -1,0 +1,169 @@
+name: Sync Vendored Skills
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      skill:
+        description: "Sync only this skill name (leave empty to sync all)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build matrix from manifest
+        id: set
+        env:
+          FILTER: ${{ inputs.skill }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          try:
+              import yaml
+          except ImportError:
+              os.system("pip install --quiet pyyaml")
+              import yaml
+
+          with open(".github/vendored-skills.yaml") as f:
+              data = yaml.safe_load(f)
+
+          skills = data.get("skills", [])
+          flt = os.environ.get("FILTER", "").strip()
+          if flt:
+              skills = [s for s in skills if s["name"] == flt]
+
+          matrix = {"include": skills}
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"matrix={json.dumps(matrix)}\n")
+          PY
+
+  sync:
+    needs: build-matrix
+    if: ${{ needs.build-matrix.outputs.matrix != '' && needs.build-matrix.outputs.matrix != '{"include":[]}' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Sparse checkout upstream
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/upstream
+          cd /tmp/upstream
+          git init -q
+          git remote add origin "https://github.com/${{ matrix.source.repo }}.git"
+          git config core.sparseCheckout true
+          echo "${{ matrix.source.path }}/*" > .git/info/sparse-checkout
+          git fetch --depth=1 origin "${{ matrix.source.ref }}"
+          git checkout FETCH_HEAD
+          echo "UPSTREAM_SHA=$(git rev-parse FETCH_HEAD)" >> "$GITHUB_ENV"
+
+      - name: Compare against current .upstream
+        id: compare
+        run: |
+          set -euo pipefail
+          DEST="${{ matrix.dest }}"
+          UPSTREAM_FILE="$DEST/.upstream"
+          NEW_SHA="$UPSTREAM_SHA"
+          CURRENT_SHA=""
+          if [ -f "$UPSTREAM_FILE" ]; then
+            CURRENT_SHA=$(grep '^commit:' "$UPSTREAM_FILE" | awk '{print $2}' || true)
+          fi
+          echo "current=$CURRENT_SHA" >> "$GITHUB_OUTPUT"
+          echo "new=$NEW_SHA" >> "$GITHUB_OUTPUT"
+          if [ "$CURRENT_SHA" = "$NEW_SHA" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Replace destination with upstream content
+        if: steps.compare.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          DEST="${{ matrix.dest }}"
+          SRC="/tmp/upstream/${{ matrix.source.path }}"
+          rm -rf "$DEST"
+          mkdir -p "$DEST"
+          cp -R "$SRC"/. "$DEST"/
+          cat > "$DEST/.upstream" <<EOF
+          repo: ${{ matrix.source.repo }}
+          ref: ${{ matrix.source.ref }}
+          path: ${{ matrix.source.path }}
+          commit: $UPSTREAM_SHA
+          synced_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          EOF
+
+      - name: Bump plugin version (patch)
+        if: steps.compare.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          PLUGIN_JSON="${{ matrix.plugin }}/.claude-plugin/plugin.json"
+          MARKETPLACE=".claude-plugin/marketplace.json"
+          python3 - <<PY
+          import json, pathlib
+          p = pathlib.Path("$PLUGIN_JSON")
+          data = json.loads(p.read_text())
+          major, minor, patch = (int(x) for x in data["version"].split("."))
+          new_version = f"{major}.{minor}.{patch + 1}"
+          data["version"] = new_version
+          p.write_text(json.dumps(data, indent=4) + "\n")
+
+          mp = pathlib.Path("$MARKETPLACE")
+          mp_data = json.loads(mp.read_text())
+          for plugin in mp_data.get("plugins", []):
+              if plugin.get("name") == "${{ matrix.plugin }}":
+                  plugin["version"] = new_version
+          mp.write_text(json.dumps(mp_data, indent=2) + "\n")
+          print(f"Bumped ${{ matrix.plugin }} to {new_version}")
+          PY
+
+      - name: Create pull request
+        if: steps.compare.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: sync/${{ matrix.name }}
+          TITLE: "chore(${{ matrix.plugin }}): sync ${{ matrix.name }} from upstream"
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B "$BRANCH"
+          git add -A
+          git commit -m "$TITLE"
+          git push --force-with-lease origin "$BRANCH"
+
+          BODY=$(cat <<EOF
+          Automated sync of \`${{ matrix.name }}\` from upstream.
+
+          **Source:** [\`${{ matrix.source.repo }}\`](https://github.com/${{ matrix.source.repo }}/tree/${{ matrix.source.ref }}/${{ matrix.source.path }})
+          **Ref:** \`${{ matrix.source.ref }}\`
+          **Previous commit:** \`${{ steps.compare.outputs.current }}\`
+          **New commit:** [\`${{ steps.compare.outputs.new }}\`](https://github.com/${{ matrix.source.repo }}/commit/${{ steps.compare.outputs.new }})
+
+          Local changes in \`${{ matrix.dest }}\` have been overwritten — upstream is the source of truth.
+
+          Plugin version for \`${{ matrix.plugin }}\` was patch-bumped (T5, T6).
+          EOF
+          )
+
+          if gh pr view "$BRANCH" --json number >/dev/null 2>&1; then
+            gh pr edit "$BRANCH" --title "$TITLE" --body "$BODY"
+          else
+            gh pr create --base "${GITHUB_REF_NAME}" --head "$BRANCH" --title "$TITLE" --body "$BODY"
+          fi
