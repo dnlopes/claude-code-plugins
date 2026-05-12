@@ -1,0 +1,16 @@
+{
+  "description": "Remind user to update tracked documentation when files in scope.paths are edited",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/staleness-reminder.py"
+          }
+        ]
+      }
+    ]
+  }
+}
