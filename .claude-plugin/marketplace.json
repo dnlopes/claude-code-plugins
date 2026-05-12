@@ -24,7 +24,7 @@
     },
     {
       "name": "ui-dev",
-      "version": "2.1.1",
+      "version": "2.1.2",
       "source": "./ui-dev",
       "description": "UI development toolkit with headless browser automation and shadcn/ui component documentation"
     },
@@ -33,6 +33,12 @@
       "version": "3.1.1",
       "source": "./governor",
       "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration"
+    },
+    {
+      "name": "backend-dev",
+      "version": "0.1.0",
+      "source": "./backend-dev",
+      "description": "Backend development toolkit with database and API best practices"
     }
   ]
 }

@@ -10,3 +10,19 @@ skills:
       repo: vercel-labs/agent-skills
       ref: main
       path: skills/react-best-practices
+
+  - name: agent-browser
+    dest: ui-dev/skills/agent-browser
+    plugin: ui-dev
+    source:
+      repo: vercel-labs/agent-browser
+      ref: main
+      path: skills/agent-browser
+
+  - name: supabase-postgres-best-practices
+    dest: backend-dev/skills/supabase-postgres-best-practices
+    plugin: backend-dev
+    source:
+      repo: supabase/agent-skills
+      ref: main
+      path: skills/supabase-postgres-best-practices

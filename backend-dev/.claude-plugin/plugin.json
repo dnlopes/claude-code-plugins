@@ -1,0 +1,8 @@
+{
+    "name": "backend-dev",
+    "description": "Backend development toolkit with database and API best practices",
+    "version": "0.1.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}
