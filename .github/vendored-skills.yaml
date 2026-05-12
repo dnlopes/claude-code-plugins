@@ -11,6 +11,22 @@ skills:
       ref: main
       path: skills/react-best-practices
 
+  - name: web-design-guidelines
+    dest: ui-dev/skills/web-design-guidelines
+    plugin: ui-dev
+    source:
+      repo: vercel-labs/agent-skills
+      ref: main
+      path: skills/web-design-guidelines
+
+  - name: shadcn
+    dest: ui-dev/skills/shadcn
+    plugin: ui-dev
+    source:
+      repo: shadcn-ui/ui
+      ref: main
+      path: skills/shadcn
+
   - name: agent-browser
     dest: ui-dev/skills/agent-browser
     plugin: ui-dev
