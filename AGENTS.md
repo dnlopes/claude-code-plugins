@@ -1,4 +1,36 @@
+<!--
+---
+last_updated: 2026-05-12T00:00:00Z
+---
+-->
+
 # Claude Code Plugins
+
+A personal marketplace of Claude Code plugins — self-contained bundles of skills, agents, and slash commands that extend Claude Code for AI-assisted development workflows. The repo is both the plugin source and the marketplace registry it publishes from.
+
+## Quick Start
+
+No build step. To contribute a plugin, author the required files and bump versions — see [Development](docs/development.md).
+
+## Documentation
+
+@docs/architecture.md
+@docs/patterns.md
+@docs/development.md
+
+- [Architecture](docs/architecture.md) — System design and component relationships
+- [Patterns](docs/patterns.md) — Plugin conventions and invariants
+- [Development](docs/development.md) — Release workflow and contribution guidelines
+
+## Key Directories
+
+| Directory | Purpose |
+|-----------|---------|
+| `.claude-plugin/` | Marketplace registry (`marketplace.json`) — authoritative plugin index |
+| `<plugin>/` | Each plugin's self-contained source (skills, agents, commands, scripts) |
+| `<plugin>/.claude-plugin/` | Per-plugin manifest (`plugin.json`) — name, description, version, author |
+| `.github/workflows/` | CI/CD: semantic-release, PR checks, security scans, vendored-skill sync |
+| `curator/` | Self-hosting documentation plugin — changes here affect doc generation |
 
 ## Tenets
 

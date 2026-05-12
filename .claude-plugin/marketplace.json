@@ -12,7 +12,7 @@
     },
     {
       "name": "curator",
-      "version": "5.0.0",
+      "version": "5.0.1",
       "source": "./curator",
       "description": "Repository documentation for AI agents, with git-based staleness tracking"
     },
