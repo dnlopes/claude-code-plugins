@@ -6,7 +6,7 @@ scope:
     - .claude-plugin/marketplace.json
     - .github/vendored-skills.yaml
   summary: "Plugin conventions and invariants"
-last_updated: 2026-05-12T00:00:00Z
+last_updated: 2026-05-12T23:21:35Z
 ---
 -->
 
@@ -52,7 +52,7 @@ The `name` field in `<plugin>/.claude-plugin/plugin.json` must exactly match the
 
 ### Vendored Skill Tracking
 
-Any skill copied from an external repository must be declared in `.github/vendored-skills.yaml` (with `repo`, `ref`, `path`, and `commit`) and must carry a `.upstream` provenance file alongside the skill. The sync workflow (`sync-vendored-skills.yaml`) overwrites vendored skill files on every run — local edits are forbidden and will be silently discarded. First-party skills must not appear in the vendored manifest or carry a `.upstream` file.
+Any skill copied from an external repository must be declared in `.github/vendored-skills.yaml` with `name`, `dest`, `plugin`, and a nested `source` block (`repo`, `ref`, `path`), and must carry a `.upstream` provenance file alongside the skill. The sync workflow (`sync-vendored-skills.yaml`) writes the resolved upstream `commit` and `synced_at` into `.upstream` — contributors do not supply those fields in the manifest. The sync workflow overwrites vendored skill files on every run — local edits are forbidden and will be silently discarded. First-party skills must not appear in the vendored manifest or carry a `.upstream` file.
 
 ### Conventional Commits
 

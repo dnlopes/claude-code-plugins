@@ -6,7 +6,7 @@ scope:
     - "*/.claude-plugin/**"
     - .github/workflows/**
   summary: "System architecture and component relationships"
-last_updated: 2026-05-12T00:00:00Z
+last_updated: 2026-05-12T23:21:35Z
 ---
 -->
 
@@ -25,7 +25,7 @@ This repository is a plugin marketplace for Claude Code: a collection of indepen
 
 ### Plugin
 **Lives in:** `<plugin>/` (one directory per plugin at the repo root)
-**Owns:** All skills, agents, commands, and scripts for a single capability domain. A plugin is the unit of installation — Claude Code installs and loads a plugin as a whole.
+**Owns:** All skills, agents, commands, hooks, and scripts for a single capability domain. A plugin is the unit of installation — Claude Code installs and loads a plugin as a whole.
 **Interacts with:** The marketplace registry for version indexing. A plugin must never reference components in another plugin; all `<plugin>:<name>` references must resolve internally.
 
 ### Plugin Manifest
@@ -47,6 +47,11 @@ This repository is a plugin marketplace for Claude Code: a collection of indepen
 **Lives in:** `<plugin>/scripts/`
 **Owns:** Bash utilities that support skill or agent execution — file discovery, data transformation, or external tool integration. Scripts are implementation details of the plugin, not independently consumable.
 **Interacts with:** Called by agents or skills within the same plugin; never imported by other plugins.
+
+### Hooks
+**Lives in:** `<plugin>/hooks/`
+**Owns:** Event-driven scripts triggered by Claude Code tool-lifecycle events (e.g., `PostToolUse`). A hook is registered via a `hooks.json` manifest at the hook directory root and is invoked by the Claude Code runtime — not by skills, agents, or commands.
+**Interacts with:** The Claude Code runtime, which dispatches lifecycle events; remains plugin-scoped, like every other component type.
 
 ### CI/CD Workflows
 **Lives in:** `.github/workflows/`

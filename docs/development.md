@@ -6,7 +6,7 @@ scope:
     - renovate.json
     - trivy.yaml
   summary: "Build, test, and development workflow"
-last_updated: 2026-05-12T23:14:02Z
+last_updated: 2026-05-12T23:21:35Z
 ---
 -->
 
@@ -58,8 +58,8 @@ There is no automated test suite for manifest correctness or skill syntax. Struc
 To vendor a skill from an external repository:
 
 1. Copy the skill files into the appropriate plugin directory.
-2. Add an entry to `.github/vendored-skills.yaml` with `repo`, `ref`, `path`, `commit`, and `synced_at`.
-3. Create a `.upstream` provenance file alongside the vendored skill with the same fields.
+2. Add an entry to `.github/vendored-skills.yaml` with `name`, `dest`, `plugin`, and a nested `source` block (`repo`, `ref`, `path`).
+3. Create a `.upstream` provenance file alongside the vendored skill. The sync workflow writes `commit` and `synced_at` into this file on each run — contributors do not need to supply them up-front.
 
 The `sync-vendored-skills.yaml` workflow fetches from upstream periodically and opens a PR when changes are detected. The PR includes the dual-manifest patch version bump (both `<plugin>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`) automatically — no manual bump is needed. Do not edit vendored skill files directly — changes will be overwritten on the next sync.
 

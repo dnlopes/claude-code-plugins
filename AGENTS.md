@@ -1,6 +1,6 @@
 <!--
 ---
-last_updated: 2026-05-12T23:14:02Z
+last_updated: 2026-05-12T23:21:35Z
 ---
 -->
 
@@ -56,7 +56,7 @@ A plugin's skills, agents, commands, and hooks must only reference other compone
 
 ### T4. Vendored skills must carry a `.upstream` marker and be declared in `.github/vendored-skills.yaml`
 
-Skills copied from upstream repositories must be tracked declaratively in `.github/vendored-skills.yaml` and must carry a `.upstream` provenance file recording `repo`, `ref`, `path`, `commit`, and `synced_at`. Local edits to vendored skills are not allowed — the sync workflow will overwrite them. First-party skills must not appear in the vendored manifest or carry a `.upstream` marker.
+Skills copied from upstream repositories must be tracked declaratively in `.github/vendored-skills.yaml` (with `name`, `dest`, `plugin`, and a nested `source` block declaring `repo`, `ref`, and `path`) and must carry a `.upstream` provenance file. The sync workflow writes the resolved `commit` and `synced_at` into `.upstream`; contributors do not supply those fields. Local edits to vendored skills are not allowed — the sync workflow will overwrite them. First-party skills must not appear in the vendored manifest or carry a `.upstream` marker.
 
 **Severity:** high
 
