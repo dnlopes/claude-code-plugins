@@ -1,6 +1,13 @@
 # Examples
 
-Concrete examples of tenets, AGENTS.md structure, and verification output.
+Concrete examples of tenets, AGENTS.md structure, and validation/verification output.
+
+## Contents
+
+- Good vs Bad Tenets (good, bad, borderline)
+- Example AGENTS.md
+- Example Verification Output (compliant, violations)
+- Example Validation Output (supported, weak, not supported, contradicted)
 
 ## Good vs Bad Tenets
 
@@ -10,16 +17,16 @@ Concrete examples of tenets, AGENTS.md structure, and verification output.
 > Domain packages must not import from infrastructure packages. This ensures the domain layer remains portable, testable, and free from external dependencies like databases or HTTP frameworks.
 
 Why it's good:
-- Specific: "Domain packages" and "infrastructure packages" are identifiable
-- Actionable: "must not import" is verifiable
-- Rationale included: explains WHY (portability, testability)
-- Architectural: about structure, not style
+- Specific — "Domain packages" and "infrastructure packages" are identifiable
+- Actionable — "must not import" is verifiable
+- Rationale included — explains WHY (portability, testability)
+- Architectural — about structure, not style
 
 **T2. Handler Delegation**
 > HTTP handlers must delegate business logic to service layer functions. Handlers should only handle request parsing, response formatting, and error translation.
 
 Why it's good:
-- Clear boundary: handlers vs service layer
+- Clear boundary between handlers and service layer
 - Specific responsibilities listed
 - Verifiable by checking handler code content
 
@@ -34,31 +41,29 @@ Why it's good:
 ### Bad Tenets
 
 **Bad: "Keep code clean"**
-- Too vague - what is "clean"?
+- Vague — what is "clean"?
 - Not verifiable
 - No specific constraint
 
 **Bad: "Use good naming conventions"**
-- Subjective - what is "good"?
+- Subjective — what is "good"?
 - No specific pattern to check
 - Style, not architecture
 
 **Bad: "Don't write bad code"**
 - Completely subjective
 - Impossible to verify
-- No actionable guidance
 
 **Bad: "Services should be small"**
 - How small? No threshold
 - What is a "service"?
-- Vague and unverifiable
 
 ### Borderline Tenets
 
 **"Functions should be under 50 lines"**
-- Verifiable but better as linting rule
+- Verifiable, but a better fit as a linting rule
 - Style rather than architecture
-- Machine-checkable, doesn't need human judgment
+- Machine-checkable; doesn't need human judgment
 
 **Better version:** "Complex business logic must be decomposed into named steps. Functions containing more than 3 distinct operations should be split into smaller, well-named functions that document intent."
 
@@ -81,14 +86,9 @@ CRITICAL: These tenets are MANDATORY and MUST be followed in all work on this co
 
 ### T1. Domain Isolation
 
-Domain packages (`internal/domain/`) must not import from infrastructure packages (`internal/infrastructure/`). This ensures the domain layer remains portable and testable without external dependencies.
+Domain packages (`internal/domain/`) must not import from infrastructure packages (`internal/infrastructure/`). This keeps the domain layer portable and testable without external dependencies.
 
 **Severity:** critical
-
-**Evidence:**
-- `internal/domain/order/order.go:1` - No infrastructure imports in package header
-- `internal/domain/user/user.go:1` - Pure domain types with no DB dependencies
-- `internal/domain/product/repository.go:5` - Repository interface defined in domain
 
 ### T2. Handler Delegation
 
@@ -96,20 +96,11 @@ HTTP handlers in `internal/api/` must delegate business logic to service layer f
 
 **Severity:** high
 
-**Evidence:**
-- `internal/api/orders.go:25` - Handler calls `orderService.Create()` for logic
-- `internal/api/users.go:18` - Handler validates input then delegates to service
-- `internal/api/products.go:42` - No SQL or business rules in handler
-
 ### T3. Error Wrapping
 
-All errors returned from internal packages must be wrapped with context using `fmt.Errorf("context: %w", err)`. This ensures error chains are traceable to their origin.
+All errors returned from internal packages must be wrapped with context using `fmt.Errorf("context: %w", err)`. This makes error chains traceable to their origin.
 
 **Severity:** medium
-
-**Evidence:**
-- `internal/domain/order/service.go:67` - Errors wrapped with operation context
-- `internal/infrastructure/postgres/repository.go:34` - DB errors wrapped with query context
 
 ## Tenet Exceptions
 
@@ -125,9 +116,11 @@ Approved exceptions to tenets. Each must have justification.
 See docs/development.md for setup instructions.
 ```
 
+Note: no `**Evidence:**` block per tenet. Evidence is gathered at validation time and shown to the user, but never persisted.
+
 ## Example Verification Output
 
-### Human Output - Compliant
+### Compliant
 
 ```
 ✓ Tenet Verification Passed
@@ -148,7 +141,7 @@ T3. Error Wrapping [medium]
 ─────────────────────────────────────
 ```
 
-### Human Output - Violations Found
+### Violations Found
 
 ```
 ✗ Tenet Verification Failed
@@ -177,95 +170,14 @@ T3. Error Wrapping [medium]
      Exception: Legacy integration layer (#Q3-removal)
 ─────────────────────────────────────
 
-Exit: FAIL (2 violations at severity >= critical)
+Result: FAIL (2 violations at severity >= critical)
 ```
 
-### JSON Output
+Note: verification reports file:line refs for the violations it finds at runtime. That's runtime evidence, distinct from persisted evidence (which we don't store).
 
-```json
-{
-  "summary": {
-    "compliant": false,
-    "files_checked": 12,
-    "violations": 2,
-    "exceptions_applied": 1
-  },
-  "options": {
-    "mode": "changed",
-    "base": "main",
-    "confidence_threshold": 50,
-    "severity_minimum": "low"
-  },
-  "tenets": [
-    {
-      "id": "T1",
-      "name": "Domain Isolation",
-      "severity": "critical",
-      "status": "violated",
-      "violations": [
-        {
-          "file": "internal/domain/order/service.go",
-          "line": 45,
-          "confidence": 95,
-          "reason": "Imports \"internal/infrastructure/postgres\"",
-          "exception": null
-        },
-        {
-          "file": "internal/domain/user/validator.go",
-          "line": 12,
-          "confidence": 88,
-          "reason": "Imports \"internal/infrastructure/cache\"",
-          "exception": null
-        }
-      ]
-    },
-    {
-      "id": "T2",
-      "name": "Handler Delegation",
-      "severity": "high",
-      "status": "compliant",
-      "violations": []
-    },
-    {
-      "id": "T3",
-      "name": "Error Wrapping",
-      "severity": "medium",
-      "status": "exception",
-      "violations": [
-        {
-          "file": "internal/domain/legacy/adapter.go",
-          "line": 78,
-          "confidence": 82,
-          "reason": "Error not wrapped with context",
-          "exception": {
-            "reason": "Legacy integration layer",
-            "approved": "2024-01-15"
-          }
-        }
-      ]
-    }
-  ],
-  "exceptions": [
-    {
-      "file": "internal/domain/legacy/adapter.go",
-      "tenet": "T1",
-      "reason": "Legacy integration layer, scheduled for removal in Q3",
-      "approved": "2024-01-15"
-    },
-    {
-      "file": "internal/api/health.go",
-      "tenet": "T2",
-      "reason": "Health check endpoint has no business logic to delegate",
-      "approved": "2024-02-01"
-    }
-  ],
-  "exit_code": 1
-}
-```
+## Example Validation Output (Bootstrap / Manage)
 
-## Example Validation Output (Setup/Manage)
-
-When validating a new or edited tenet:
+When validating a proposed or edited tenet:
 
 ### Supported
 
@@ -292,12 +204,12 @@ Searching for evidence...
   ✗ Most entities use direct state mutation
 
 Verdict: WEAK_EVIDENCE
-Evidence strength: Weak (pattern exists but not consistently applied)
+Evidence strength: Weak (pattern exists but inconsistent)
 
-Recommendation: This appears to be partially implemented. Consider:
-1. Documenting which entities use event sourcing
-2. Narrowing the tenet scope to specific domains
-3. Marking as aspirational (severity: low)
+Recommendation: Partially implemented. Options:
+1. Narrow the tenet scope to specific domains
+2. Mark as aspirational (severity: low)
+3. Drop the tenet
 ```
 
 ### Not Supported
@@ -311,12 +223,12 @@ Searching for evidence...
   ✗ No query handlers distinct from command handlers
 
 Verdict: NOT_SUPPORTED
-Evidence strength: None (pattern not found in codebase)
+Evidence strength: None (pattern not found)
 
 Recommendation: This tenet is aspirational, not descriptive. Options:
-1. Remove (doesn't reflect current architecture)
-2. Keep as goal with severity: low
-3. Implement CQRS first, then add tenet
+1. Drop it (doesn't reflect current architecture)
+2. Keep with severity: low as a goal
+3. Implement CQRS first, then add the tenet
 ```
 
 ### Contradicted
@@ -327,16 +239,15 @@ Validating: T7. No Direct DB Access in Domain
 Searching for evidence...
   ✗ Found 5 direct SQL queries in domain packages
   ✗ Found database/sql imports in 3 domain files
-  ✓ Repository interfaces exist but implementations in domain
+  ✓ Repository interfaces exist but implementations also in domain
 
 Verdict: CONTRADICTED
 Evidence strength: Counter-evidence found
 
 The codebase actively violates this proposed tenet.
-This is NOT a valid tenet for the current architecture.
 
 Options:
-1. Fix violations first, then add tenet
-2. Adjust tenet to match reality
-3. Add as aspirational with plan to refactor
+1. Fix violations first, then add the tenet
+2. Adjust the tenet to match reality
+3. Add as aspirational with a plan to refactor
 ```

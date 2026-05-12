@@ -1,7 +1,7 @@
 {
     "name": "governor",
-    "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration",
-    "version": "3.1.1",
+    "description": "Project tenets management via user-invocable skills: bootstrap, manage, and verify architectural constraints in AGENTS.md",
+    "version": "4.0.0",
     "author": {
         "name": "David Lopes"
     }

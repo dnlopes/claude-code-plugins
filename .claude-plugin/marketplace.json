@@ -30,9 +30,9 @@
     },
     {
       "name": "governor",
-      "version": "3.1.1",
+      "version": "4.0.0",
       "source": "./governor",
-      "description": "Project tenets management with evidence tracking, severity levels, and CI/CD integration"
+      "description": "Project tenets management via user-invocable skills: bootstrap, manage, and verify architectural constraints in AGENTS.md"
     },
     {
       "name": "backend-dev",

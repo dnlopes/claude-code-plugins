@@ -2,6 +2,14 @@
 
 Language-specific patterns for detecting tenet violations.
 
+## Contents
+
+- Common Tenet Types (imports, layers, naming, structural)
+- Language-Specific Patterns (Go, TypeScript/JavaScript, Python, C#, Rust)
+- Confidence Scoring Guidelines (90-100, 70-89, 50-69, 1-49)
+- Verification Process
+- Edge Cases (dynamic imports, conditional compilation, generated, tests)
+
 ## Common Tenet Types
 
 ### 1. Import/Dependency Restrictions
