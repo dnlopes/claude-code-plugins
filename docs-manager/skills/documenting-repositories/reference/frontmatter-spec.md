@@ -1,24 +1,22 @@
-# Front-matter Specification
+# Frontmatter Specification
 
-Every document in `docs/` and tracked README.md files must have YAML front-matter for staleness tracking.
+Every tracked document uses **HTML-comment-wrapped YAML frontmatter**. This keeps the frontmatter hidden when the document is rendered on GitHub or any other markdown viewer while remaining parseable by `docs-manager` scripts and readable by Claude.
 
 ## Contents
 
-- [Formats](#formats)
-  - [Standard Format](#standard-format-docs)
-  - [HTML Comment Format](#html-comment-format-readmemd)
-  - [AGENTS.md Format](#agentsmd-format)
+- [Format](#format)
 - [Field Definitions](#field-definitions)
   - [scope.paths](#scopepaths)
   - [scope.summary](#scopesummary)
   - [last_updated](#last_updated)
+- [Document-Type Rules](#document-type-rules)
 - [Validation Rules](#validation-rules)
+- [Parsing](#parsing)
 
-## Formats
+## Format
 
-### Standard Format (docs/)
-
-```yaml
+```markdown
+<!--
 ---
 scope:
   paths:
@@ -27,55 +25,42 @@ scope:
   summary: "Brief description of coverage"
 last_updated: 2025-01-15T10:30:00Z
 ---
-```
-
-### HTML Comment Format (README.md)
-
-For documents rendered on GitHub where YAML would be visible:
-
-```markdown
-<!--
----
-scope:
-  paths:
-    - README.md
-    - package.json
-  summary: "Project overview and installation"
-last_updated: 2025-01-15T10:30:00Z
----
 -->
+
+# Title
+
+...
 ```
 
-### AGENTS.md Format
+**Rules:**
 
-AGENTS.md at repository root does NOT use scope-based front-matter. Staleness is determined by checking if any docs/ files were updated.
-
-```yaml
----
-last_updated: 2025-01-15T10:30:00Z
----
-```
+1. First line of the file MUST be `<!--`
+2. Frontmatter delimiters (`---`) live INSIDE the HTML comment
+3. Closing `-->` MUST appear before any document content
+4. Blank line between `-->` and the first heading is recommended
 
 ## Field Definitions
 
 ### scope.paths
 
 **Type:** Array of glob patterns
-**Purpose:** Files/directories this document covers
+**Purpose:** Files/directories this document covers — used for staleness detection.
 
-Used for staleness detection:
+Staleness is computed by:
+
 ```bash
 git log --since="<last_updated>" --name-only -- <paths>
 ```
 
 **Examples:**
+
 ```yaml
-# Architecture - structural directories
+# Architecture — structural directories
 paths:
   - src/core/**
   - src/api/**
 
-# Development - build/config files
+# Development — build/config files
 paths:
   - Makefile
   - package.json
@@ -85,18 +70,51 @@ paths:
 ### scope.summary
 
 **Type:** String
-**Purpose:** One sentence describing coverage area
+**Purpose:** One sentence describing the coverage area. Helps reviewers and tooling without re-reading the body.
 
 ### last_updated
 
-**Type:** ISO 8601 timestamp (UTC)
-**Purpose:** When document was last reviewed/updated
+**Type:** ISO 8601 UTC timestamp (e.g., `2025-01-15T10:30:00Z`)
+**Purpose:** When the document was last reviewed/updated.
 
-**Why timestamps instead of commit hashes:**
-- Survives git squash merges (hashes become orphaned)
-- Works with feature branch → squash merge workflow
+**Why timestamps over commit hashes:**
+
+- Survive `git squash --merge` (hashes become orphaned)
+- Work with feature-branch → squash-merge workflows
+- Human-readable
+
+## Document-Type Rules
+
+| Document | Frontmatter? | `scope.paths` required? | Notes |
+|----------|--------------|--------------------------|-------|
+| `AGENTS.md` (root) | Yes | No | Tracks whole repo; `scope` omitted |
+| `AGENTS.md` (module) | Yes | Yes | `paths` covers the module subtree |
+| `CLAUDE.md` | **No** | N/A | Single line `@AGENTS.md` only |
+| `README.md` | Yes | Yes | Same wrapped format as other docs |
+| `docs/*.md` | Yes | Yes | `paths` covers the docs scope |
+
+Root `AGENTS.md` example (no `scope`):
+
+```markdown
+<!--
+---
+last_updated: 2025-01-15T10:30:00Z
+---
+-->
+
+# Project Name
+...
+```
 
 ## Validation Rules
 
-1. All paths in scope.paths should match at least one file
-2. Timestamps must be valid ISO 8601 format
+1. **Wrapped format only.** First line must be `<!--`; plain YAML frontmatter is not supported.
+2. **`last_updated` is required** on every tracked document.
+3. **`last_updated` must be ISO 8601 UTC** (ends in `Z`).
+4. **`scope.paths` (when present)** must be an array of strings; each pattern should match at least one existing file.
+5. **`scope.summary` (when present)** must be a single-line string.
+6. **No additional top-level fields** beyond `scope` and `last_updated`.
+
+## Parsing
+
+The plugin's `scripts/find-tracked-docs.sh` identifies tracked documents by checking that the first line is `<!--` and that the first 20 lines contain a `last_updated:` field. Anything else is ignored.

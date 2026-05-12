@@ -1,24 +1,29 @@
 # Document Templates
 
-Templates for all document types. Each uses **Core + Optional** structure.
+Sole source of templates for every document type. Agents and workflow skills MUST read templates from this file rather than carrying their own copies.
+
+All frontmatter blocks use the [HTML-comment-wrapped format](frontmatter-spec.md).
 
 ## Contents
 
-- [AGENTS.md (Root)](#agentsmd-root)
-- [AGENTS.md (Module)](#agentsmd-module)
+- [AGENTS.md (root)](#agentsmd-root)
+- [AGENTS.md (module)](#agentsmd-module)
 - [CLAUDE.md](#claudemd)
 - [docs/architecture.md](#docsarchitecturemd)
 - [docs/domain.md](#docsdomainmd)
 - [docs/patterns.md](#docspatternsmd)
 - [docs/development.md](#docsdevelopmentmd)
 - [README.md](#readmemd)
+- [Ad-hoc document](#ad-hoc-document)
 
-## AGENTS.md (Root)
+## AGENTS.md (root)
 
 ```markdown
+<!--
 ---
 last_updated: <ISO_TIMESTAMP>
 ---
+-->
 
 # <Project Name>
 
@@ -28,13 +33,13 @@ last_updated: <ISO_TIMESTAMP>
 
 \`\`\`bash
 # Build
-<build command>
+<build-system command>
 
 # Test
-<test command>
+<build-system command>
 
 # Run
-<run command>
+<build-system command>
 \`\`\`
 
 ## Documentation
@@ -44,10 +49,10 @@ last_updated: <ISO_TIMESTAMP>
 @docs/patterns.md
 @docs/development.md
 
-- [Architecture](docs/architecture.md) - System design and components
-- [Domain](docs/domain.md) - Business concepts and terminology
-- [Patterns](docs/patterns.md) - Code conventions and examples
-- [Development](docs/development.md) - Build, test, and development
+- [Architecture](docs/architecture.md) — System design and components
+- [Domain](docs/domain.md) — Business concepts and terminology
+- [Patterns](docs/patterns.md) — Code conventions and examples
+- [Development](docs/development.md) — Build, test, and development
 
 ## Key Directories
 
@@ -56,15 +61,18 @@ last_updated: <ISO_TIMESTAMP>
 | `<dir>` | <purpose> |
 ```
 
-### Guidelines
-- Quick Start uses build system interfaces
-- Dual-format doc references (@ and markdown links)
+**Notes:**
 
-## AGENTS.md (Module)
+- Root `AGENTS.md` has no `scope` block — it tracks the whole repo.
+- Quick Start uses build-system commands.
+- Documentation section uses dual-format references (`@` import + markdown link).
+
+## AGENTS.md (module)
 
 For complex modules with co-located documentation:
 
 ```markdown
+<!--
 ---
 scope:
   paths:
@@ -72,6 +80,7 @@ scope:
   summary: "<Module name> technical documentation"
 last_updated: <ISO_TIMESTAMP>
 ---
+-->
 
 # <Module Name>
 
@@ -97,27 +106,27 @@ last_updated: <ISO_TIMESTAMP>
 - <Other module>: <how it's used>
 ```
 
-### When to Create Module Docs
-- Has non-obvious internal architecture
+**Create module AGENTS.md only when:**
+
+- Internal architecture is non-obvious
 - Contains business-critical logic
 - Multiple interacting components
 - Takes significant time to understand from code
 
 ## CLAUDE.md
 
-Single line file:
+Single line, no frontmatter:
 
 ```markdown
 @AGENTS.md
 ```
 
-For modules: `@AGENTS.md` (points to module's AGENTS.md)
+Applies to both root and module `CLAUDE.md`.
 
 ## docs/architecture.md
 
-### Required Sections
-
 ```markdown
+<!--
 ---
 scope:
   paths:
@@ -125,6 +134,7 @@ scope:
   summary: "System architecture and component relationships"
 last_updated: <ISO_TIMESTAMP>
 ---
+-->
 
 # Architecture
 
@@ -140,31 +150,15 @@ last_updated: <ISO_TIMESTAMP>
 **Interacts with:** <other components>
 ```
 
-### Optional Sections
+**Optional sections** (include only when applicable):
 
-**Data Flow** - Include when non-trivial flow exists
-```markdown
-## Data Flow
-
-\`\`\`
-[Entry] → [Component A] → [Component B] → [Output]
-\`\`\`
-```
-
-**External Dependencies** - Include when external integrations exist
-```markdown
-## External Dependencies
-
-| Dependency | Purpose | Integration Point |
-|------------|---------|-------------------|
-| <name> | <why> | `<path>` |
-```
+- **Data Flow** — when non-trivial flow exists
+- **External Dependencies** — when external integrations exist
 
 ## docs/domain.md
 
-### Required Sections
-
 ```markdown
+<!--
 ---
 scope:
   paths:
@@ -172,6 +166,7 @@ scope:
   summary: "Business domain concepts and terminology"
 last_updated: <ISO_TIMESTAMP>
 ---
+-->
 
 # Domain
 
@@ -182,18 +177,17 @@ last_updated: <ISO_TIMESTAMP>
 | <domain term> | <business definition> |
 ```
 
-### Optional Sections
+**Optional sections:**
 
-**Core Entities** - Include when domain model exists
-**Business Rules** - Include when business constraints exist
+- **Core Entities** — when a domain model exists
+- **Business Rules** — when business constraints exist
 
-**Note:** For utility libraries or technical projects, this may be minimal or skipped.
+**Skip `docs/domain.md` entirely** for utility libraries or purely technical projects with no business domain.
 
 ## docs/patterns.md
 
-### Required Sections
-
 ```markdown
+<!--
 ---
 scope:
   paths:
@@ -201,6 +195,7 @@ scope:
   summary: "Code patterns and conventions"
 last_updated: <ISO_TIMESTAMP>
 ---
+-->
 
 # Patterns
 
@@ -220,21 +215,20 @@ last_updated: <ISO_TIMESTAMP>
 | Functions | <convention> | `<example>` |
 ```
 
-### Optional Sections
+**Optional sections:**
 
-**Error Handling** - Include when consistent pattern exists
-**Testing Patterns** - Include when tests follow consistent approach
-**Common Patterns** - Include when repeating patterns exist
+- **Error Handling** — when a consistent pattern exists
+- **Testing Patterns** — when tests follow a consistent approach
+- **Common Patterns** — when repeating patterns exist
 
-Include file:line references for examples.
+Always include `file:line` references for pattern examples.
 
 ## docs/development.md
 
-**Audience:** Human developers
-
-### Required Sections
+**Audience:** Human developers.
 
 ```markdown
+<!--
 ---
 scope:
   paths:
@@ -244,6 +238,7 @@ scope:
   summary: "Build, test, and development workflow"
 last_updated: <ISO_TIMESTAMP>
 ---
+-->
 
 # Development
 
@@ -276,18 +271,16 @@ last_updated: <ISO_TIMESTAMP>
 \`\`\`
 ```
 
-### Optional Sections
+**Optional sections:**
 
-**Environment Variables** - Include when env vars used
-**Common Tasks** - Include when helpful shortcuts exist
-**Deployment** - Include when deployment process exists
-**Contributing** - Include when accepting contributions
+- **Environment Variables** — when env vars are used
+- **Common Tasks** — when helpful shortcuts exist
+- **Deployment** — when a deployment process exists
+- **Contributing** — when accepting contributions
 
 ## README.md
 
-**Audience:** Users (human-focused)
-
-### Required Sections
+**Audience:** End users (human-focused). Same HTML-wrapped frontmatter as other docs.
 
 ```markdown
 <!--
@@ -303,7 +296,7 @@ last_updated: <ISO_TIMESTAMP>
 
 # <Project Name>
 
-<One sentence tagline>
+<One-sentence tagline>
 
 ## Summary
 
@@ -323,19 +316,59 @@ last_updated: <ISO_TIMESTAMP>
 
 ## Documentation
 
-- [Architecture](docs/architecture.md) - System design
-- [Domain](docs/domain.md) - Concepts and terminology
-- [Patterns](docs/patterns.md) - Code conventions
-- [Development](docs/development.md) - Contributing and setup
+- [Architecture](docs/architecture.md) — System design
+- [Domain](docs/domain.md) — Concepts and terminology
+- [Patterns](docs/patterns.md) — Code conventions
+- [Development](docs/development.md) — Contributing and setup
 ```
 
-### Optional Sections
+**Optional sections:**
 
-**Features** - Include when multiple user-visible capabilities
-**Usage** - Include when Quick Start isn't enough
-**Contributing** - Include when accepting contributions
+- **Features** — when there are multiple user-visible capabilities
+- **Usage** — when Quick Start isn't enough
+- **Contributing** — when accepting contributions
 
-### What NOT to Include
-- Development setup (goes in docs/development.md)
-- Architecture details (goes in docs/architecture.md)
-- All environment variables (goes in docs/development.md)
+**What NOT to include in README.md:**
+
+- Development setup → goes in `docs/development.md`
+- Architecture details → goes in `docs/architecture.md`
+- All environment variables → goes in `docs/development.md`
+
+## Ad-hoc document
+
+For focused documents created outside the standard set (e.g., via the `adding-documentation` skill):
+
+```markdown
+<!--
+---
+scope:
+  paths:
+    - <paths this document covers>
+  summary: "<Brief description of what this documents>"
+last_updated: <ISO_TIMESTAMP>
+---
+-->
+
+# <Title>
+
+<What this document covers and why it exists>
+
+## Overview
+
+<High-level explanation>
+
+## Key Concepts
+
+### <Concept Name>
+<Explanation>
+
+## Usage
+
+<How to use/interact with what's documented>
+
+## Related
+
+- <Links to related docs or code>
+```
+
+Ad-hoc documents MUST include `scope.paths`, `scope.summary`, and `last_updated` to be tracked.

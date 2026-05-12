@@ -4,5 +4,15 @@
     "version": "4.4.3",
     "author": {
         "name": "David Lopes"
-    }
+    },
+    "homepage": "https://github.com/dnlopes/claude-code-plugins",
+    "repository": "https://github.com/dnlopes/claude-code-plugins",
+    "keywords": [
+        "documentation",
+        "agents",
+        "staleness-tracking",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "onboarding"
+    ]
 }
