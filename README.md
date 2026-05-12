@@ -27,7 +27,6 @@ A marketplace of production-ready plugins extending Claude Code CLI with special
 
 | Plugin | Version | Purpose |
 |--------|---------|---------|
-| `dev-toolkit` | 1.0.0 | Build system skills (Taskfile) |
 | `docs-manager` | 4.3.0 | Documentation generation with staleness tracking |
 | `git-workflow` | 3.0.2 | Commit and PR workflows with Angular convention |
 | `governor` | 3.1.0 | Architectural tenet management and verification |
