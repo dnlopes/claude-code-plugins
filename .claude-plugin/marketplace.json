@@ -39,6 +39,12 @@
       "version": "0.1.0",
       "source": "./backend-dev",
       "description": "Backend development toolkit with database and API best practices"
+    },
+    {
+      "name": "quartermaster",
+      "version": "0.2.1",
+      "source": "./quartermaster",
+      "description": "Project management skills for turning plans and specs into tracked tickets and moving issues through triage"
     }
   ]
 }
