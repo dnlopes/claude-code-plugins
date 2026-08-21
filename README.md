@@ -5,7 +5,7 @@ scope:
     - README.md
     - .claude-plugin/marketplace.json
   summary: "Project overview and installation"
-last_updated: 2026-05-12T23:14:02Z
+last_updated: 2026-08-21T00:00:00Z
 ---
 -->
 
@@ -44,6 +44,7 @@ claude plugins install governor
 | `review-toolkit` | Multi-agent code review toolkit with specialized reviewers |
 | `ui-dev` | UI development toolkit with headless browser automation and shadcn/ui |
 | `backend-dev` | Backend development toolkit with database and API best practices |
+| `status-line` | Custom Claude Code status line showing context window usage, cost, and model |
 
 ## Documentation
 

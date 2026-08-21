@@ -1,0 +1,8 @@
+{
+    "name": "status-line",
+    "description": "Custom Claude Code status line showing context window usage, cost, and model",
+    "version": "1.0.0",
+    "author": {
+        "name": "David Lopes"
+    }
+}
