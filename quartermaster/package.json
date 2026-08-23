@@ -1,0 +1,24 @@
+{
+  "name": "@dnlopes/quartermaster",
+  "version": "0.4.0",
+  "description": "Project management skills for turning plans and specs into tracked tickets and moving issues through triage",
+  "type": "module",
+  "main": ".opencode/plugin.js",
+  "files": [
+    ".opencode",
+    "skills"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "skills",
+    "quartermaster"
+  ],
+  "author": "David Lopes",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlopes/claude-code-plugins.git",
+    "directory": "quartermaster"
+  }
+}

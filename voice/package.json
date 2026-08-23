@@ -1,0 +1,24 @@
+{
+  "name": "@dnlopes/voice",
+  "version": "1.2.0",
+  "description": "Communication guidelines and style for how Claude writes and talks: code comments, documentation prose, and conversation with the user",
+  "type": "module",
+  "main": ".opencode/plugin.js",
+  "files": [
+    ".opencode",
+    "skills"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "skills",
+    "voice"
+  ],
+  "author": "David Lopes",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlopes/claude-code-plugins.git",
+    "directory": "voice"
+  }
+}

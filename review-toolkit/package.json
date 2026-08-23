@@ -1,0 +1,26 @@
+{
+  "name": "@dnlopes/review-toolkit",
+  "version": "4.2.0",
+  "description": "Multi-agent code review toolkit with specialized reviewers for bugs, security, quality, contracts, tests, and historical context.",
+  "type": "module",
+  "main": ".opencode/plugin.js",
+  "files": [
+    ".opencode",
+    "skills",
+    "agents",
+    "commands"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "skills",
+    "review-toolkit"
+  ],
+  "author": "David Lopes",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlopes/claude-code-plugins.git",
+    "directory": "review-toolkit"
+  }
+}

@@ -20,6 +20,8 @@ claude-code-plugins/
 ├── .github/workflows/      # CI/CD: release, PR checks, vendored-skill sync
 ├── <plugin>/               # One directory per plugin
 │   ├── .claude-plugin/     # Plugin manifest (plugin.json)
+│   ├── package.json        # OpenCode package (@dnlopes/<plugin>) when skills exist
+│   ├── .opencode/          # OpenCode adapter (plugin.js) when skills exist
 │   ├── skills/             # Skill definitions (SKILL.md files)
 │   ├── agents/             # Agent definitions
 │   ├── commands/           # Slash command definitions
@@ -61,3 +63,7 @@ All commit messages must follow the conventional commits format (`feat:`, `fix:`
 ### No Build Step
 
 There is no compilation, bundling, or artifact generation. The repository content is the artifact. The "release" is a GitHub tag and release created by semantic-release when a PR merges to `main`. Validation is limited to PR-time checks (conventional commit format, Trivy security scan) — there is no test suite or schema validation for manifest files.
+
+### OpenCode Isolation
+
+Skill-bearing plugins ship an isolated OpenCode package: `<plugin>/package.json` (`@dnlopes/<plugin>`) and `<plugin>/.opencode/plugin.js`. The adapter registers that plugin's `skills/`, and when present maps `agents/` and `commands/` into OpenCode config. No shared monorepo OpenCode entrypoint — users install individual plugin directories. On version bumps (T2), also bump `<plugin>/package.json` to the same version and keep `files` listing `agents`/`commands` when those dirs exist. Plugins without skills (e.g. `status-line`) omit the OpenCode package. See [OpenCode](opencode.md).

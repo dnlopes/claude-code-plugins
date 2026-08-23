@@ -27,7 +27,8 @@ No local tooling required. There is no build step. All you need is a text editor
 2. Add `<plugin>/.claude-plugin/plugin.json` declaring `name` (must match directory), `description`, `version`, and `author`.
 3. Add skills, agents, commands, and scripts under `<plugin>/skills/`, `<plugin>/agents/`, `<plugin>/commands/`, and `<plugin>/scripts/` as appropriate.
 4. Register the plugin in `.claude-plugin/marketplace.json` with the same version declared in `plugin.json`.
-5. Open a PR with a conventional commit title (e.g., `feat: add <plugin> plugin`).
+5. If the plugin has `skills/`, add OpenCode packaging: `<plugin>/package.json` (`name` `@dnlopes/<plugin>`, `main` `.opencode/plugin.js`, same `version`, `files` including `skills` and any `agents`/`commands` dirs) and copy `<plugin>/.opencode/plugin.js` from an existing skill-bearing plugin (registers skills, agents, commands). See [OpenCode](opencode.md).
+6. Open a PR with a conventional commit title (e.g., `feat: add <plugin> plugin`).
 
 ## Modifying an Existing Plugin
 
@@ -37,6 +38,8 @@ Every change to a plugin's contents requires a version bump in two places:
 - `.claude-plugin/marketplace.json`
 
 Both must carry the same version. Bump type: `patch` for fixes, `minor` for new capabilities, `major` for breaking changes.
+
+If the plugin is skill-bearing and has OpenCode packaging, bump `<plugin>/package.json` `version` to the same value as well.
 
 Exception: vendored-skill sync PRs opened by `sync-vendored-skills.yaml` apply the bump automatically — contributors do not need to bump manually on those PRs.
 

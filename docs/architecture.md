@@ -53,6 +53,11 @@ This repository is a plugin marketplace for Claude Code: a collection of indepen
 **Owns:** Event-driven scripts triggered by Claude Code tool-lifecycle events (e.g., `PostToolUse`). A hook is registered via a `hooks.json` manifest at the hook directory root and is invoked by the Claude Code runtime — not by skills, agents, or commands.
 **Interacts with:** The Claude Code runtime, which dispatches lifecycle events; remains plugin-scoped, like every other component type.
 
+### OpenCode Adapter
+**Lives in:** `<plugin>/.opencode/plugin.js` plus `<plugin>/package.json` (skill-bearing plugins only)
+**Owns:** A thin, per-plugin OpenCode package that on `config` registers `skills/` (`config.skills.paths`), maps `agents/*.md` into `config.agent` (bare name + `plugin:name` alias, `mode: subagent`), and maps `commands/*.md` into `config.command` (body → `template`). No bootstrap injection.
+**Interacts with:** The same skills/agents/commands trees Claude Code uses. Install is by local path to the plugin directory (Bun does not install monorepo subdirectories from git URLs reliably). Version in `package.json` must match the Claude dual manifests.
+
 ### CI/CD Workflows
 **Lives in:** `.github/workflows/`
 **Owns:** The automated quality and release pipeline. Key workflows: `pr-semantic.yaml` (enforces conventional commits), `pr-trivy.yaml` (security scanning), `release.yaml` (semantic-release on push to `main`), `sync-vendored-skills.yaml` (upstream skill synchronization).

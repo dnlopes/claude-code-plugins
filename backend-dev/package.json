@@ -1,0 +1,24 @@
+{
+  "name": "@dnlopes/backend-dev",
+  "version": "0.3.0",
+  "description": "Backend development toolkit with database and API best practices",
+  "type": "module",
+  "main": ".opencode/plugin.js",
+  "files": [
+    ".opencode",
+    "skills"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "skills",
+    "backend-dev"
+  ],
+  "author": "David Lopes",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlopes/claude-code-plugins.git",
+    "directory": "backend-dev"
+  }
+}

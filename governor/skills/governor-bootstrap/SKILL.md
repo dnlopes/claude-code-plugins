@@ -53,12 +53,12 @@ grep -q "^## Tenets" AGENTS.md 2>/dev/null && echo "Tenets: exist" || echo "Tene
 
 ### Step 2: Explore codebase
 
-Spawn the `governor:constraint-explorer` agent via the Task tool:
+Spawn the `governor:constraint-explorer` (OpenCode: `constraint-explorer`) agent via the Task tool (OpenCode: `task`):
 
 ```
 Task:
   description: "Discover architectural constraints"
-  subagent_type: governor:constraint-explorer
+  subagent_type: governor:constraint-explorer  (OpenCode also accepts: constraint-explorer)
   prompt: |
     Explore the codebase at: <project-path>
 
