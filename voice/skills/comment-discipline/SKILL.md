@@ -1,6 +1,7 @@
 ---
 name: comment-discipline
 description: Governs when to add comments while writing or editing code, in any language, including IaC/config/manifest files. Comments exist only to capture genuinely hidden, codebase-specific facts — a silent failure mode, a cross-file/cross-system link nothing else surfaces, a workaround for a named external bug, an incident that already happened. Never to explain general engineering knowledge a competent practitioner already has, never to restate what a well-named identifier/resource/key already says (even in different words), never to narrate the current task, and never as a systematic habit applied to every function, block, or resource. Load before writing new code, editing existing code, or reviewing a diff for comment quality.
+user-invocable: false
 ---
 
 # Comment discipline
