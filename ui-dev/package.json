@@ -1,12 +1,13 @@
 {
   "name": "@dnlopes/ui-dev",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "UI development toolkit with headless browser automation and shadcn/ui component documentation",
   "type": "module",
   "main": ".opencode/plugin.js",
   "files": [
     ".opencode",
-    "skills"
+    "skills",
+    ".mcp.json"
   ],
   "keywords": [
     "opencode",

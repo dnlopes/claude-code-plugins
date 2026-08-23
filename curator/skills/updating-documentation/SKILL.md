@@ -5,6 +5,8 @@ description: Use when refreshing tracked documentation based on code changes —
 
 # Updating Documentation
 
+> Plugin root: `${CLAUDE_PLUGIN_ROOT}` (Claude Code and the OpenCode adapter both set this in the shell environment).
+
 Refresh tracked documentation that has fallen behind the code: inventory → staleness check → analyze → review → apply.
 
 ## Critical Guidelines

@@ -55,8 +55,8 @@ This repository is a plugin marketplace for Claude Code: a collection of indepen
 
 ### OpenCode Adapter
 **Lives in:** `<plugin>/.opencode/plugin.js` plus `<plugin>/package.json` (skill-bearing plugins only)
-**Owns:** A thin, per-plugin OpenCode package that on `config` registers `skills/` (`config.skills.paths`), maps `agents/*.md` into `config.agent` (bare name + `plugin:name` alias, `mode: subagent`), and maps `commands/*.md` into `config.command` (body → `template`). No bootstrap injection.
-**Interacts with:** The same skills/agents/commands trees Claude Code uses. Install is by local path to the plugin directory (Bun does not install monorepo subdirectories from git URLs reliably). Version in `package.json` must match the Claude dual manifests.
+**Owns:** A thin, per-plugin OpenCode package that registers `skills/`, maps `agents/*.md` and `commands/*.md` into config, maps optional `.mcp.json` into `config.mcp`, sets `CLAUDE_PLUGIN_ROOT` via `shell.env`, and ports selected Claude hooks (curator staleness after edits; voice session hint). No Superpowers-style skill bootstrap.
+**Interacts with:** The same skills/agents/commands/hooks/scripts trees Claude Code uses. Install is by local path to the plugin directory (Bun does not install monorepo subdirectories from git URLs reliably). Version in `package.json` must match the Claude dual manifests.
 
 ### CI/CD Workflows
 **Lives in:** `.github/workflows/`

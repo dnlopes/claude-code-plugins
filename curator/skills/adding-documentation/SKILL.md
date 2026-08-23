@@ -5,6 +5,8 @@ description: Use when adding focused documentation for a specific module, file, 
 
 # Adding Documentation
 
+> Plugin root: `${CLAUDE_PLUGIN_ROOT}` (Claude Code and the OpenCode adapter both set this in the shell environment).
+
 Generate a focused document for a specific target (path or topic) in a repo that already has core documentation.
 
 ## Critical Guidelines

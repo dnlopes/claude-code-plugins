@@ -5,6 +5,8 @@ description: Use when bootstrapping documentation for a repository for the first
 
 # Onboarding Repository
 
+> Plugin root: `${CLAUDE_PLUGIN_ROOT}` (Claude Code and the OpenCode adapter both set this in the shell environment).
+
 Generate the full documentation suite for a repository in three stages: explore → review → generate → validate.
 
 ## Critical Guidelines

@@ -5,6 +5,8 @@ description: Use when checking documentation system integrity — validates HTML
 
 # Validating Documentation
 
+> Plugin root: `${CLAUDE_PLUGIN_ROOT}` (Claude Code and the OpenCode adapter both set this in the shell environment).
+
 Check the documentation system for structural issues and optionally apply safe fixes.
 
 ## Critical Guidelines

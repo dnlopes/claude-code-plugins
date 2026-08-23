@@ -1,6 +1,6 @@
 {
   "name": "@dnlopes/governor",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "Project tenets management via user-invocable skills: bootstrap, manage, and verify architectural constraints in AGENTS.md",
   "type": "module",
   "main": ".opencode/plugin.js",

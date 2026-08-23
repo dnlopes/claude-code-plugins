@@ -12,9 +12,9 @@ last_updated: 2026-08-23T00:00:00Z
 
 # OpenCode
 
-Each skill-bearing Claude Code plugin is also an **isolated OpenCode plugin**. The adapter registers that plugin’s `skills/`, and when present `agents/` and `commands/`. There is **no bootstrap injection** — the model loads skills when descriptions match; commands are user-invoked (`/name`).
+Each skill-bearing Claude Code plugin is also an **isolated OpenCode plugin**. The adapter registers that plugin’s skills, agents, commands, optional MCP servers, and a thin port of Claude hooks where they exist. There is **no Superpowers-style skill bootstrap** that forces skill loading on every turn.
 
-Claude hooks and `status-line` stay Claude-only.
+`status-line` is Claude UI-only and is not packaged for OpenCode.
 
 ## Install (supported)
 
@@ -32,7 +32,10 @@ Add only the plugins you want in global `~/.config/opencode/opencode.json` or pr
   "plugin": [
     "~/src/claude-code-plugins/git-workflow",
     "~/src/claude-code-plugins/governor",
-    "~/src/claude-code-plugins/review-toolkit"
+    "~/src/claude-code-plugins/review-toolkit",
+    "~/src/claude-code-plugins/ui-dev",
+    "~/src/claude-code-plugins/curator",
+    "~/src/claude-code-plugins/voice"
   ]
 }
 ```
@@ -43,18 +46,16 @@ Paths may be absolute or `~`-prefixed. Relative paths are resolved from the conf
 
 ### Available packages
 
-| Directory | Package | Skills | Agents | Commands |
-|-----------|---------|:------:|:------:|:--------:|
-| `backend-dev/` | `@dnlopes/backend-dev` | yes | — | — |
-| `curator/` | `@dnlopes/curator` | yes | yes | — |
-| `git-workflow/` | `@dnlopes/git-workflow` | yes | — | `commit`, `create-pr` |
-| `governor/` | `@dnlopes/governor` | yes | yes | — |
-| `quartermaster/` | `@dnlopes/quartermaster` | yes | — | — |
-| `review-toolkit/` | `@dnlopes/review-toolkit` | yes | yes | `review-pr` |
-| `ui-dev/` | `@dnlopes/ui-dev` | yes | — | — |
-| `voice/` | `@dnlopes/voice` | yes | — | — |
-
-`status-line` is not packaged for OpenCode.
+| Directory | Package | Skills | Agents | Commands | MCP | Hooks |
+|-----------|---------|:------:|:------:|:--------:|:---:|:-----:|
+| `backend-dev/` | `@dnlopes/backend-dev` | yes | — | — | — | env |
+| `curator/` | `@dnlopes/curator` | yes | yes | — | — | env + staleness |
+| `git-workflow/` | `@dnlopes/git-workflow` | yes | — | `commit`, `create-pr` | — | env |
+| `governor/` | `@dnlopes/governor` | yes | yes | — | — | env |
+| `quartermaster/` | `@dnlopes/quartermaster` | yes | — | — | — | env |
+| `review-toolkit/` | `@dnlopes/review-toolkit` | yes | yes | `review-pr` | — | env |
+| `ui-dev/` | `@dnlopes/ui-dev` | yes | — | — | shadcn | env |
+| `voice/` | `@dnlopes/voice` | yes | — | — | — | env + session hint |
 
 ### Updating
 
@@ -66,47 +67,52 @@ Restart OpenCode.
 
 ## What gets registered
 
-The adapter (`.opencode/plugin.js`) on `config`:
+The adapter (`.opencode/plugin.js`) on load:
 
-1. **Skills** — pushes `<plugin>/skills` onto `config.skills.paths` (same `SKILL.md` trees as Claude).
-2. **Agents** — reads `<plugin>/agents/*.md`, sets `mode: subagent`, maps body → `prompt`, keeps `description` / theme `color`. Registers each agent under:
-   - bare name (`tenet-verifier`) — OpenCode-native
-   - `plugin:name` (`governor:tenet-verifier`) — matches Claude-style skill refs
-   Bare Claude model aliases (`sonnet`) are dropped; only `provider/model` is kept.
-3. **Commands** — reads `<plugin>/commands/*.md`, maps body → `template`, keeps `description`. Claude-only frontmatter (`allowed-tools`, `argument-hint`) is ignored.
-
-No message transforms. No forced skill loading.
+1. **Skills** — pushes `<plugin>/skills` onto `config.skills.paths`.
+2. **Agents** — maps `agents/*.md` → `config.agent` (`mode: subagent`, body → `prompt`). Registers bare name and `plugin:name` alias. Expands `${CLAUDE_PLUGIN_ROOT}` in prompts to the plugin directory.
+3. **Commands** — maps `commands/*.md` → `config.command` (body → `template`). Claude-only frontmatter is ignored.
+4. **MCP** — if `.mcp.json` exists, maps servers into `config.mcp` (`http`/`sse` → OpenCode `remote`).
+5. **shell.env** — sets `CLAUDE_PLUGIN_ROOT`, `CLAUDE_PROJECT_DIR`, `OPENCODE_PLUGIN_ROOT`, `OPENCODE_PLUGIN_NAME` so skills/scripts that use the Claude env var work under OpenCode bash.
+6. **Hooks (optional)**
+   - **voice:** one-time session hint via `experimental.chat.messages.transform` (comment-discipline reminder only — not a skill-catalog bootstrap).
+   - **curator:** after edit/write tools, runs `hooks/staleness-reminder.py` and appends its stdout to tool output when present.
 
 ## Verify
 
-1. Restart OpenCode with a plugin path in `plugin`.
-2. **Skills:** use the `skill` tool to list/load (e.g. `committing-work`, `governor-verify`).
-3. **Commands:** run `/commit`, `/create-pr`, or `/review-pr` when those plugins are installed.
-4. **Agents:** invoke via Task/`task` with `subagent_type` equal to the bare name or `plugin:name` alias (e.g. `tenet-verifier` or `governor:tenet-verifier`).
+1. Restart OpenCode with plugin paths configured.
+2. **Skills:** `skill` tool → load e.g. `committing-work`, `governor-verify`.
+3. **Commands:** `/commit`, `/create-pr`, `/review-pr`.
+4. **Agents:** Task/`task` with `subagent_type` `tenet-verifier` or `governor:tenet-verifier`.
+5. **MCP (ui-dev):** confirm `shadcn` appears among MCP servers.
+6. **voice:** first user turn should include a short comment-discipline hint once.
+7. **curator:** edit a file under a tracked doc’s `scope.paths` and check for a staleness reminder in tool output.
 
 ## Layout
 
 ```
 <plugin>/
 ├── package.json              # @dnlopes/<plugin>, main → .opencode/plugin.js
-├── .opencode/plugin.js       # registers skills + agents + commands
+├── .opencode/plugin.js       # adapter
 ├── skills/                   # shared with Claude Code
-├── agents/                   # optional; registered as OpenCode subagents
-├── commands/                 # optional; registered as OpenCode /commands
+├── agents/                   # optional
+├── commands/                 # optional
+├── hooks/                    # optional; OpenCode ports when present
+├── scripts/                  # optional; available via CLAUDE_PLUGIN_ROOT
+├── .mcp.json                 # optional; mapped to OpenCode mcp
 └── .claude-plugin/           # Claude marketplace (unchanged)
 ```
 
 ## Authoring rules
 
-- Skill-bearing plugins must keep `.opencode/plugin.js` and `package.json` in lockstep with Claude versioning: bump `package.json` with the dual Claude manifests (T2). Include `agents` / `commands` in `package.json` `files` when those dirs exist.
-- Prefer harness-neutral skill prose. Where Claude uses `plugin:name` agent ids, note the OpenCode bare name (or rely on the adapter’s dual registration).
-- Do not add bootstrap / `messages.transform` unless product requirements change.
-- Plugins without `skills/` do not get an OpenCode package.
+- Skill-bearing plugins must keep `.opencode/plugin.js` and `package.json` in lockstep with Claude versioning (T2). Include `agents`, `commands`, `hooks`, `scripts`, `.mcp.json` in `package.json` `files` when those exist.
+- Prefer harness-neutral skill prose. Claude `plugin:name` agent ids remain valid; the adapter also registers bare names.
+- Use `${CLAUDE_PLUGIN_ROOT}` for plugin-local scripts/templates — both harnesses set it (OpenCode via `shell.env`).
+- Do not add Superpowers-style forced skill bootstrap.
+- Plugins without skills (e.g. `status-line`) do not get an OpenCode package.
 
 ## Out of scope
 
-- Claude hooks (curator staleness, voice comment suggestions)
-- `status-line`
-- Forced skill loading / bootstrap
+- `status-line` (Claude Code status bar UI; OpenCode has no equivalent)
 - npm publish of `@dnlopes/*` (local path is the supported channel)
-- MCP entries from `ui-dev/.mcp.json` (configure OpenCode `mcp` separately if needed)
+- Perfect parity of every Claude hook edge case (opt-out keys, MultiEdit shapes may differ)

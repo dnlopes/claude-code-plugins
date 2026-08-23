@@ -1,6 +1,6 @@
 {
   "name": "@dnlopes/backend-dev",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Backend development toolkit with database and API best practices",
   "type": "module",
   "main": ".opencode/plugin.js",

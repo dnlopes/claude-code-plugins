@@ -6,43 +6,43 @@
   "plugins": [
     {
       "name": "git-workflow",
-      "version": "3.2.0",
+      "version": "3.3.0",
       "source": "./git-workflow",
       "description": "Git and GitHub workflow commands for commits and pull requests"
     },
     {
       "name": "curator",
-      "version": "5.3.0",
+      "version": "5.4.0",
       "source": "./curator",
       "description": "Repository documentation for AI agents, with git-based staleness tracking"
     },
     {
       "name": "review-toolkit",
-      "version": "4.2.0",
+      "version": "4.3.0",
       "source": "./review-toolkit",
       "description": "Multi-agent code review toolkit with specialized reviewers for bugs, security, quality, contracts, tests, and historical context."
     },
     {
       "name": "ui-dev",
-      "version": "2.3.0",
+      "version": "2.4.0",
       "source": "./ui-dev",
       "description": "UI development toolkit with headless browser automation and shadcn/ui component documentation"
     },
     {
       "name": "governor",
-      "version": "4.2.0",
+      "version": "4.3.0",
       "source": "./governor",
       "description": "Project tenets management via user-invocable skills: bootstrap, manage, and verify architectural constraints in AGENTS.md"
     },
     {
       "name": "backend-dev",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "source": "./backend-dev",
       "description": "Backend development toolkit with database and API best practices"
     },
     {
       "name": "quartermaster",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "source": "./quartermaster",
       "description": "Project management skills for turning plans and specs into tracked tickets and moving issues through triage"
     },
@@ -54,7 +54,7 @@
     },
     {
       "name": "voice",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "source": "./voice",
       "description": "Communication guidelines and style for how Claude writes and talks: code comments, documentation prose, and conversation with the user"
     }

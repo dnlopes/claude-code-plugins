@@ -1,6 +1,6 @@
 {
   "name": "@dnlopes/review-toolkit",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "Multi-agent code review toolkit with specialized reviewers for bugs, security, quality, contracts, tests, and historical context.",
   "type": "module",
   "main": ".opencode/plugin.js",

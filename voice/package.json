@@ -1,12 +1,13 @@
 {
   "name": "@dnlopes/voice",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Communication guidelines and style for how Claude writes and talks: code comments, documentation prose, and conversation with the user",
   "type": "module",
   "main": ".opencode/plugin.js",
   "files": [
     ".opencode",
-    "skills"
+    "skills",
+    "hooks"
   ],
   "keywords": [
     "opencode",

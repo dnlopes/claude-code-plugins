@@ -61,15 +61,15 @@ Restart OpenCode after editing config. Full details: [OpenCode](docs/opencode.md
 
 | Plugin | Description | OpenCode |
 |--------|-------------|---------|
-| `curator` | Repository documentation for AI agents, with git-based staleness tracking | skills + agents |
-| `git-workflow` | Git and GitHub workflow commands for commits and pull requests | skills + commands |
-| `governor` | Project tenets management via user-invocable skills: bootstrap, manage, and verify architectural constraints in AGENTS.md | skills + agents |
-| `review-toolkit` | Multi-agent code review toolkit with specialized reviewers | skills + agents + commands |
-| `ui-dev` | UI development toolkit with headless browser automation and shadcn/ui | skills |
+| `curator` | Repository documentation for AI agents, with git-based staleness tracking | skills, agents, staleness hook |
+| `git-workflow` | Git and GitHub workflow commands for commits and pull requests | skills, commands |
+| `governor` | Project tenets management via user-invocable skills: bootstrap, manage, and verify architectural constraints in AGENTS.md | skills, agents |
+| `review-toolkit` | Multi-agent code review toolkit with specialized reviewers | skills, agents, commands |
+| `ui-dev` | UI development toolkit with headless browser automation and shadcn/ui | skills, shadcn MCP |
 | `backend-dev` | Backend development toolkit with database and API best practices | skills |
 | `quartermaster` | Project management skills for tickets and triage | skills |
-| `voice` | Communication guidelines and comment discipline | skills |
-| `status-line` | Custom Claude Code status line showing context window usage, cost, and model | — |
+| `voice` | Communication guidelines and comment discipline | skills, session hint |
+| `status-line` | Custom Claude Code status line showing context window usage, cost, and model | — (Claude UI only) |
 
 ## Documentation
 
