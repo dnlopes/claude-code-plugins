@@ -1,0 +1,16 @@
+{
+  "description": "Suggest loading the comment-discipline skill at session start",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/suggest-comment-discipline.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
