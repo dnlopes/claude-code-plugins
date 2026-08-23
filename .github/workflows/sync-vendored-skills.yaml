@@ -20,7 +20,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build matrix from manifest
         id: set
@@ -57,7 +57,7 @@ jobs:
       matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     steps:
       - name: Checkout this repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Sparse checkout upstream
         run: |
