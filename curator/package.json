@@ -1,0 +1,27 @@
+{
+  "name": "@dnlopes/curator",
+  "version": "5.4.0",
+  "description": "Repository documentation for AI agents, with git-based staleness tracking",
+  "type": "module",
+  "main": ".opencode/plugin.js",
+  "files": [
+    ".opencode",
+    "skills",
+    "agents",
+    "hooks",
+    "scripts"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "skills",
+    "curator"
+  ],
+  "author": "David Lopes",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlopes/claude-code-plugins.git",
+    "directory": "curator"
+  }
+}

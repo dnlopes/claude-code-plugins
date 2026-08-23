@@ -22,7 +22,7 @@ Check code compliance against the tenets in AGENTS.md.
 
 ## Critical guidelines
 
-- **You MUST run the `governor:tenet-verifier` agent for the actual analysis.** Don't analyze files yourself in this skill's context — the verifier has a dedicated context window for file reading.
+- **You MUST run the `governor:tenet-verifier` (OpenCode: `tenet-verifier`) agent for the actual analysis.** Don't analyze files yourself in this skill's context — the verifier has a dedicated context window for file reading.
 - **You MUST respect exceptions.** Both the Tenet Exceptions table in AGENTS.md and inline `governor:ignore` comments suppress matching violations.
 - **You MUST report file:line for each violation.** Without it, the user can't act on findings.
 - **You MUST NOT modify any files.** Verification is read-only.
@@ -77,7 +77,7 @@ Filter to code files only (exclude images, lockfiles, generated artifacts).
 
 ### Step 3: Spawn tenet-verifier agent
 
-Use the Task tool with `subagent_type: governor:tenet-verifier`:
+Use the Task tool (OpenCode: `task`) with `subagent_type: governor:tenet-verifier  (OpenCode also accepts: tenet-verifier)`:
 
 ```
 Verify compliance of the following files against these tenets.

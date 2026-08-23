@@ -55,7 +55,7 @@ If the target is refused, stop and report:
 Cannot remove `<doc-path>`.
 
 <For root docs:>
-Root documentation is regenerated via `/curator:onboarding-repository`,
+Root documentation is regenerated via `/curator:onboarding-repository` (OpenCode skill: `onboarding-repository`),
 not removed.
 
 <For missing path:>
@@ -202,7 +202,7 @@ If any dangling structured reference remains, surface it as an error in Step 6 �
 
 ### Next Steps
 1. Review the plain-text mentions listed above
-2. Run `/curator:validating-documentation` to confirm no broken cross-references
+2. Run `/curator:validating-documentation` (OpenCode skill: `validating-documentation`) to confirm no broken cross-references
 3. Commit the changes
 ```
 
@@ -210,7 +210,7 @@ If any dangling structured reference remains, surface it as an error in Step 6 �
 
 | Scenario | Approach |
 |----------|----------|
-| Target is root `AGENTS.md` | **Refuse** — direct user to `/curator:onboarding-repository` |
+| Target is root `AGENTS.md` | **Refuse** — direct user to `/curator:onboarding-repository` (OpenCode skill: `onboarding-repository`) |
 | Target is root `CLAUDE.md` | **Refuse** — same as above |
 | Target is root `README.md` | **Refuse** — same as above |
 | Target is a module `CLAUDE.md` directly | Treat as request to remove the module pair (also remove `AGENTS.md`); ask user to confirm |

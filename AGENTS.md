@@ -17,10 +17,12 @@ No build step. To contribute a plugin, author the required files and bump versio
 @docs/architecture.md
 @docs/patterns.md
 @docs/development.md
+@docs/opencode.md
 
 - [Architecture](docs/architecture.md) — System design and component relationships
 - [Patterns](docs/patterns.md) — Plugin conventions and invariants
 - [Development](docs/development.md) — Release workflow and contribution guidelines
+- [OpenCode](docs/opencode.md) — Isolated OpenCode packaging (skills, agents, commands)
 
 ## Key Directories
 
@@ -29,6 +31,8 @@ No build step. To contribute a plugin, author the required files and bump versio
 | `.claude-plugin/` | Marketplace registry (`marketplace.json`) — authoritative plugin index |
 | `<plugin>/` | Each plugin's self-contained source (skills, agents, commands, hooks, scripts) |
 | `<plugin>/.claude-plugin/` | Per-plugin manifest (`plugin.json`) — name, description, version, author |
+| `<plugin>/.opencode/` | OpenCode adapter (`plugin.js`) — registers skills, agents, commands when present |
+| `<plugin>/package.json` | OpenCode package metadata (`@dnlopes/<plugin>`) for skill-bearing plugins |
 | `.github/workflows/` | CI/CD: semantic-release, PR checks, security scans, vendored-skill sync |
 | `curator/` | Self-hosting documentation plugin — changes here affect doc generation |
 

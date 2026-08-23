@@ -5,11 +5,13 @@ description: Use when checking documentation system integrity — validates HTML
 
 # Validating Documentation
 
+> Plugin root: `${CLAUDE_PLUGIN_ROOT}` (Claude Code and the OpenCode adapter both set this in the shell environment).
+
 Check the documentation system for structural issues and optionally apply safe fixes.
 
 ## Critical Guidelines
 
-- **You MUST load the `curator:documenting-repositories` skill first** for the frontmatter spec and document-type rules.
+- **You MUST load the `documenting-repositories` skill first** for the frontmatter spec and document-type rules.
 - **You MUST create TodoWrite todos for each step in the Workflow section** — one todo per Step, marked `in_progress` on entry and `completed` on exit. Multi-step workflows silently skip steps without explicit tracking.
 - **You MUST be non-destructive by default** — report only, unless the user invoked with `--fix` or explicitly confirms a fix.
 - **You MUST NOT delete user content** under any circumstance. Fixes are limited to frontmatter normalization and `CLAUDE.md` content replacement.
@@ -197,7 +199,7 @@ For each fixable issue, apply the fix:
 | Invalid YAML syntax | Requires manual edit; structural ambiguity |
 | Scope paths matching nothing | Requires understanding intent — may be a typo or may be future-facing |
 | Broken cross-reference | Could mean delete the reference OR create the target — user must decide |
-| Missing root `AGENTS.md` | Suggest `/curator:onboarding-repository` |
+| Missing root `AGENTS.md` | Suggest `/curator:onboarding-repository` (OpenCode skill: `onboarding-repository`) |
 
 Generate one shared timestamp for any new `last_updated` insertions:
 
@@ -220,7 +222,7 @@ date -u +"%Y-%m-%dT%H:%M:%SZ"
 
 ### Next Steps
 1. Address remaining issues manually
-2. Re-run `/curator:validating-documentation` to confirm
+2. Re-run `/curator:validating-documentation` (OpenCode skill: `validating-documentation`) to confirm
 3. Commit the fixes
 ```
 

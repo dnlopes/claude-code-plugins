@@ -1,0 +1,25 @@
+{
+  "name": "@dnlopes/git-workflow",
+  "version": "3.3.0",
+  "description": "Git and GitHub workflow commands for commits and pull requests",
+  "type": "module",
+  "main": ".opencode/plugin.js",
+  "files": [
+    ".opencode",
+    "skills",
+    "commands"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "skills",
+    "git-workflow"
+  ],
+  "author": "David Lopes",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlopes/claude-code-plugins.git",
+    "directory": "git-workflow"
+  }
+}

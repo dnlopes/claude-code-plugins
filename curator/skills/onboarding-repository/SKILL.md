@@ -5,11 +5,13 @@ description: Use when bootstrapping documentation for a repository for the first
 
 # Onboarding Repository
 
+> Plugin root: `${CLAUDE_PLUGIN_ROOT}` (Claude Code and the OpenCode adapter both set this in the shell environment).
+
 Generate the full documentation suite for a repository in three stages: explore → review → generate → validate.
 
 ## Critical Guidelines
 
-- **You MUST load the `curator:documenting-repositories` skill first** for format standards, abstraction rules, and frontmatter spec.
+- **You MUST load the `documenting-repositories` skill first** for format standards, abstraction rules, and frontmatter spec.
 - **You MUST follow the steps in order** — pre-flight, explore, review, generate, validate, summary.
 - **You MUST create TodoWrite todos for each step in the Workflow section** — one todo per Step, marked `in_progress` on entry and `completed` on exit. Multi-step workflows silently skip steps without explicit tracking.
 - **You MUST get user confirmation before generating files** unless the user invocation includes `--auto`.
@@ -58,7 +60,7 @@ Store the README action (`replace` / `merge` / `skip`) — needed in Step 3.
 
 ### Step 1 — Explore
 
-Launch the `curator:codebase-explorer` agent via the Task tool:
+Launch the `curator:codebase-explorer` (OpenCode: `codebase-explorer`) agent via the Task tool (OpenCode: `task`):
 
 ```
 Description: Explore codebase for documentation
@@ -123,7 +125,7 @@ Handle the user's choice:
 
 ### Step 3 — Generate
 
-Launch the `curator:doc-generator` agent via the Task tool:
+Launch the `curator:doc-generator` (OpenCode: `doc-generator`) agent via the Task tool (OpenCode: `task`):
 
 ```
 Description: Generate documentation files
@@ -197,7 +199,7 @@ Report back to the user:
 
 ### Next Steps
 1. Review generated documentation
-2. Run `/curator:validating-documentation` to verify system integrity
+2. Run `/curator:validating-documentation` (OpenCode skill: `validating-documentation`) to verify system integrity
 3. Commit the documentation
 ```
 
