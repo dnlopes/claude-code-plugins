@@ -9,7 +9,7 @@ concurrency:
 jobs:
   security:
     name: Security
-    uses: dnlopes/Reusable.Workflows/.github/workflows/trivy-scan.yaml@v1
+    uses: dnlopes/Reusable.Workflows/.github/workflows/trivy-scan.yaml@7cd6a461f07032cf92c3f60c3d7dd0792c2caa7d # v1
     permissions:
       contents: read
       pull-requests: write # needed for PR comments
