@@ -1,5 +1,5 @@
 repo: supabase/agent-skills
 ref: main
 path: skills/supabase-postgres-best-practices
-commit: 3e7771598f3a03d29533208dd7b5a50bdfc8860f
-synced_at: 2026-05-12T00:00:00Z
+commit: c9be0e931b7930f7d02126d04774d904c381e7d7
+synced_at: 2026-10-05T06:26:10Z
